@@ -19,14 +19,16 @@ class ProgramparticipantController extends BaseController {
 
   private $response = array('message' => 'success');
   
-  // public function participants(Type $var = null) {
+  // public function participants($id) {
+  //   $results = Programparticipant::where('alumniId', $id)->get();;
+  //   return response()->json($results);
   // }
 
   public function enroll(Request $request) {
-    $result = new Programparticipant;
-    $result->programId = $request->programId;
-    $result->alumniId = $request->alumniId;
-    $result->save();
+    $results = new Programparticipant;
+    $results->programId = $request->programId;
+    $results->alumniId = $request->alumniId;
+    $results->save();
     return response()->json($this->response); 
   }
 }
