@@ -47,4 +47,5 @@ $router->post('/program_depa/edit', 'program_department\ProgramDepartmentControl
 $router->delete('/program_depa/delete', 'program_department\ProgramDepartmentController@delete');
 
 $router->post('/alumni/sort', 'alumni\AlumniController@sort');
+$router->get('/alumni/{id:[0-9]+}', 'alumni\AlumniController@find');
 
