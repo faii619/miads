@@ -22,3 +22,5 @@ $router->get('/program_depa', 'program_department\ProgramDepartmentController@pr
 $router->post('/program_depa/create', 'program_department\ProgramDepartmentController@create');
 $router->post('/program_depa/edit', 'program_department\ProgramDepartmentController@edit');
 $router->post('/program_depa/delete', 'program_department\ProgramDepartmentController@delete');
+
+$router->post('/alumni/sort', 'alumni\AlumniController@sort');
