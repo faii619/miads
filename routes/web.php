@@ -42,9 +42,9 @@ $router->post('/program_depa/create', 'program_department\ProgramDepartmentContr
 $router->post('/program_depa/edit', 'program_department\ProgramDepartmentController@edit');
 $router->delete('/program_depa/delete/{id:[0-9]+}', 'program_department\ProgramDepartmentController@delete');
 
-$router->post('/news_cate/create', 'news_category\NewsCategoryController@edit');
+$router->post('/news_cate/create', 'news_category\NewsCategoryController@create');
 $router->post('/news_cate/edit', 'news_category\NewsCategoryController@edit');
-$router->post('/news_cate/delete', 'news_category\NewsCategoryController@edit');
+$router->delete('/news_cate/delete/{id:[0-9]+}', 'news_category\NewsCategoryController@delete');
 
 $router->post('/alumni/sort', 'alumni\AlumniController@sort');
 
