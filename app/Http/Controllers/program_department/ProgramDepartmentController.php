@@ -39,8 +39,8 @@ class ProgramDepartmentController extends BaseController
     return response()->json($this->response);
   }
 
-  // public function delete(Request $request){
-  //   $result->save();
-  //   return response()->json($this->response);
-  // }
+  public function delete(Request $request){
+    $result = ProgramDepartment::where('id', $request->id)->delete();
+    return response()->json($this->response);
+  }
 }
