@@ -20,30 +20,42 @@ class ProgramDepartmentController extends BaseController
 
     private $response = array('status' => 1, 'message' => 'success');
 
-    public function program_department(){
-      $results = ProgramDepartment::all();
-      return response()->json($results);
+    public function program_department()
+    {
+        $results = ProgramDepartment::all();
+        return response()->json($results);
     }
 
-    public function create(Request $request){
-      $result = new ProgramDepartment;
-      // $result->id = $request->id;
-      $result->caption = $request->caption;
-      $result->save();
+    public function create(Request $request)
+    {
+      $instance = new Users;
+  
+      $instance->social_user_id = $request->social_user_id;
+      $instance->name = $request->name;
+      $instance->email = $request->email;
+      $instance->password = $request->password;
+      $instance->image = $request->image;
+      $instance->image_small = $request->image;
+      $instance->remember_token = $request->remember_token;
+      $instance->status = 1;
+      $instance->save();
+  
       return response()->json($this->response);
     }
 
-    public function edit(Request $request){
-      $result = ProgramDepartment::find($request->id);
-      $result->caption = $request->caption;
+    public function edit(Request $request)
+    {
+      $inputs = $request->all();
+      $result = Users::find($inputs['txt_id']);
+  
+      $result->name = $inputs['txt_name'];
+      $result->email = $inputs['txt_email'];
+      $result->password = $inputs['txt_password'];
+      $result->image = $inputs['txt_image'];
+      $result->remember_token = $inputs['txt_remember_token'];
+      $result->status = $inputs['txt_status'];
       $result->save();
-      return response()->json($this->response);
-    }
-
-    public function delete(Request $request){
-      $result = ProgramDepartment::find($request->id);
-      $result->caption = $request->caption;      
-      $result->save();
+  
       return response()->json($this->response);
     }
 }
