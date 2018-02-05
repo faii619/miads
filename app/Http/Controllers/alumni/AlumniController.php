@@ -49,7 +49,6 @@ class AlumniController extends BaseController
                 ->leftJoin('persontitle', 'person.personTitleId', '=', 'persontitle.id')
                 ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
                 ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.id')
-                // ->leftJoin('programparticipant', 'person.id', '=', 'programparticipant.alumniId')
                 ->get(['person.*', 'alumni.code', 'persontitle.caption as title', 'file.fileName', 'addresscountry.caption as nationality']);
 
     $result[0]['homeAddress'] = 'No Information';
