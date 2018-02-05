@@ -19,3 +19,6 @@ $router->get('/key', function () use ($router) {
 });
 
 $router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
+$router->post('/program_depa/create', 'program_department\ProgramDepartmentController@create');
+$router->post('/program_depa/edit', 'program_department\ProgramDepartmentController@edit');
+$router->post('/program_depa/delete', 'program_department\ProgramDepartmentController@delete');
