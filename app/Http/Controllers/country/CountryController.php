@@ -18,24 +18,29 @@ class CountryController extends BaseController
         //
     }
 
-    private $response = array('status' => 1, 'message' => 'success');
+    private $response = array( 'message' => 'success');
+
     public function country(){
         $results = Country::all();
         return response()->json($results);
       }
 
-    public function create(Request $request)
-    {
-      $instance = new Country;
-    //   $instance->id = $request->input('id', '');
+    // public function create(Request $request)
+    // {
+    // $instance = new Country;
+    //   $instance->id = $request->input('id','46');
     //   $instance->caption = $request->input('caption', 'maha');
-    //   $instance->ordinal = $request->input('ordinal', '5000');
-     //   $result->caption = $request->caption;
-      $instance->save();
-    //   $name = $request->input('name', 'Sally');
-      return response()->json($this->response);
-    // return "kk";
-    }
+    //   $instance->ordinal = $request->input('ordinal', '100');
+    //   return response()->json($this->response);
+
+    // }
+    // public function create(Request $request){
+    //     $result = new Country;
+    //     $result->caption = $request->caption;
+    //     $result->ordinal = $request->ordinal;
+    //     $result->save();
+    //     return response()->json($this->response); 
+    //   }
     
     
 }
