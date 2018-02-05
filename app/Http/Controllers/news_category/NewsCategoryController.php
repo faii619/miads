@@ -19,6 +19,7 @@ class NewsCategoryController extends BaseController {
 
   private $response = array('message' => 'success');
 
+<<<<<<< HEAD
   // public function find(Request $request) {
   // }
   public function news_cate(){
@@ -26,30 +27,24 @@ class NewsCategoryController extends BaseController {
     return response()->json($results);
   }
 
+=======
+>>>>>>> 70f752f343310f7955877c50e74810fe5b42a7a7
   public function create(Request $request) {
-    $results = new Program;
-    $results->code = $request->code;
-    $results->title = $request->title;
-    $results->startDate = $request->startDate;
-    $results->endDate = $request->endDate;
-    $results->programDepartmentId = $request->programDepartmentId;
+    $results = new NewsCategory;
+    $results->caption = $request->caption;
     $results->save();
-    return response()->json($this->response); 
+    return response()->json($this->response);
   }
 
   public function edit(Request $request) {
-    $results = Program::find($request->id);
-    $results->code = $request->code;
-    $results->title = $request->title;
-    $results->startDate = $request->startDate;
-    $results->endDate = $request->endDate;
-    $results->programDepartmentId = $request->programDepartmentId;
+    $results = NewsCategory::find($request->id);
+    $results->caption = $request->caption;
     $results->save();
     return response()->json($this->response);
   }
 
   public function delete($id) {
-    $result = Program::where('id', $id)->delete();
+    NewsCategory::where('id', $id)->delete();
     return response()->json($this->response);
   }
 }

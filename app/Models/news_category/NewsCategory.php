@@ -4,7 +4,7 @@ namespace App\Models\news_category;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Programparticipant extends Model {
-  protected $table = "programparticipant";
+class NewsCategory extends Model {
+  protected $table = "newscategory";
   public $timestamps = false;
 }
