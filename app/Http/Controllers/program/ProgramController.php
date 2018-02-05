@@ -44,8 +44,8 @@ class ProgramController extends BaseController {
     return response()->json($this->response);
   }
 
-  public function delete(Request $request) {
-    $result = Program::where('id', $request->id)->delete();
+  public function delete($id) {
+    $result = Program::where('id', $id)->delete();
     return response()->json($this->response);
   }
   
