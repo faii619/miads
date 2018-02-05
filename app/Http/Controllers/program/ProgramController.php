@@ -36,15 +36,19 @@ class ProgramController extends BaseController
     return response()->json($this->response); 
   }
 
-  // public function edit(Request $request){
-  //   $result = ProgramDepartment::find($request->id);
-  //   $result->caption = $request->caption;
-  //   $result->save();
-  //   return response()->json($this->response);
-  // }
+  public function edit(Request $request){
+    $result = Program::find($request->id);
+    $result->code = $request->code;
+    $result->title = $request->title;
+    $result->startDate = $request->startDate;
+    $result->endDate = $request->endDate;
+    $result->programDepartmentId = $request->programDepartmentId;
+    $result->save();
+    return response()->json($this->response);
+  }
 
   // public function delete(Request $request){
-  //   $result = ProgramDepartment::where('id', $request->id)->delete();
+  //   $result = Program::where('id', $request->id)->delete();
   //   return response()->json($this->response);
   // }
 }
