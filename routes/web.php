@@ -19,13 +19,21 @@ $router->get('/key', function () use ($router) {
 });
 
 $router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
-$router->get('/ministry', 'authority_control\MinistryController@create');
+
 
 $router->get('/country', 'country\CountryController@country');
 $router->post('/country2', 'country\CountryController@country2');
 $router->post('/country/create', 'country\CountryController@create');
 $router->post('/country/edit', 'country\CountryController@edit');
 $router->post('/country/delete', 'country\CountryController@delete');
+
+$router->post('/ministry/create', 'authority_control\MinistryController@create');
+$router->post('/ministry_department/create', 'authority_control\MinistryController@create_department');
+$router->post('/university/create', 'authority_control\UniversityController@create');
+$router->post('/university_department/create', 'authority_control\UniversityController@create_department');
+
+$router->post('/organization/create', 'authority_control\OrganizationController@create');
+$router->post('/university_department/create', 'authority_control\UniversityController@create_department');
 
 // $router->get('/program_depa/{id:[0-9]+}', 'program_department\ProgramDepartmentController@program_department');
 $router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');

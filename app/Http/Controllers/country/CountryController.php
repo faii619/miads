@@ -44,8 +44,9 @@ class CountryController extends BaseController
         return response()->json($this->response); 
       }
       public function delete(Request $request){
-        $result = Country::find($request->id);
-        $result->save();
+        // $affectedRows = User::where('votes', '>', 100)->delete();
+        $result = Country::where('id',$request->id)->delete();
+        // $result->save();
         return response()->json($this->response); 
       }
     
