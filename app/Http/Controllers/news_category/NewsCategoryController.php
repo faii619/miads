@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\program;
+namespace App\Http\Controllers\news_category;
 
-use App\Models\program\Program;
+use App\Models\news_category\NewsCategory;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
-class ProgramController extends BaseController {
+class NewsCategoryController extends BaseController {
   /**
    * Create a new controller instance.
    *
