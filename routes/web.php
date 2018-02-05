@@ -22,6 +22,9 @@ $router->get('/ministry', 'authority_control\MinistryController@create');
 $router->get('/country', 'country\CountryController@create');
 
 
+
+$router->post('/program/create', 'program\ProgramController@create');
+
 // $router->get('/program_depa/{id:[0-9]+}', 'program_department\ProgramDepartmentController@program_department');
 $router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
 $router->post('/program_depa/create', 'program_department\ProgramDepartmentController@create');
