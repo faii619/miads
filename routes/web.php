@@ -34,8 +34,8 @@ $router->get('/country', 'country\CountryController@create');
 $router->post('/program/create', 'program\ProgramController@create');
 $router->post('/program/edit', 'program\ProgramController@edit');
 $router->delete('/program/delete/{id:[0-9]+}', 'program\ProgramController@delete');
-// $router->get('/program/participants/{id:[0-9]+}', 'program\ProgramController@participants');
-// $router->post('/program/enroll', 'program\ProgramController@enroll');
+// $router->get('/program/participants/{id:[0-9]+}', 'program\ProgramparticipantController@participants');
+$router->post('/program/enroll', 'program\ProgramparticipantController@enroll');
 
 $router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
 $router->post('/program_depa/create', 'program_department\ProgramDepartmentController@create');

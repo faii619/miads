@@ -48,15 +48,4 @@ class ProgramController extends BaseController {
     $result = Program::where('id', $id)->delete();
     return response()->json($this->response);
   }
-  
-  // public function participants(Type $var = null) {
-  // }
-
-  // public function enroll(Request $request) {
-  //   $result = new Programparticipant;
-  //   $result->programId = $request->programId;
-  //   $result->alumniId = $request->alumniId;
-  //   $result->save();
-  //   return response()->json($this->response); 
-  // }
 }
