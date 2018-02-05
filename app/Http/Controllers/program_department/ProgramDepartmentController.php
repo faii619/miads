@@ -29,7 +29,6 @@ class ProgramDepartmentController extends BaseController
     $result = new ProgramDepartment;
     $result->caption = $request->caption;
     $result->save();
-    // return response()->json($results);
     return response()->json($this->response); 
   }
 
