@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\program_department;
 
 use App\Models\program_department\ProgramDepartment;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class ProgramDepartmentController extends BaseController
