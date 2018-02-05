@@ -17,3 +17,5 @@ $router->get('/', function () use ($router) {
 $router->get('/key', function () use ($router) {
     return str_random(32);
 });
+
+$router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
