@@ -19,25 +19,23 @@ class CountryController extends BaseController
     }
 
     private $response = array('status' => 1, 'message' => 'success');
-    // public function create()
-    // {
-    //     $results = Country::all();
-    //     return response()->json($results);
-    // }
+    public function country(){
+        $results = Country::all();
+        return response()->json($results);
+      }
 
     public function create(Request $request)
     {
       $instance = new Country;
-  
-      $instance->social_user_id = $request->social_user_id;
-      $instance->name = $request->name;
-      $instance->email = $request->email;
-g
+    //   $instance->id = $request->input('id', '');
+    //   $instance->caption = $request->input('caption', 'maha');
+    //   $instance->ordinal = $request->input('ordinal', '5000');
+     //   $result->caption = $request->caption;
       $instance->save();
-  
+    //   $name = $request->input('name', 'Sally');
       return response()->json($this->response);
-
+    // return "kk";
     }
-
+    
     
 }
