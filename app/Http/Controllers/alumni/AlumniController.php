@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\alumni;
 
-use App\Models\alumni\Alumni;
+use App\Models\person\Person;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
