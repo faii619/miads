@@ -19,8 +19,12 @@ class ProgramController extends BaseController {
 
   private $response = array('message' => 'success');
 
-  // public function find(Request $request) {
-  // }
+  public function find($id) {
+    $results = Program::where('Program.id', $id)
+      ->leftJoin('programdepartment', 'Program.programDepartmentId', '=', 'programdepartment.id')
+      ->get();
+    return response()->json($results);
+  }
 
   public function create(Request $request) {
     $results = new Program;
