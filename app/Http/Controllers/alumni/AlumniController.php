@@ -21,6 +21,7 @@ class AlumniController extends BaseController
   }
 
   private $response = array('status' => 1, 'message' => 'success');
+  private $text_status = 'No Information';
 
   public function sort(Request $request)
   {
@@ -44,41 +45,25 @@ class AlumniController extends BaseController
 
   public function find($id)
   {
+    $item = [
+      'person.*', 'alumni.code', 'file.fileName'
+      , 'persontitle.caption as title'
+      , 'addresscountry.caption as nationality'
+    ];
+    
     $result = Person::where([['person.id', '=', $id]])
                 ->leftJoin('alumni', 'person.id', '=', 'alumni.personId')
                 ->leftJoin('persontitle', 'person.personTitleId', '=', 'persontitle.id')
                 ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
                 ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.id')
-                ->get(['person.*', 'alumni.code', 'persontitle.caption as title', 'file.fileName', 'addresscountry.caption as nationality']);
+                ->get($item);
 
-    $result[0]['homeAddress'] = 'No Information';
-    if ($result[0]['homeAddressId'] > 0 && $result[0]['homeAddressId'] != NULL) {
-      $home = $this->get_person_address($result[0]['homeAddressId']);
-      $result[0]['homeAddress'] = $home->original['address'];
-      $result[0]['homeTel'] = $home->original[0]['tel'];
-      $result[0]['homeFax'] = $home->original[0]['fax'];
-      $result[0]['homeMobile'] = $home->original[0]['mobile'];
+    if (count($result) > 0) {
+      $result[0]['homeAddress'] = ($result[0]['homeAddressId'] > 0 && $result[0]['homeAddressId'] != NULL) ? $this->get_person_address($result[0]['homeAddressId']) : $this->text_status ;
+      $result[0]['officeAddress'] = ($result[0]['officeAddressId'] > 0 && $result[0]['officeAddressId'] != NULL) ? $this->get_person_address($result[0]['officeAddressId']) : $this->text_status ;
+      $result[0]['officeContactAddress'] = ($result[0]['isPreferOfficeContact'] > 0 && $result[0]['isPreferOfficeContact'] != NULL) ? $this->get_person_address($result[0]['isPreferOfficeContact']) : $this->text_status ;
+      $result[0]['program'] = $this->get_person_program($result[0]['id']);
     }
-
-    $result[0]['officeAddress'] = 'No Information';
-    if ($result[0]['officeAddressId'] > 0 && $result[0]['officeAddressId'] != NULL) {
-      $office = $this->get_person_address($result[0]['officeAddressId']);
-      $result[0]['officeAddress'] = $office->original['address'];
-      $result[0]['officeTel'] = $office->original[0]['tel'];
-      $result[0]['officeFax'] = $office->original[0]['fax'];
-      $result[0]['officeMobile'] = $office->original[0]['mobile'];
-    }
-    
-    $result[0]['officeContactAddress'] = 'No Information';
-    if ($result[0]['isPreferOfficeContact'] > 0 && $result[0]['isPreferOfficeContact'] != NULL) {
-      $contact = $this->get_person_address($result[0]['isPreferOfficeContact']);
-      $result[0]['officeContactAddress'] = $contact->original['address'];
-      $result[0]['officeContactTel'] = $contact->original[0]['tel'];
-      $result[0]['officeContactFax'] = $contact->original[0]['fax'];
-      $result[0]['officeContactMobile'] = $contact->original[0]['mobile'];
-    }
-
-    $result[0]['program'] = $this->get_person_program($result[0]['id']);
 
     return response()->json($result);
   }
@@ -88,14 +73,8 @@ class AlumniController extends BaseController
     $result = Address::where([['address.id', '=', $address_id]])
                 ->leftJoin('addresscountry', 'address.addressCountryId', '=', 'addresscountry.id')
                 ->get(['addresscountry.*', 'address.*']);
-    if (!empty($result[0]['streetAddress'])) {
-      $caption = ($result[0]['addressCountryId'] != 1) ? $result[0]['caption'] : '' ;
-      $result['address'] = $result[0]['streetAddress'].' '.$result[0]['city'].' '.$result[0]['province'].' '.$caption.' '.$result[0]['zip'];
-    } else {
-      $result['address'] = $result[0]['caption'];
-    }
     
-    return response()->json($result);
+    return $result;
   }
 
   public function get_person_program($person_id)
