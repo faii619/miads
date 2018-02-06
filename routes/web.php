@@ -18,11 +18,6 @@ $router->get('/key', function () use ($router) {
     return str_random(32);
 });
 
-<<<<<<< HEAD
-$router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
-
-=======
->>>>>>> 4177b2b863864f88eff690b326bfc4670e700de6
 $router->get('/ministry', 'authority_control\MinistryController@create');
 
 $router->get('/country', 'country\CountryController@country');
@@ -31,25 +26,6 @@ $router->post('/country/create', 'country\CountryController@create');
 $router->post('/country/edit', 'country\CountryController@edit');
 $router->post('/country/delete', 'country\CountryController@delete');
 
-<<<<<<< HEAD
-$router->post('/ministry/create', 'authority_control\MinistryController@create');
-$router->post('/ministry_department/create', 'authority_control\MinistryController@create_department');
-$router->post('/university/create', 'authority_control\UniversityController@create');
-$router->post('/university_department/create', 'authority_control\UniversityController@create_department');
-$router->post('/organization/create', 'authority_control\OrganizationController@create');
-$router->post('/organization_department/create', 'authority_control\OrganizationController@create_department');
-$router->post('/job_position/create', 'authority_control\PositionController@create');
-
-$router->post('/expertise/create', 'authority_control\ExpertiseController@create');
-$router->post('/division/create', 'authority_control\DivisionController@create');
-
-// $router->get('/program_depa/{id:[0-9]+}', 'program_department\ProgramDepartmentController@program_department');
-$router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
-// $router->post('/program_depa/create', 'program_department\ProgramDepartmentController@create');
-// $router->post('/program_depa/edit', 'program_department\ProgramDepartmentController@edit');
-// $router->delete('/program_depa/delete', 'program_department\ProgramDepartmentController@delete');
-=======
->>>>>>> 4177b2b863864f88eff690b326bfc4670e700de6
 $router->get('/ministry', 'authority_control\MinistryController@create');
 $router->get('/country', 'country\CountryController@create');
 
