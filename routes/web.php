@@ -51,10 +51,10 @@ $router->delete('/program/delete/{id:[0-9]+}', 'program\ProgramController@delete
 $router->get('/program/participants/{id:[0-9]+}', 'program\ProgramparticipantController@participants');
 $router->post('/program/enroll', 'program\ProgramparticipantController@enroll');
 
-$router->get('/program_department', 'program_department\ProgramDepartmentController@program_department');
-$router->post('/program_department/create', 'program_department\ProgramDepartmentController@create');
-$router->post('/program_department/edit', 'program_department\ProgramDepartmentController@edit');
-$router->delete('/program_department/delete/{id:[0-9]+}', 'program_department\ProgramDepartmentController@delete');
+$router->get('/program_departments', 'program_department\ProgramDepartmentController@program_department');
+$router->post('/program_departments/create', 'program_department\ProgramDepartmentController@create');
+$router->post('/program_departments/edit', 'program_department\ProgramDepartmentController@edit');
+$router->delete('/program_departments/delete/{id:[0-9]+}', 'program_department\ProgramDepartmentController@delete');
 
 $router->get('/news_cate', 'news_category\NewsCategoryController@news_cate');
 $router->post('/news_cate/create', 'news_category\NewsCategoryController@edit');
