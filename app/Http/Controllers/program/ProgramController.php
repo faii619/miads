@@ -18,9 +18,20 @@ class ProgramController extends BaseController {
   }
 
   private $response = array('message' => 'success');
+  
+  private function get_dates_en($results) {
+    foreach ($results as $key => $value) {
+      $results[$key]['startDate'] = date("d/m/Y", strtotime($value['startDate']));
+      $results[$key]['endDate'] = date("d/m/Y", strtotime($value['endDate']));
+    }
+
+    return $results;
+  }
 
   public function programs_by_conditions(Request $request) {
     $results = Program::where('status', 1)->get();
+    $results = $this->get_dates_en($results);
+
     return response()->json($results);
   }
 
