@@ -5,6 +5,6 @@ namespace App\Models\news_category;
 use Illuminate\Database\Eloquent\Model;
 
 class NewsCategory extends Model {
-  protected $table = "newscategory";
+  protected $table = "Newscategory";
   public $timestamps = false;
 }
