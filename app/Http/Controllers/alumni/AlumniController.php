@@ -50,7 +50,7 @@ class AlumniController extends BaseController
       , 'persontitle.caption as title'
       , 'addresscountry.caption as nationality'
     ];
-    
+
     $result = Person::where([['person.id', '=', $id]])
                 ->leftJoin('alumni', 'person.id', '=', 'alumni.personId')
                 ->leftJoin('persontitle', 'person.personTitleId', '=', 'persontitle.id')
@@ -83,6 +83,11 @@ class AlumniController extends BaseController
                 ->leftJoin('program', 'programparticipant.programId', '=', 'program.id')
                 ->get(['program.*']);
     return $result;
+  }
+
+  public function create(Request $request)
+  {
+    return response()->json($request);
   }
 
 }
