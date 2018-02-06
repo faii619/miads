@@ -44,6 +44,7 @@ $router->get('/program_depa', 'program_department\ProgramDepartmentController@pr
 $router->get('/ministry', 'authority_control\MinistryController@create');
 
 // $router->get('/program/{id:[0-9]+}', 'program\ProgramController@find');
+$router->post('/program/programs_by_conditions', 'program\ProgramController@programs_by_conditions');
 $router->post('/program/create', 'program\ProgramController@create');
 $router->post('/program/edit', 'program\ProgramController@edit');
 $router->delete('/program/delete/{id:[0-9]+}', 'program\ProgramController@delete');

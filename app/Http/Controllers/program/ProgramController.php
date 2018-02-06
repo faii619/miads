@@ -19,8 +19,13 @@ class ProgramController extends BaseController {
 
   private $response = array('message' => 'success');
 
-  // public function find(Request $request) {
-  // }
+  public function programs_by_conditions(Request $request) {
+    // $results = Program::where('status', 1)->get();
+    // return response()->json($results);
+
+    $results = Program::all();
+    return response()->json($results);
+  }
 
   public function create(Request $request) {
     $results = new Program;
