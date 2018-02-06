@@ -19,6 +19,11 @@ class ProgramController extends BaseController {
 
   private $response = array('message' => 'success');
 
+  public function programs_by_conditions(Request $request) {
+    $results = Program::where('status', 1)->get();
+    return response()->json($results);
+  }
+
   public function find($id) {
     $results = Program::where('Program.id', $id)
       ->leftJoin('programdepartment', 'Program.programDepartmentId', '=', 'programdepartment.id')

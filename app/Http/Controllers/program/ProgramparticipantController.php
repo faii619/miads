@@ -25,7 +25,9 @@ class ProgramparticipantController extends BaseController {
       ->leftJoin('alumni', 'Programparticipant.alumniId', '=', 'alumni.id')  
       ->leftJoin('person', 'alumni.personId', '=', 'person.id')  
       ->leftJoin('persontitle', 'person.personTitleId', '=', 'persontitle.id')  
-      ->leftJoin('file', 'person.photoFileId', '=', 'file.id')  
+      ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
+      ->leftJoin('address', 'person.homeAddressId', '=', 'address.id')
+      // ->leftJoin('address', 'person.officeAddressId', '=', 'address.id')
       ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.id')  
       ->get();
     return response()->json($results);
