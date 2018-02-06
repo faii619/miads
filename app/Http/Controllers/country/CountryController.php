@@ -19,15 +19,12 @@ class CountryController extends BaseController
     }
 
     private $response = array( 'message' => 'success');
+    
     public function country(){
         $results = Country::all();
         return response()->json($results);
       }
-      
-      public function country2(){
-        $results = Country::all();
-        return response()->json($results);
-      }
+    
     public function create(Request $request){
         $result = new Country;
         $result->caption = $request->caption;
@@ -43,10 +40,8 @@ class CountryController extends BaseController
         $result->save();
         return response()->json($this->response); 
       }
-      public function delete(Request $request){
-        // $affectedRows = User::where('votes', '>', 100)->delete();
-        $result = Country::where('id',$request->id)->delete();
-        // $result->save();
+      public function delete($id){
+        $result = Country::where('id',$id)->delete();
         return response()->json($this->response); 
       }
     

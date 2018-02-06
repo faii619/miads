@@ -19,6 +19,13 @@ class NewsCategoryController extends BaseController {
 
   private $response = array('message' => 'success');
 
+  // public function find(Request $request) {
+  // }
+  public function news_cate(){
+    $results = NewsCategory::all();
+    return response()->json($results);
+  }
+
   public function create(Request $request) {
     $results = new NewsCategory;
     $results->caption = $request->caption;
