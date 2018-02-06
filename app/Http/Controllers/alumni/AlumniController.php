@@ -87,6 +87,79 @@ class AlumniController extends BaseController
 
   public function create(Request $request)
   {
+    $instanceFile = new File;
+    $instanceFile->fileName = $request->;
+    $instanceFile->fileSize = $request->;
+    $instanceFile->save();
+    
+    $instancePerson = new Person;
+    $instancePerson->personTitleId = $request->;
+    $instancePerson->name = $request->;
+    $instancePerson->birthDate = $request->;
+    $instancePerson->email = $request->;
+    $instancePerson->otherEmails = $request->;
+    $instancePerson->photoFileId = $request->;//tb file->PK
+    $instancePerson->homeAddressId = $request->;
+    $instancePerson->officeAddressId = $request->;
+    $instancePerson->isPreferOfficeContact = $request->;
+    $instancePerson->gender = $request->;
+    $instancePerson->nationalityAddressCountryId = $request->;
+    $instancePerson->save();
+    
+    $instanceAlumni = new Alumni;
+    $instanceAlumni->code = $request->;
+    $instanceAlumni->personId = $request->;
+    $instanceAlumni->save();
+    
+    $instanceHomeAddress = new address;
+    $instanceHomeAddress->streetAddress = $request->;
+    $instanceHomeAddress->city = $request->;
+    $instanceHomeAddress->province = $request->;
+    $instanceHomeAddress->addressCountryId = $request->;
+    $instanceHomeAddress->zip = $request->;
+    $instanceHomeAddress->tel = $request->;
+    $instanceHomeAddress->fax = $request->;
+    $instanceHomeAddress->mobile = $request->;
+    $instanceHomeAddress->save();
+    
+    $instanceOfficeAddress = new address;
+    $instanceOfficeAddress->streetAddress = $request->;
+    $instanceOfficeAddress->city = $request->;
+    $instanceOfficeAddress->province = $request->;
+    $instanceOfficeAddress->addressCountryId = $request->;
+    $instanceOfficeAddress->zip = $request->;
+    $instanceOfficeAddress->tel = $request->;
+    $instanceOfficeAddress->fax = $request->;
+    $instanceOfficeAddress->mobile = $request->;
+    $instanceOfficeAddress->save();
+    
+    $instanceCareer = new career;
+    $instanceCareer->position = $request->;
+    $instanceCareer->startYear = $request->;
+    $instanceCareer->areaOfExpertise = $request->;
+    $instanceCareer->govMinistryName = $request->;
+    $instanceCareer->govDepartmentName = $request->;
+    $instanceCareer->organizationName = $request->;
+    $instanceCareer->organizationDepartment = $request->;
+    $instanceCareer->universityName = $request->;
+    $instanceCareer->universityDepartment = $request->;
+    $instanceCareer->careerOrganizationTypeId = $request->;
+    $instanceCareer->personId = $request->;
+    $instanceCareer->division = $request->;
+    $instanceCareer->save();
+    
+    $instanceUserLogin = new UserLogin;
+    $instanceUserLogin->login = $request->;
+    $instanceUserLogin->password = $request->;
+    $instanceUserLogin->isDisabled = $request->;
+    $instanceUserLogin->personId = $request->;
+    $instanceUserLogin->save();
+    
+    $instanceUserLoginUserRole = new UserLoginUserRole;
+    $instanceUserLoginUserRole->userLoginId = $request->;
+    $instanceUserLoginUserRole->userRoleId = $request->;
+    $instanceUserLoginUserRole->save();
+
     return response()->json($request);
   }
 
