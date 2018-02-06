@@ -19,10 +19,17 @@ class ProgramparticipantController extends BaseController {
 
   private $response = array('message' => 'success');
   
-  // public function participants($id) {
-  //   $results = Programparticipant::where('alumniId', $id)->get();;
-  //   return response()->json($results);
-  // }
+  public function participants($id) {
+    $results = Programparticipant::where('programId', $id)
+      ->leftJoin('program', 'Programparticipant.programId', '=', 'program.id')  
+      ->leftJoin('alumni', 'Programparticipant.alumniId', '=', 'alumni.id')  
+      ->leftJoin('person', 'alumni.personId', '=', 'person.id')  
+      ->leftJoin('persontitle', 'person.personTitleId', '=', 'persontitle.id')  
+      ->leftJoin('file', 'person.photoFileId', '=', 'file.id')  
+      ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.id')  
+      ->get();
+    return response()->json($results);
+  }
 
   public function enroll(Request $request) {
     $results = new Programparticipant;
