@@ -49,6 +49,7 @@ class ProgramController extends BaseController {
     $results->startDate = $request->startDate;
     $results->endDate = $request->endDate;
     $results->programDepartmentId = $request->programDepartmentId;
+    $results->status = 1;
     $results->save();
     return response()->json($this->response); 
   }
@@ -60,6 +61,7 @@ class ProgramController extends BaseController {
     $results->startDate = $request->startDate;
     $results->endDate = $request->endDate;
     $results->programDepartmentId = $request->programDepartmentId;
+    $results->status = 1;
     $results->save();
     return response()->json($this->response);
   }
