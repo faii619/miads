@@ -17,7 +17,7 @@ class ProgramController extends BaseController {
       //
   }
 
-  private $response = array('message' => 'success');
+  private $response = array('status'=>1, 'message' => 'success');
   
   private function get_dates_en($results) {
     foreach ($results as $key => $value) {
@@ -37,6 +37,8 @@ class ProgramController extends BaseController {
 
   public function find($id) {
     $results = Program::find($id);
+    $results['startDate'] = date("d/m/Y", strtotime($results['startDate']));
+    $results['endDate'] = date("d/m/Y", strtotime($results['endDate']));
     return response()->json($results);
   }
 
@@ -44,8 +46,8 @@ class ProgramController extends BaseController {
     $results = new Program;
     $results->code = $request->code;
     $results->title = $request->title;
-    $results->startDate = $request->startDate;
-    $results->endDate = $request->endDate;
+    $results->startDate = date("Y-m-d", strtotime($request->startDate));
+    $results->endDate = date("Y-m-d", strtotime($request->endDate));
     $results->programDepartmentId = $request->programDepartmentId;
     $results->status = 1;
     $results->save();
@@ -53,11 +55,14 @@ class ProgramController extends BaseController {
   }
 
   public function edit(Request $request) {
+    $startDate = str_replace('/', '-', $request->startDate);
+    $endDate = str_replace('/', '-', $request->endDate);
+    
     $results = Program::find($request->id);
     $results->code = $request->code;
     $results->title = $request->title;
-    $results->startDate = $request->startDate;
-    $results->endDate = $request->endDate;
+    $results->startDate = date("Y-m-d", strtotime($startDate));
+    $results->endDate = date("Y-m-d", strtotime($endDate));
     $results->programDepartmentId = $request->programDepartmentId;
     $results->status = 1;
     $results->save();
@@ -65,7 +70,10 @@ class ProgramController extends BaseController {
   }
 
   public function delete($id) {
-    $result = Program::where('id', $id)->delete();
+    $results = Program::find($id);
+    $results->status = 0;
+    $results->save();
+
     return response()->json($this->response);
   }
 }
