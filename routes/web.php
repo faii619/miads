@@ -20,13 +20,13 @@ $router->get('/key', function () use ($router) {
 
 $router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
 
-$router->get('/ministry', 'authority_control\MinistryController@create');
-
 $router->get('/country', 'country\CountryController@country');
 $router->post('/country/create', 'country\CountryController@create');
 $router->post('/country/edit', 'country\CountryController@edit');
 $router->delete('/country/delete/{id:[0-9]+}', 'country\CountryController@delete');
 
+$router->get('/ministry', 'authority_control\MinistryController@ministry');
+$router->delete('/ministry/delete/{id:[0-9]+}', 'authority_control\MinistryController@delete');
 $router->post('/ministry/create', 'authority_control\MinistryController@create');
 $router->get('/ministry_department', 'authority_control\MinistryController@department');
 $router->post('/ministry_department/create', 'authority_control\MinistryController@create_department');
@@ -36,13 +36,6 @@ $router->post('/organization_department/create', 'authority_control\Organization
 $router->post('/job_position/create', 'authority_control\PositionController@create');
 $router->post('/expertise/create', 'authority_control\ExpertiseController@create');
 $router->post('/division/create', 'authority_control\DivisionController@create');
-
-// $router->get('/program_depa/{id:[0-9]+}', 'program_department\ProgramDepartmentController@program_department');
-// $router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
-// $router->post('/program_depa/create', 'program_department\ProgramDepartmentController@create');
-// $router->post('/program_depa/edit', 'program_department\ProgramDepartmentController@edit');
-// $router->delete('/program_depa/delete', 'program_department\ProgramDepartmentController@delete');
-$router->get('/ministry', 'authority_control\MinistryController@create');
 
 $router->post('/program/programs_by_conditions', 'program\ProgramController@programs_by_conditions');
 $router->get('/program/{id:[0-9]+}', 'program\ProgramController@find');
@@ -67,5 +60,7 @@ $router->post('/alumni/sort', 'alumni\AlumniController@sort');
 $router->get('/alumni/{id:[0-9]+}', 'alumni\AlumniController@find');
 $router->post('/alumni/create', 'alumni\AlumniController@create');
 $router->post('/alumni/edit', 'alumni\AlumniController@edit');
-$router->delete('/alumni/delete', 'alumni\AlumniController@delete');
+$router->delete('/alumni/delete/{id:[0-9]+}', 'alumni\AlumniController@delete');
+$router->get('/alumni/latest', 'alumni\AlumniController@latest');
+$router->post('/alumni/change_passwod', 'alumni\AlumniController@change_passwod');
 
