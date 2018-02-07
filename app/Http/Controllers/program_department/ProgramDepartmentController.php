@@ -21,7 +21,7 @@ class ProgramDepartmentController extends BaseController
     private $response = array('message' => 'success');
 
     public function program_department() {
-      $results = ProgramDepartment::all();
+      $results = ProgramDepartment::where('status', 1)->get();
       return response()->json($results);
     }
 
