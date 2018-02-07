@@ -17,7 +17,7 @@ class ProgramController extends BaseController {
       //
   }
 
-  private $response = array('message' => 'success');
+  private $response = array('status'=>1, 'message' => 'success');
   
   private function get_dates_en($results) {
     foreach ($results as $key => $value) {
@@ -70,7 +70,10 @@ class ProgramController extends BaseController {
   }
 
   public function delete($id) {
-    $result = Program::where('id', $id)->delete();
+    $results = Program::find($id);
+    $results->status = 0;
+    $results->save();
+
     return response()->json($this->response);
   }
 }
