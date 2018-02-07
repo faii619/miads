@@ -280,4 +280,16 @@ class AlumniController extends BaseController
     return response()->json($this->response);
   }
 
+  public function latest()
+  {
+    $result = Person::where('personStatus', 1)
+                ->leftJoin('alumni', 'person.id', '=', 'alumni.personId')
+                ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.Id')
+                ->orderBy('person.id', 'desc')
+                ->limit(20)
+                ->get(['person.*', 'alumni.code', 'addresscountry.caption']);
+
+    return response()->json($result);
+  }
+
 }

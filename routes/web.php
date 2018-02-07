@@ -67,4 +67,5 @@ $router->get('/alumni/{id:[0-9]+}', 'alumni\AlumniController@find');
 $router->post('/alumni/create', 'alumni\AlumniController@create');
 $router->post('/alumni/edit', 'alumni\AlumniController@edit');
 $router->delete('/alumni/delete/{id:[0-9]+}', 'alumni\AlumniController@delete');
+$router->get('/alumni/latest', 'alumni\AlumniController@latest');
 
