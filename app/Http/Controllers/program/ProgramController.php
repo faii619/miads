@@ -37,6 +37,8 @@ class ProgramController extends BaseController {
 
   public function find($id) {
     $results = Program::find($id);
+    $results['startDate'] = date("d/m/Y", strtotime($results['startDate']));
+    $results['endDate'] = date("d/m/Y", strtotime($results['endDate']));
     return response()->json($results);
   }
 
