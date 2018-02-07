@@ -28,6 +28,7 @@ $router->post('/country/edit', 'country\CountryController@edit');
 $router->delete('/country/delete/{id:[0-9]+}', 'country\CountryController@delete');
 
 $router->post('/ministry/create', 'authority_control\MinistryController@create');
+$router->get('/ministry_department', 'authority_control\MinistryController@department');
 $router->post('/ministry_department/create', 'authority_control\MinistryController@create_department');
 $router->post('/university_department/create', 'authority_control\UniversityController@create_department');
 $router->post('/organization/create', 'authority_control\OrganizationController@create');

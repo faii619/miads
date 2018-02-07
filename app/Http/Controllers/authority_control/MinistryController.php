@@ -25,6 +25,10 @@ class MinistryController extends BaseController
         $result->save();
         return response()->json($this->response); 
       }
+      public function department(){
+        $results = AuthorityControl::where('status',1)->get();
+        return response()->json($results);
+      }
       public function create_department(Request $request){
         $result = new AuthorityControl;
         $result->govDepartmentName = $request->govDepartmentName;
