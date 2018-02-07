@@ -36,9 +36,7 @@ class ProgramController extends BaseController {
   }
 
   public function find($id) {
-    $results = Program::where('Program.id', $id)
-      ->leftJoin('programdepartment', 'Program.programDepartmentId', '=', 'programdepartment.id')
-      ->get();
+    $results = Program::find($id);
     return response()->json($results);
   }
 
