@@ -258,7 +258,38 @@ class AlumniController extends BaseController
 
   public function delete($id)
   {
-    return response()->json($id);
+    $result = $this->find($id)->original;
+    $personId = $result[0]['personId'];
+    $fileId = $result[0]['photoFileId'];
+    $status = ['status' => 0];
+
+    $resultPerson = Person::find($personId);
+    $resultPerson->personStatus = 0;
+    $resultPerson->save();
+
+    $resultFile = File::find($fileId);
+    $resultFile->status = 0;
+    $resultFile->save();
+    
+    Alumni::where([['personId', '=', $personId]])->update($status);
+
+    UserLogin::where([['personId', '=', $personId]])->update($status);
+    
+    Career::where([['personId', '=', $id]])->update($status);
+
+    return response()->json($this->response);
+  }
+
+  public function latest()
+  {
+    $result = Person::where('personStatus', 1)
+                ->leftJoin('alumni', 'person.id', '=', 'alumni.personId')
+                ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.Id')
+                ->orderBy('person.id', 'desc')
+                ->limit(20)
+                ->get(['person.*', 'alumni.code', 'addresscountry.caption']);
+
+    return response()->json($result);
   }
 
 }
