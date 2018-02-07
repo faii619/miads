@@ -52,8 +52,9 @@ class AlumniController extends BaseController
   {
     $item = [
       'person.*', 'alumni.code', 'file.fileName'
-      , 'persontitle.caption as title'
+      , 'persontitle.caption as personTitle'
       , 'addresscountry.caption as nationality'
+      , 'career.*'
     ];
 
     $result = Person::where([['person.id', '=', $id]])
@@ -61,6 +62,7 @@ class AlumniController extends BaseController
                 ->leftJoin('persontitle', 'person.personTitleId', '=', 'persontitle.id')
                 ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
                 ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.id')
+                ->leftJoin('career', 'person.id', 'career.personId')
                 ->get($item);
 
     if (count($result) > 0) {
@@ -252,6 +254,11 @@ class AlumniController extends BaseController
             ]);
 
     return response()->json($this->response);
+  }
+
+  public function delete($id)
+  {
+    return response()->json($id);
   }
 
 }
