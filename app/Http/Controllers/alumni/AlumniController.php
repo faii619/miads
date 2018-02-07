@@ -292,4 +292,10 @@ class AlumniController extends BaseController
     return response()->json($result);
   }
 
+  public function change_passwod(Request $request)
+  {
+    
+    return response()->json($request);
+  }
+
 }
