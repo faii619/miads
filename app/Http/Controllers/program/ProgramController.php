@@ -46,8 +46,8 @@ class ProgramController extends BaseController {
     $results = new Program;
     $results->code = $request->code;
     $results->title = $request->title;
-    $results->startDate = $request->startDate;
-    $results->endDate = $request->endDate;
+    $results->startDate = date("Y-m-d", strtotime($request->startDate));
+    $results->endDate = date("Y-m-d", strtotime($request->endDate));
     $results->programDepartmentId = $request->programDepartmentId;
     $results->status = 1;
     $results->save();
@@ -55,11 +55,14 @@ class ProgramController extends BaseController {
   }
 
   public function edit(Request $request) {
+    $startDate = str_replace('/', '-', $request->startDate);
+    $endDate = str_replace('/', '-', $request->endDate);
+    
     $results = Program::find($request->id);
     $results->code = $request->code;
     $results->title = $request->title;
-    $results->startDate = $request->startDate;
-    $results->endDate = $request->endDate;
+    $results->startDate = date("Y-m-d", strtotime($startDate));
+    $results->endDate = date("Y-m-d", strtotime($endDate));
     $results->programDepartmentId = $request->programDepartmentId;
     $results->status = 1;
     $results->save();
