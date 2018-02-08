@@ -8,33 +8,6 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class UniversityController extends BaseController
 {
-<<<<<<< HEAD
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    private $response = array('status' => 1, 'message' => 'success');
-    
-    public function create(Request $request){
-        $result = new AuthorityControl;
-        $result->universityName = $request->universityName;
-        $result->save();
-        return response()->json($this->response); 
-      }
-      public function create_department(Request $request){
-        $result = new AuthorityControl;
-        $result->universityDepartment = $request->universityDepartment;
-        $result->save();
-        return response()->json($this->response); 
-      }
-// ge
-=======
   /**
    * Create a new controller instance.
    *
@@ -82,5 +55,4 @@ class UniversityController extends BaseController
     $result->save();
     return response()->json($this->response); 
   }
->>>>>>> 9f3c3e3151bfd71a8022777e23609577282081d2
 }
