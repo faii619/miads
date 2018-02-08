@@ -21,27 +21,31 @@ class NewsCategoryController extends BaseController {
 
   // public function find(Request $request) {
   // }
-  public function news_cate(){
-    $results = NewsCategory::all();
+  public function news_cate() {
+    // $results = NewsCategory::where('status', 1)->get();
+    $results = NewsCategory::where('status', 1)->take(200)->get();
     return response()->json($results);
   }
 
-  public function create(Request $request) {
-    $results = new NewsCategory;
-    $results->caption = $request->caption;
-    $results->save();
-    return response()->json($this->response);
+  public function create(Request $request){
+    $result = new NewsCategory;
+    $result->caption = $request->caption;
+    $result->save();
+    return response()->json($this->response); 
   }
 
   public function edit(Request $request) {
     $results = NewsCategory::find($request->id);
     $results->caption = $request->caption;
+    $results->status = 1;
     $results->save();
     return response()->json($this->response);
   }
 
   public function delete($id) {
-    NewsCategory::where('id', $id)->delete();
+    $results = NewsCategory::find($id);
+    $results->status = 0;
+    $results->save();
     return response()->json($this->response);
   }
 }

@@ -77,7 +77,6 @@ $router->post('/program_departments/edit', 'program_department\ProgramDepartment
 $router->delete('/program_departments/delete/{id:[0-9]+}', 'program_department\ProgramDepartmentController@delete');
 
 $router->get('/news_cate', 'news_category\NewsCategoryController@news_cate');
-$router->post('/news_cate/create', 'news_category\NewsCategoryController@edit');
 $router->post('/news_cate/create', 'news_category\NewsCategoryController@create');
 $router->post('/news_cate/edit', 'news_category\NewsCategoryController@edit');
 $router->delete('/news_cate/delete/{id:[0-9]+}', 'news_category\NewsCategoryController@delete');
