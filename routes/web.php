@@ -33,6 +33,7 @@ $router->delete('/ministry/delete/{id:[0-9]+}', 'authority_control\MinistryContr
 $router->post('/ministry_departments/create', 'authority_control\MinistryDepartmentsController@create');
 $router->post('/ministry_departments/edit', 'authority_control\MinistryDepartmentsController@edit');
 
+
 $router->post('/university_department/create', 'authority_control\UniversityDepartmentsController@university_create');
 $router->post('/university_department/edit', 'authority_control\UniversityDepartmentsController@university_edit');
 
