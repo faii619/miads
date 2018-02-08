@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\authority_control;
 
-use App\Models\authority_control\AuthorityControl;
+use App\Models\career\Career;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
-class UniversityController extends BaseController
+class UniversityDepartmentsController extends BaseController
 {
     /**
      * Create a new controller instance.
@@ -20,17 +20,19 @@ class UniversityController extends BaseController
 
     private $response = array('status' => 1, 'message' => 'success');
     
-    public function create(Request $request){
-        $result = new AuthorityControl;
-        $result->universityName = $request->universityName;
-        $result->save();
-        return response()->json($this->response); 
-      }
-      public function create_department(Request $request){
-        $result = new AuthorityControl;
+    public function  university_create(Request $request) {
+        $result = new Career;
         $result->universityDepartment = $request->universityDepartment;
         $result->save();
         return response()->json($this->response); 
       }
-// ge
+    
+      public function  university_edit(Request $request) {
+        $results = Career::find($request->id);
+        $results->universityDepartment = $request->universityDepartment;
+        $results->status = 1;
+        $results->save();
+        return response()->json($this->response);
+      }
+// ge universityName
 }
