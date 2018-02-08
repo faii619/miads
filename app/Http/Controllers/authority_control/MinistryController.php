@@ -21,7 +21,9 @@ class MinistryController extends BaseController
     private $response = array('status' => 1, 'message' => 'success');
 
     public function ministry() {
-        $results = Career::where('status', 1)->get();
+        // $results = Career::where('status', 1)->get();
+        $results = Career::where('status', 1)->take(200)->get();
+        
         return response()->json($results);
     }
 
