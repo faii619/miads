@@ -46,7 +46,12 @@ $router->post('/organization/edit', 'authority_control\OrganizationController@ed
 $router->delete('/organization/delete/{id:[0-9]+}', 'authority_control\OrganizationController@delete');
 
 $router->post('/organization_department/create', 'authority_control\OrganizationController@create_department');
+
+$router->get('/job_position', 'authority_control\PositionController@job_position');
 $router->post('/job_position/create', 'authority_control\PositionController@create');
+$router->post('/job_position/edit', 'authority_control\PositionController@edit');
+$router->delete('/job_position/delete/{id:[0-9]+}', 'authority_control\PositionController@delete');
+
 $router->post('/expertise/create', 'authority_control\ExpertiseController@create');
 $router->post('/division/create', 'authority_control\DivisionController@create');
 
