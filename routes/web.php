@@ -33,13 +33,26 @@ $router->delete('/ministry/delete/{id:[0-9]+}', 'authority_control\MinistryContr
 $router->post('/ministry_departments/create', 'authority_control\MinistryDepartmentsController@create');
 $router->post('/ministry_departments/edit', 'authority_control\MinistryDepartmentsController@edit');
 
-// $router->get('/university', 'authority_control\UniversityController@university');
-$router->post('/university_department/create', 'authority_control\UniversityDepartmentsController@university_create');
-$router->post('/university_department/edit', 'authority_control\UniversityDepartmentsController@university_edit');
+$router->post('/university_department/create', 'authority_control\UniversityDepartmentsController@create');
+$router->post('/university_department/edit', 'authority_control\UniversityDepartmentsController@edit');
 
+$router->get('/university', 'authority_control\UniversityController@university');
+$router->post('/university/create', 'authority_control\UniversityController@create');
+$router->post('/university/edit', 'authority_control\UniversityController@edit');
+$router->delete('/university/delete/{id:[0-9]+}', 'authority_control\UniversityController@delete');
+
+$router->get('/organization', 'authority_control\OrganizationController@organization');
 $router->post('/organization/create', 'authority_control\OrganizationController@create');
+$router->post('/organization/edit', 'authority_control\OrganizationController@edit');
+$router->delete('/organization/delete/{id:[0-9]+}', 'authority_control\OrganizationController@delete');
+
 $router->post('/organization_department/create', 'authority_control\OrganizationController@create_department');
+
+$router->get('/job_position', 'authority_control\PositionController@job_position');
 $router->post('/job_position/create', 'authority_control\PositionController@create');
+$router->post('/job_position/edit', 'authority_control\PositionController@edit');
+$router->delete('/job_position/delete/{id:[0-9]+}', 'authority_control\PositionController@delete');
+
 $router->post('/expertise/create', 'authority_control\ExpertiseController@create');
 $router->post('/division/create', 'authority_control\DivisionController@create');
 

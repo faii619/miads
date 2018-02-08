@@ -20,14 +20,14 @@ class UniversityDepartmentsController extends BaseController
 
     private $response = array('status' => 1, 'message' => 'success');
     
-    public function  university_create(Request $request) {
+    public function  create(Request $request) {
         $result = new Career;
         $result->universityDepartment = $request->universityDepartment;
         $result->save();
         return response()->json($this->response); 
       }
-    
-      public function  university_edit(Request $request) {
+
+      public function  edit(Request $request) {
         $results = Career::find($request->id);
         $results->universityDepartment = $request->universityDepartment;
         $results->status = 1;

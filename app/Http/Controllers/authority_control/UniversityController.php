@@ -48,11 +48,4 @@ class UniversityController extends BaseController
     return response()->json($this->response);
   }
 
-
-  public function create_department(Request $request){
-    $result = new AuthorityControl;
-    $result->universityDepartment = $request->universityDepartment;
-    $result->save();
-    return response()->json($this->response); 
-  }
 }
