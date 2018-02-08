@@ -39,7 +39,12 @@ $router->post('/university/edit', 'authority_control\UniversityController@edit')
 $router->delete('/university/delete/{id:[0-9]+}', 'authority_control\UniversityController@delete');
 
 $router->post('/university_department/create', 'authority_control\UniversityController@create_department');
+
+$router->get('/organization', 'authority_control\OrganizationController@organization');
 $router->post('/organization/create', 'authority_control\OrganizationController@create');
+$router->post('/organization/edit', 'authority_control\OrganizationController@edit');
+$router->delete('/organization/delete/{id:[0-9]+}', 'authority_control\OrganizationController@delete');
+
 $router->post('/organization_department/create', 'authority_control\OrganizationController@create_department');
 $router->post('/job_position/create', 'authority_control\PositionController@create');
 $router->post('/expertise/create', 'authority_control\ExpertiseController@create');
