@@ -26,10 +26,13 @@ $router->post('/country/edit', 'country\CountryController@edit');
 $router->delete('/country/delete/{id:[0-9]+}', 'country\CountryController@delete');
 
 $router->get('/ministry', 'authority_control\MinistryController@ministry');
-$router->delete('/ministry/delete/{id:[0-9]+}', 'authority_control\MinistryController@delete');
 $router->post('/ministry/create', 'authority_control\MinistryController@create');
-$router->get('/ministry_department', 'authority_control\MinistryController@department');
-$router->post('/ministry_department/create', 'authority_control\MinistryController@create_department');
+$router->post('/ministry/edit', 'authority_control\MinistryController@edit');
+$router->delete('/ministry/delete/{id:[0-9]+}', 'authority_control\MinistryController@delete');
+
+$router->post('/ministry_departments/create', 'authority_control\MinistryDepartmentsController@create');
+$router->post('/ministry_departments/edit', 'authority_control\MinistryDepartmentsController@edit');
+
 $router->post('/university_department/create', 'authority_control\UniversityController@create_department');
 $router->post('/organization/create', 'authority_control\OrganizationController@create');
 $router->post('/organization_department/create', 'authority_control\OrganizationController@create_department');

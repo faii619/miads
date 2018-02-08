@@ -294,8 +294,18 @@ class AlumniController extends BaseController
 
   public function change_passwod(Request $request)
   {
-    
-    return response()->json($request);
+    $personId = $request->id;
+    $new = $request->newPassword;
+    $confirm = $request->confirmPassword;
+    if ($new == $confirm) {
+      UserLogin::where([['personId', '=', $personId]])
+                ->update([
+                    'password' => md5($new)
+                  ]);
+    } else {
+      $this->response = ['status' => 0, 'message' => 'not match'];
+    }
+    return response()->json($this->response);
   }
 
 }
