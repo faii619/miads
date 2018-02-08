@@ -33,6 +33,11 @@ $router->delete('/ministry/delete/{id:[0-9]+}', 'authority_control\MinistryContr
 $router->post('/ministry_departments/create', 'authority_control\MinistryDepartmentsController@create');
 $router->post('/ministry_departments/edit', 'authority_control\MinistryDepartmentsController@edit');
 
+$router->get('/university', 'authority_control\UniversityController@university');
+$router->post('/university/create', 'authority_control\UniversityController@create');
+$router->post('/university/edit', 'authority_control\UniversityController@edit');
+$router->delete('/university/delete/{id:[0-9]+}', 'authority_control\UniversityController@delete');
+
 $router->post('/university_department/create', 'authority_control\UniversityController@create_department');
 $router->post('/organization/create', 'authority_control\OrganizationController@create');
 $router->post('/organization_department/create', 'authority_control\OrganizationController@create_department');
