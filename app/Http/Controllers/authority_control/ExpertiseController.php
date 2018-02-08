@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\authority_control;
 
-use App\Models\authority_control\AuthorityControl;
+use App\Models\career\Career;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -19,12 +19,34 @@ class ExpertiseController extends BaseController
     }
 
     private $response = array('status' => 1, 'message' => 'success');
+    
+    public function expertise() {
+      // $results = Career::where('status', 1)->get();
+      $results = Career::where('status', 1)->take(200)->get();
+      return response()->json($results);
+    }
+
     public function create(Request $request){
-        $result = new AuthorityControl;
-        $result->areaOfExpertise = $request->areaOfExpertise;
-        $result->save();
-        return response()->json($this->response); 
-      }
+      $result = new Career;
+      $result->areaOfExpertise = $request->areaOfExpertise;
+      $result->save();
+      return response()->json($this->response); 
+    }
+
+    public function edit(Request $request) {
+      $results = Career::find($request->id);
+      $results->areaOfExpertise = $request->areaOfExpertise;
+      $results->status = 1;
+      $results->save();
+      return response()->json($this->response);
+    }
+
+    public function delete($id) {
+      $results = Career::find($id);
+      $results->status = 0;
+      $results->save();
+      return response()->json($this->response);
+    }
 
 
 }

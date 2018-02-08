@@ -52,7 +52,11 @@ $router->post('/job_position/create', 'authority_control\PositionController@crea
 $router->post('/job_position/edit', 'authority_control\PositionController@edit');
 $router->delete('/job_position/delete/{id:[0-9]+}', 'authority_control\PositionController@delete');
 
+$router->get('/expertise', 'authority_control\ExpertiseController@expertise');
 $router->post('/expertise/create', 'authority_control\ExpertiseController@create');
+$router->post('/expertise/edit', 'authority_control\ExpertiseController@edit');
+$router->delete('/expertise/delete/{id:[0-9]+}', 'authority_control\ExpertiseController@delete');
+
 $router->post('/division/create', 'authority_control\DivisionController@create');
 
 $router->post('/program/programs_by_conditions', 'program\ProgramController@programs_by_conditions');
