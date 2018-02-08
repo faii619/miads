@@ -17,7 +17,7 @@ class NewsCategoryController extends BaseController {
       //
   }
 
-  private $response = array('message' => 'success');
+  private $response = array('status' => 1, 'message' => 'success');
 
   // public function find(Request $request) {
   // }
