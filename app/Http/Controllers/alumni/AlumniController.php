@@ -45,12 +45,13 @@ class AlumniController extends BaseController
     //             ->orderBy('alumni.code', 'asc')
     //             ->get(['person.*', 'alumni.code', 'addresscountry.caption']);
 
-    // $result = Person::leftJoin('alumni', 'person.id', '=', 'alumni.personId')
-    // ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.Id')
-    // ->orderBy('alumni.code', 'asc')
-    // ->get(['person.*', 'alumni.code', 'addresscountry.caption']);
+    $result = Person::leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
+    ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
+    ->orderBy('Alumni.code', 'asc')
+    ->take(20)
+    ->get(['Person.*', 'Alumni.code', 'AddressCountry.caption']);
 
-    // return response()->json($result);
+    return response()->json($result);
   }
 
   public function find($id)
