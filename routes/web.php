@@ -18,8 +18,6 @@ $router->get('/key', function () use ($router) {
     return str_random(32);
 });
 
-$router->get('/program_depa', 'program_department\ProgramDepartmentController@program_department');
-
 $router->get('/country', 'country\CountryController@country');
 $router->post('/country/create', 'country\CountryController@create');
 $router->post('/country/edit', 'country\CountryController@edit');
