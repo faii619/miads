@@ -50,14 +50,19 @@ class ProgramController extends BaseController {
   }
 
   public function create(Request $request) {
+    $startDate = str_replace('/', '-', $request->startDate);
+    $endDate = str_replace('/', '-', $request->endDate);
+
     $results = new Program;
     $results->code = $request->code;
     $results->title = $request->title;
-    $results->startDate = date("Y-m-d", strtotime($request->startDate));
-    $results->endDate = date("Y-m-d", strtotime($request->endDate));
+    $results->startDate = date("Y-m-d", strtotime($startDate));
+    $results->endDate = date("Y-m-d", strtotime($endDate));
     $results->programDepartmentId = $request->programDepartmentId;
     $results->status = 1;
     $results->save();
+    
+    $this->response['lastId'] = $results->id;
     return response()->json($this->response); 
   }
 
@@ -73,6 +78,8 @@ class ProgramController extends BaseController {
     $results->programDepartmentId = $request->programDepartmentId;
     $results->status = 1;
     $results->save();
+
+    $this->response['lastId'] = $request->id;
     return response()->json($this->response);
   }
 
