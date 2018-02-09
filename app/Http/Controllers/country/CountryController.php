@@ -48,6 +48,5 @@ class CountryController extends BaseController
         $results->save();
         return response()->json($this->response);
       }
-    
-    
+   
 }
