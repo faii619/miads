@@ -18,7 +18,7 @@ class CountryController extends BaseController
         //
     }
 
-    private $response = array( 'message' => 'success');
+  private $response = array('status' => 1, 'message' => 'success');  
       
   public function country() {
     // $results = Career::where('status', 1)->get();
