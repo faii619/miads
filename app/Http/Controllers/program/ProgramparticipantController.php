@@ -17,7 +17,7 @@ class ProgramparticipantController extends BaseController {
       //
   }
 
-  private $response = array('message' => 'success');
+  private $response = array('status'=>1,'message' => 'success');
   
   public function participants($id) {
     $results = Programparticipant::where('programId', $id)
@@ -33,10 +33,16 @@ class ProgramparticipantController extends BaseController {
   }
 
   public function enroll(Request $request) {
-    $results = new Programparticipant;
-    $results->programId = $request->programId;
-    $results->alumniId = $request->alumniId;
-    $results->save();
-    return response()->json($this->response); 
+    $alumni = $request->alumni;
+
+    foreach ($alumni as $key => $value) {
+      $results = new Programparticipant;
+      $results->programId = $request->programId;
+      $results->alumniId = $value;
+      $results->save();
+    }
+    
+    return response()->json($this->response);
+    
   }
 }
