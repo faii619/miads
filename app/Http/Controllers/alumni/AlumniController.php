@@ -30,25 +30,29 @@ class AlumniController extends BaseController
 
   public function sort(Request $request)
   {
-    // if (!empty($request->code)) {
-    //   $arr_where = [['alumni.code', '=', $request->code]];
-    // } else {
-    //   $arr_where = [
-    //     ['name', '<>', 'null']
-    //     , ['caption', '<>', 'null']
-    //   ];
-    // }
+    $conditions[] = ['Person.personStatus', '=', 1];
+    
+    if ($request->txt_code !='0') {
+      $conditions[] = ['Alumni.code', 'like', $request->txt_code.'%'];
+    }
 
-    // $result = Person::where($arr_where)
-    //             ->leftJoin('alumni', 'person.id', '=', 'alumni.personId')
-    //             ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.Id')
-    //             ->orderBy('alumni.code', 'asc')
-    //             ->get(['person.*', 'alumni.code', 'addresscountry.caption']);
+    if ($request->txt_name !='0') {
+      $conditions[] = ['Person.name', 'like', $request->txt_name.'%'];
+    }
 
-    $result = Person::leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
+    if ($request->txt_email !='0') {
+      $conditions[] = ['Person.email', 'like', $request->txt_email.'%'];
+    }
+
+    if ($request->countryId !='0') {
+      $conditions[] = ['Person.nationalityAddressCountryId', '=', $request->countryId];
+    }
+
+    $result = Person::where($conditions)
+    ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
     ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
     ->orderBy('Alumni.code', 'asc')
-    ->take(20)
+    // ->take(20)
     ->get(['Person.*', 'Alumni.code', 'AddressCountry.caption']);
 
     return response()->json($result);
