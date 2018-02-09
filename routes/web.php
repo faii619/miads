@@ -67,8 +67,10 @@ $router->get('/program/{id:[0-9]+}', 'program\ProgramController@find');
 $router->post('/program/create', 'program\ProgramController@create');
 $router->post('/program/edit', 'program\ProgramController@edit');
 $router->delete('/program/delete/{id:[0-9]+}', 'program\ProgramController@delete');
+
 $router->get('/program/participants/{id:[0-9]+}', 'program\ProgramparticipantController@participants');
 $router->post('/program/enroll', 'program\ProgramparticipantController@enroll');
+$router->post('/program/participants/delete', 'program\ProgramparticipantController@delete');
 
 $router->get('/program_departments', 'program_department\ProgramDepartmentController@program_department');
 $router->post('/program_departments/create', 'program_department\ProgramDepartmentController@create');

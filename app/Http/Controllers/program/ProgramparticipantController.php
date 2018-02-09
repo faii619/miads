@@ -43,6 +43,15 @@ class ProgramparticipantController extends BaseController {
     }
     
     return response()->json($this->response);
-    
+  }
+
+  public function delete(Request $request) {
+    // return response()->json($request);
+
+    $results = Programparticipant::where('programId', $request->programId)
+    ->where('alumniId', $request->alumniId)
+    ->update(['status' => 0]);
+
+    return response()->json($this->response);
   }
 }
