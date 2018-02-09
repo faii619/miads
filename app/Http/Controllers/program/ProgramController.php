@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\program;
 
 use App\Models\program\Program;
+use App\Models\program\Programparticipant;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -87,6 +88,8 @@ class ProgramController extends BaseController {
     $results = Program::find($id);
     $results->status = 0;
     $results->save();
+
+    Programparticipant::where('programId', $id)->update(['status' => 0]);
 
     return response()->json($this->response);
   }
