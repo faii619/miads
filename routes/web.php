@@ -44,7 +44,8 @@ $router->post('/organization/create', 'authority_control\OrganizationController@
 $router->post('/organization/edit', 'authority_control\OrganizationController@edit');
 $router->delete('/organization/delete/{id:[0-9]+}', 'authority_control\OrganizationController@delete');
 
-$router->post('/organization_department/create', 'authority_control\OrganizationController@create_department');
+$router->post('/organization_department/create', 'authority_control\OrganizationDepartmentController@create');
+$router->post('/organization_department/edit', 'authority_control\OrganizationDepartmentController@edit');
 
 $router->get('/job_position', 'authority_control\PositionController@job_position');
 $router->post('/job_position/create', 'authority_control\PositionController@create');
