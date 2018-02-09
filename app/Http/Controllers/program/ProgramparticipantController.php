@@ -21,15 +21,14 @@ class ProgramparticipantController extends BaseController {
   
   public function participants($id) {
     $results = Programparticipant::where('programId', $id)
-      ->leftJoin('program', 'Programparticipant.programId', '=', 'program.id')  
-      ->leftJoin('alumni', 'Programparticipant.alumniId', '=', 'alumni.id')  
-      ->leftJoin('person', 'alumni.personId', '=', 'person.id')  
-      ->leftJoin('persontitle', 'person.personTitleId', '=', 'persontitle.id')  
-      ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
-      ->leftJoin('address', 'person.homeAddressId', '=', 'address.id')
-      // ->leftJoin('address', 'person.officeAddressId', '=', 'address.id')
-      ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.id')  
-      ->get();
+    ->leftJoin('Program', 'ProgramParticipant.programId', '=', 'Program.id')  
+    ->leftJoin('Alumni', 'ProgramParticipant.alumniId', '=', 'Alumni.id')  
+    ->leftJoin('Person', 'Alumni.personId', '=', 'Person.id')  
+    ->leftJoin('PersonTitle', 'Person.personTitleId', '=', 'PersonTitle.id')  
+    ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
+    ->leftJoin('Address', 'Person.homeAddressId', '=', 'Address.id')
+    ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.id')
+    ->get();
     return response()->json($results);
   }
 
