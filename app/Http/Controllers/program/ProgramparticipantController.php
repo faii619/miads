@@ -20,7 +20,8 @@ class ProgramparticipantController extends BaseController {
   private $response = array('status'=>1,'message' => 'success');
   
   public function participants($id) {
-    $results = Programparticipant::where('programId', $id)
+    $results = Programparticipant::where('ProgramParticipant.programId', $id)
+    ->where('ProgramParticipant.status', 1)
     ->leftJoin('Program', 'ProgramParticipant.programId', '=', 'Program.id')  
     ->leftJoin('Alumni', 'ProgramParticipant.alumniId', '=', 'Alumni.id')  
     ->leftJoin('Person', 'Alumni.personId', '=', 'Person.id')  
