@@ -30,7 +30,26 @@ class ProgramController extends BaseController {
   }
 
   public function programs_by_conditions(Request $request) {
-    $results = Program::where('status', 1)->get();
+    
+    $conditions[] = ['Program.status', '=', 1];
+    
+    if ($request->txt_code !='0') {
+      // $conditions[] = ['Program.code', '=', $request->txt_code];
+      $conditions[] = ['Program.code', 'like', $request->txt_code.'%'];
+    }
+
+    if ($request->txt_title !='0') {
+      $conditions[] = ['Program.title', 'like', $request->txt_title.'%'];
+    }
+
+    if ($request->programDepartmentId !='0') {
+      $conditions[] = ['Program.programDepartmentId', '=', $request->programDepartmentId];
+    }
+
+    $results = Program::where($conditions)
+    ->take(500)
+    ->get();
+
     $results = $this->get_dates_en($results);
 
     return response()->json($results);
