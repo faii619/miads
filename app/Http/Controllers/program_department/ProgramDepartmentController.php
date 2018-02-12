@@ -22,7 +22,10 @@ class ProgramDepartmentController extends BaseController
 
   public function program_department() {
     // $results = ProgramDepartment::where('status', 1)->get();
-    $results = ProgramDepartment::where('status', 1)->take(200)->get();
+    $results = ProgramDepartment::where('status', 1)
+                ->take(200)
+                ->orderBy('caption', 'asc')
+                ->get();
     return response()->json($results);
   }
 
