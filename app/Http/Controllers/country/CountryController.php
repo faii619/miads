@@ -20,7 +20,7 @@ class CountryController extends BaseController
     }
 
   private $response = array('status' => 1, 'message' => 'success');
-  private $path = 'country_images';
+  private $path = 'images/country_images';
 
   public function country() 
   {
@@ -37,7 +37,7 @@ class CountryController extends BaseController
       $result = new Country;
       $result->caption = $request->caption;
       $result->flagFileId = $image;
-      
+
       $result->save();
       return response()->json($this->response); 
     }
