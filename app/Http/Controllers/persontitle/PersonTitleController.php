@@ -16,5 +16,10 @@ class PersonTitleController extends BaseController {
   {
       //
   }
+
+  public function person_title(Type $var = null)
+  {
+    # code...
+  }
   
 }
