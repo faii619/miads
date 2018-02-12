@@ -17,9 +17,10 @@ class PersonTitleController extends BaseController {
       //
   }
 
-  public function person_title(Type $var = null)
+  public function person_title()
   {
-    # code...
+    $results = PersonTitle::all();
+    return response()->json($results);
   }
   
 }
