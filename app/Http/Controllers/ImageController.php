@@ -9,10 +9,8 @@ class ImageController extends BaseController
   public function getImagesUrl($results, $path, $index='image')
   {
     foreach ($results as $key => $value) {
-      // $image = $this->verifyImage($value[$index], $path);
       $image = $this->getImageUrl($value[$index], $path);
       $results[$key][$index.'_url'] = $image;
-      // $results[$key][$index.'_url'] = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/'.$path.$image;
     }
 
     return $results;
