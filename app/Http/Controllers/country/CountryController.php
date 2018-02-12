@@ -33,13 +33,15 @@ class CountryController extends BaseController
     {
       $upload = new UploadController();
       $image = $upload->setImage($request, $this->path);
+      return response()->json($image);
       
       $result = new Country;
       $result->caption = $request->caption;
+      $result->ordinal = $request->ordinal;
       $result->flagFileId = $image;
 
       $result->save();
-      return response()->json($this->response); 
+      return response()->json($this->response);
     }
 
     public function edit(Request $request)
