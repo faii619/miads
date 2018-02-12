@@ -90,3 +90,4 @@ $router->delete('/alumni/delete/{id:[0-9]+}', 'alumni\AlumniController@delete');
 $router->get('/alumni/latest', 'alumni\AlumniController@latest');
 $router->post('/alumni/change_passwod', 'alumni\AlumniController@change_passwod');
 
+$router->get('/persontitle', 'persontitle\PersonTitleController@person_title');
