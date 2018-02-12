@@ -4,4 +4,4 @@ Homestead.json
 Homestead.yaml
 .env
 
-public/images/country/*
+/public/images/country/*
