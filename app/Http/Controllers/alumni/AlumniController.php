@@ -53,7 +53,7 @@ class AlumniController extends BaseController
     ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
     ->orderBy('Alumni.code', 'asc')
     ->take(500)
-    ->get(['Person.*', 'Alumni.code', 'AddressCountry.caption']);
+    ->get(['Person.*', 'Alumni.code', 'AddressCountry.*']);
 
     return response()->json($result);
   }
