@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\country;
 
 use App\Models\country\Country;
+use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -19,7 +20,8 @@ class CountryController extends BaseController
     }
 
   private $response = array('status' => 1, 'message' => 'success');
-      
+  private $path = 'country_images';
+
   public function country() 
   {
     // $results = Career::where('status', 1)->get();
@@ -29,9 +31,13 @@ class CountryController extends BaseController
     
     public function create(Request $request)
     {
+      $upload = new UploadController();
+      $image = $upload->setImage($request, $this->path);
+      
       $result = new Country;
       $result->caption = $request->caption;
-      // $result->ordinal = $request->ordinal;
+      $result->flagFileId = $image;
+      
       $result->save();
       return response()->json($this->response); 
     }
