@@ -25,7 +25,7 @@ class CountryController extends BaseController
   public function country() 
   {
     // $results = Career::where('status', 1)->get();
-    $results = Country::where('status', 1)->take(200)->get();
+    $results = Country::where('status', 1)->orderBy('caption', 'asc')->take(200)->get();
     return response()->json($results);
   }
     
