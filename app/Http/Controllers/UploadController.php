@@ -17,8 +17,9 @@ class UploadController extends Controller
 
   public function setImage($request, $path)
   {
-    $link_name = 'default.png';
-
+    // $link_name = 'default.png';
+    $link_name = ($request->old_image =='0'? 'default.png' : $request->old_image);
+    
     if ($request->hasFile('image')) {
       $image = $request->file('image');
       $origin_name = $image->getClientOriginalName();
@@ -28,8 +29,6 @@ class UploadController extends Controller
     }
     
     return $link_name;
-    // $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/'.$this->dest.$link_name;
-    // return response()->json(['imageUrl'=>$image_url]);
   }
 
 }
