@@ -91,3 +91,5 @@ $router->get('/alumni/latest', 'alumni\AlumniController@latest');
 $router->post('/alumni/change_passwod', 'alumni\AlumniController@change_passwod');
 
 $router->get('/persontitle', 'persontitle\PersonTitleController@person_title');
+
+$router->get('/gender', 'gender\GenderController@gender');
