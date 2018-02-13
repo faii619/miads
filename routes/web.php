@@ -93,3 +93,5 @@ $router->post('/alumni/change_passwod', 'alumni\AlumniController@change_passwod'
 $router->get('/persontitle', 'persontitle\PersonTitleController@person_title');
 
 $router->get('/gender', 'gender\GenderController@gender');
+
+$router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
