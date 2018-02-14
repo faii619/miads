@@ -27,6 +27,7 @@ class AlumniController extends BaseController
 
   private $response = array('status' => 1, 'message' => 'success');
   private $text_status = 'No Information';
+  private $path = 'images/alumni/';
 
   public function sort(Request $request)
   {
@@ -104,13 +105,25 @@ class AlumniController extends BaseController
 
   public function create(Request $request)
   {
+    // $imageSize = (!empty($request->imageSize) && $request->imageSize != '') ? $request->imageSize : '0' ;
+
+    // if (!empty($request->image) && $request->image != 0) {
+    //   $upload = new UploadController();
+    //   $image = $upload->setImage($request, $this->path);
+    // }
+    // $instanceFile->fileSize = $imageSize;
+    $image = 'default.png';
+    $birthday = '0000-00-00';
     $personCode = $request->code;
-    $imageName = (!empty($request->imageName) && $request->imageName != '') ? $request->imageName : 'default.jpg' ;
-    $imageSize = (!empty($request->imageSize) && $request->imageSize != '') ? $request->imageSize : '0' ;
+
+    if ($request->birthday != 0) {
+      $bd = explode("/", $request->birthday);
+      $birthday = $bd[2].'-'.$bd[1].'-'.$bd[0];
+    }
 
     $instanceFile = new File;
-    $instanceFile->fileName = $imageName;
-    $instanceFile->fileSize = $imageSize;
+    $instanceFile->fileName = $image;
+    $instanceFile->fileSize = $request->imageSize;
     $instanceFile->save();
     $fileId = $instanceFile->id;
     
@@ -141,7 +154,7 @@ class AlumniController extends BaseController
     $instancePerson = new Person;
     $instancePerson->personTitleId = $request->title;
     $instancePerson->name = $request->name;
-    $instancePerson->birthDate = $request->birthday;
+    $instancePerson->birthDate = $birthday;
     $instancePerson->email = $request->email;
     $instancePerson->otherEmails = $request->otherEmails;
     $instancePerson->photoFileId = $fileId;
@@ -187,6 +200,7 @@ class AlumniController extends BaseController
     $instanceUserLoginUserRole->save();
 
     return response()->json($this->response);
+    // return response()->json($request);
   }
 
   public function edit(Request $request)
