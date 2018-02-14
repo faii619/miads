@@ -22,7 +22,8 @@ class OrganizationController extends BaseController
 
   public function organization() {
     // $results = Career::where('status', 1)->get();
-    $results = Career::where('status', 1)->take(200)->get();
+    // $results = Career::where('status', 1)->take(200)->get();
+    $results = Career::where([['status', 1],['organizationName', '!=', ''],['organizationDepartment', '!=', '']])->take(200)->get();
     return response()->json($results);
   }
 

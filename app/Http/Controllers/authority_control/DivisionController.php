@@ -22,7 +22,8 @@ class DivisionController extends BaseController
   
   public function division() {
     // $results = Career::where('status', 1)->get();
-    $results = Career::where('status', 1)->take(200)->get();
+    // $results = Career::where('status', 1)->take(200)->get();
+    $results = Career::where([['status', 1],['division', '!=', '']])->take(200)->get();
     return response()->json($results);
   }
 

@@ -22,7 +22,9 @@ class PositionController extends BaseController
 
   public function job_position() {
     // $results = Career::where('status', 1)->get();
-    $results = Career::where('status', 1)->take(200)->get();
+    // $results = Career::where('status', 1)->take(200)->get();
+    // $results = Career::where('position', '!=', '')->take(200)->get();
+    $results = Career::where([['status', 1],['position', '!=', '']])->take(200)->get();
     return response()->json($results);
   }
 
