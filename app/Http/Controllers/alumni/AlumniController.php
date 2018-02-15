@@ -56,7 +56,10 @@ class AlumniController extends BaseController
     ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
     ->orderBy('Alumni.code', 'asc')
     ->take(500)
-    ->get(['Person.*', 'Alumni.code', 'AddressCountry.*']);
+    ->get(['Person.*', 'Alumni.code', 'AddressCountry.*', 'Person.id as personId']);
+
+    $images = new ImageController();
+    $result = $images->getImagesUrl($result, $this->path, 'flagImage');
 
     return response()->json($result);
   }
@@ -68,6 +71,7 @@ class AlumniController extends BaseController
       , 'persontitle.caption as personTitle'
       , 'addresscountry.caption as nationality'
       , 'career.*', 'gender.caption as gender'
+      , 'careerorganizationtype.caption as organizationType'
     ];
 
     $result = Person::where([['person.id', '=', $id]])
@@ -76,21 +80,34 @@ class AlumniController extends BaseController
                 ->leftJoin('gender', 'person.gender', '=', 'gender.id')
                 ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
                 ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.id')
-                ->leftJoin('career', 'person.id', 'career.personId')
+                ->leftJoin('career', 'person.id', '=', 'career.personId')
+                ->leftJoin('careerorganizationtype', 'career.careerOrganizationTypeId', '=', 'careerorganizationtype.id')
                 ->get($item);
 
     if (count($result) > 0) {
       $result[0]['birthDate'] = $this->getDateShow($result[0]['birthDate']);
+      $result[0]['contactAddress'] = ($result[0]['isPreferOfficeContact'] == 0) ? 'Home' : 'Office' ;
       $result[0]['homeAddress'] = ($result[0]['homeAddressId'] > 0 && $result[0]['homeAddressId'] != NULL) ? $this->get_person_address($result[0]['homeAddressId']) : $this->text_status ;
       $result[0]['officeAddress'] = ($result[0]['officeAddressId'] > 0 && $result[0]['officeAddressId'] != NULL) ? $this->get_person_address($result[0]['officeAddressId']) : $this->text_status ;
       $result[0]['officeContactAddress'] = ($result[0]['isPreferOfficeContact'] = 0) ? $result[0]['homeAddress'] : $result[0]['officeAddress'] ;
-      $result[0]['program'] = $this->get_person_program($result[0]['id']);
+      $result[0]['program'] = $this->get_person_program($id);
+      $result[0]['program'] = $this->editFormatDate($result[0]['program']);
 
       $images = new ImageController();
       $result = $images->getImagesUrl($result, $this->path, 'fileName');
     }
 
     return response()->json($result);
+  }
+
+  public function editFormatDate($results)
+  {
+    foreach ($results as $key => $value) {
+      $start = $this->getDateShow($value['startDate']);
+      $end = $this->getDateShow($value['endDate']);
+      $results[$key]['schedule'] = $start." - ".$end;
+    }
+    return $results;
   }
 
   public function getDateShow($date)
