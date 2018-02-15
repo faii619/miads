@@ -10,6 +10,8 @@ use App\Models\user_login\UserLogin;
 use App\Models\user_login_user_role\UserLoginUserRole;
 use App\Models\career\Career;
 use App\Models\program_participant\ProgramParticipant;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\ImageController;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -65,25 +67,37 @@ class AlumniController extends BaseController
       'person.*', 'alumni.code', 'file.fileName'
       , 'persontitle.caption as personTitle'
       , 'addresscountry.caption as nationality'
-      , 'career.*'
+      , 'career.*', 'gender.caption as gender'
     ];
 
     $result = Person::where([['person.id', '=', $id]])
                 ->leftJoin('alumni', 'person.id', '=', 'alumni.personId')
                 ->leftJoin('persontitle', 'person.personTitleId', '=', 'persontitle.id')
+                ->leftJoin('gender', 'person.gender', '=', 'gender.id')
                 ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
                 ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.id')
                 ->leftJoin('career', 'person.id', 'career.personId')
                 ->get($item);
 
     if (count($result) > 0) {
+      $result[0]['birthDate'] = $this->getDateShow($result[0]['birthDate']);
       $result[0]['homeAddress'] = ($result[0]['homeAddressId'] > 0 && $result[0]['homeAddressId'] != NULL) ? $this->get_person_address($result[0]['homeAddressId']) : $this->text_status ;
       $result[0]['officeAddress'] = ($result[0]['officeAddressId'] > 0 && $result[0]['officeAddressId'] != NULL) ? $this->get_person_address($result[0]['officeAddressId']) : $this->text_status ;
       $result[0]['officeContactAddress'] = ($result[0]['isPreferOfficeContact'] = 0) ? $result[0]['homeAddress'] : $result[0]['officeAddress'] ;
       $result[0]['program'] = $this->get_person_program($result[0]['id']);
+
+      $images = new ImageController();
+      $result = $images->getImagesUrl($result, $this->path, 'fileName');
     }
 
     return response()->json($result);
+  }
+
+  public function getDateShow($date)
+  {
+    $bd = explode("-", $date);
+    $formatDate = $bd[2].'/'.$bd[1].'/'.$bd[0];
+    return $formatDate;
   }
 
   public function get_person_address($address_id)
@@ -105,13 +119,6 @@ class AlumniController extends BaseController
 
   public function create(Request $request)
   {
-    // $imageSize = (!empty($request->imageSize) && $request->imageSize != '') ? $request->imageSize : '0' ;
-
-    // if (!empty($request->image) && $request->image != 0) {
-    //   $upload = new UploadController();
-    //   $image = $upload->setImage($request, $this->path);
-    // }
-    // $instanceFile->fileSize = $imageSize;
     $image = 'default.png';
     $birthday = '0000-00-00';
     $personCode = $request->code;
@@ -121,12 +128,17 @@ class AlumniController extends BaseController
       $birthday = $bd[2].'-'.$bd[1].'-'.$bd[0];
     }
 
+    if (!empty($request->image) && $request->image != 0) {
+      $upload = new UploadController();
+      $image = $upload->setImage($request, $this->path);
+    }
+
     $instanceFile = new File;
     $instanceFile->fileName = $image;
     $instanceFile->fileSize = $request->imageSize;
     $instanceFile->save();
     $fileId = $instanceFile->id;
-    
+
     $instanceHomeAddress = new Address;
     $instanceHomeAddress->streetAddress = $request->homeStreetAddress;
     $instanceHomeAddress->city = $request->homeCity;
@@ -138,7 +150,7 @@ class AlumniController extends BaseController
     $instanceHomeAddress->mobile = $request->homeMobile;
     $instanceHomeAddress->save();
     $homeId = $instanceHomeAddress->id;
-    
+
     $instanceOfficeAddress = new Address;
     $instanceOfficeAddress->streetAddress = $request->officeStreetAddress;
     $instanceOfficeAddress->city = $request->officeCity;
@@ -150,7 +162,7 @@ class AlumniController extends BaseController
     $instanceOfficeAddress->mobile = $request->officeMobile;
     $instanceOfficeAddress->save();
     $officeId = $instanceOfficeAddress->id;
-    
+
     $instancePerson = new Person;
     $instancePerson->personTitleId = $request->title;
     $instancePerson->name = $request->name;
@@ -165,12 +177,12 @@ class AlumniController extends BaseController
     $instancePerson->nationalityAddressCountryId = $request->nationCountry;
     $instancePerson->save();
     $personId = $instancePerson->id;
-    
+
     $instanceAlumni = new Alumni;
     $instanceAlumni->code = $personCode;
     $instanceAlumni->personId = $personId;
     $instanceAlumni->save();
-    
+
     $instanceCareer = new Career;
     $instanceCareer->position = $request->careerPosition;
     $instanceCareer->startYear = $request->careerStartYear;
@@ -185,7 +197,7 @@ class AlumniController extends BaseController
     $instanceCareer->personId = $personId;
     $instanceCareer->division = $request->careerDivision;
     $instanceCareer->save();
-    
+
     $instanceUserLogin = new UserLogin;
     $instanceUserLogin->login = $personCode;
     $instanceUserLogin->password = md5($personCode);
@@ -193,14 +205,13 @@ class AlumniController extends BaseController
     $instanceUserLogin->personId = $personId;
     $instanceUserLogin->save();
     $UserLoginId = $instanceUserLogin->id;
-    
+
     $instanceUserLoginUserRole = new UserLoginUserRole;
     $instanceUserLoginUserRole->userLoginId = $UserLoginId;
     $instanceUserLoginUserRole->userRoleId = 2;
     $instanceUserLoginUserRole->save();
 
     return response()->json($this->response);
-    // return response()->json($request);
   }
 
   public function edit(Request $request)
