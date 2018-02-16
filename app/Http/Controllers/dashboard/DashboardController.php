@@ -21,7 +21,7 @@ class DashboardController extends BaseController {
 
   public function dashboard() {
     // $results = Person::where('status', 1)->get();
-    $results = Person::where('status', 1)->take(200)->get();
+    $results = Person::where('personStatus', 1)->orderBy('person.id', 'desc')->take(10)->get();
     return response()->json($results);
   }
 }
