@@ -69,7 +69,7 @@ class AlumniController extends BaseController
   public function find($id)
   {
     $item = [
-      'person.*', 'alumni.code', 'file.fileName'
+      'person.*', 'alumni.code', 'file.fileName', 'file.fileSize'
       , 'persontitle.caption as personTitle'
       , 'addresscountry.caption as nationality'
       , 'career.*', 'gender.caption as personGender'
