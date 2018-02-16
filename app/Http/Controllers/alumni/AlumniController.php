@@ -87,8 +87,12 @@ class AlumniController extends BaseController
                 ->get($item);
 
     if (count($result) > 0) {
+      // if ($result[0]['birthDate'] != NULL) {
+      //   # code...
+      // }
       $result[0]['birthDate'] = $this->getDateShow($result[0]['birthDate']);
       $result[0]['contactAddress'] = ($result[0]['isPreferOfficeContact'] == 0) ? 'Home' : 'Office' ;
+      $result[0]['isContact'] = $result[0]['isPreferOfficeContact'];
       $result[0]['homeAddress'] = ($result[0]['homeAddressId'] > 0 && $result[0]['homeAddressId'] != NULL) ? $this->get_person_address($result[0]['homeAddressId']) : $this->text_status ;
       $result[0]['officeAddress'] = ($result[0]['officeAddressId'] > 0 && $result[0]['officeAddressId'] != NULL) ? $this->get_person_address($result[0]['officeAddressId']) : $this->text_status ;
       $result[0]['officeContactAddress'] = ($result[0]['isPreferOfficeContact'] = 0) ? $result[0]['homeAddress'] : $result[0]['officeAddress'] ;
@@ -114,8 +118,11 @@ class AlumniController extends BaseController
 
   public function getDateShow($date)
   {
-    $bd = explode("-", $date);
-    $formatDate = $bd[2].'/'.$bd[1].'/'.$bd[0];
+    $formatDate = '00/00/0000';
+    if ($date !== null) {
+      $bd = explode("-", $date);
+      $formatDate = $bd[2].'/'.$bd[1].'/'.$bd[0];
+    }
     return $formatDate;
   }
 
@@ -235,6 +242,16 @@ class AlumniController extends BaseController
 
   public function edit(Request $request)
   {
+    if ($request->birthday != 0) {
+      $bd = explode("/", $request->birthday);
+      $birthday = $bd[2].'-'.$bd[1].'-'.$bd[0];
+    }
+
+    if (!empty($request->image) && $request->image != 0) {
+      $upload = new UploadController();
+      $image = $upload->setImage($request, $this->path);
+    }
+
     $personId = $request->id;
     $personCode = $request->code;
     $fileId = $request->fileId;
@@ -244,19 +261,19 @@ class AlumniController extends BaseController
     $resultPerson = Person::find($personId);
     $resultPerson->personTitleId = $request->title;
     $resultPerson->name = $request->name;
-    $resultPerson->birthDate = $request->birthday;
+    $resultPerson->birthDate = $birthday;
     $resultPerson->email = $request->email;
     $resultPerson->otherEmails = $request->otherEmails;
-    $resultPerson->photoFileId = $fileId;
-    $resultPerson->homeAddressId = $homeId;
-    $resultPerson->officeAddressId = $officeId;
+    // $resultPerson->photoFileId = $fileId;
+    // $resultPerson->homeAddressId = $homeId;
+    // $resultPerson->officeAddressId = $officeId;
     $resultPerson->isPreferOfficeContact = $request->ContactAddress;
     $resultPerson->gender = $request->gender;
     $resultPerson->nationalityAddressCountryId = $request->nationCountry;
     $resultPerson->save();
 
     $resultFile = File::find($fileId);
-    $resultFile->fileName = $request->imageName;
+    $resultFile->fileName = $image;
     $resultFile->fileSize = $request->imageSize;
     $resultFile->save();
     
