@@ -94,4 +94,6 @@ $router->get('/persontitle', 'persontitle\PersonTitleController@person_title');
 
 $router->get('/gender', 'gender\GenderController@gender');
 
+$router->get('/dashboard', 'Dashboard\DashboardController@dashboard');
+
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
