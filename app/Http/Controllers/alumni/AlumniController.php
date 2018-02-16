@@ -72,7 +72,7 @@ class AlumniController extends BaseController
       'person.*', 'alumni.code', 'file.fileName'
       , 'persontitle.caption as personTitle'
       , 'addresscountry.caption as nationality'
-      , 'career.*', 'gender.caption as gender'
+      , 'career.*', 'gender.caption as personGender'
       , 'careerorganizationtype.caption as organizationType'
     ];
 
