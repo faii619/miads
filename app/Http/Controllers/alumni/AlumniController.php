@@ -363,7 +363,7 @@ class AlumniController extends BaseController
                 ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.Id')
                 ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
                 ->orderBy('person.id', 'desc')
-                ->limit(20)
+                ->limit(5)
                 ->get(['person.*', 'alumni.code', 'addresscountry.caption', 'file.fileName']);
     $images = new ImageController();
     $result = $images->getImagesUrl($result, $this->path, 'fileName');
