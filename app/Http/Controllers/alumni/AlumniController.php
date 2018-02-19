@@ -364,7 +364,7 @@ class AlumniController extends BaseController
                 ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
                 ->orderBy('person.id', 'desc')
                 ->limit(20)
-                ->get(['person.*', 'alumni.code', 'addresscountry.caption']);
+                ->get(['person.*', 'alumni.code', 'addresscountry.caption', 'file.fileName']);
     $images = new ImageController();
     $result = $images->getImagesUrl($result, $this->path, 'fileName');
     return response()->json($result);
