@@ -69,7 +69,8 @@ class AlumniController extends BaseController
   public function find($id)
   {
     $item = [
-      'person.*', 'alumni.code', 'file.fileName', 'file.fileSize'
+      'person.*', 'person.id as personID', 'alumni.code'
+      , 'file.fileName', 'file.fileSize'
       , 'persontitle.caption as personTitle'
       , 'addresscountry.caption as nationality'
       , 'career.*', 'gender.caption as personGender'
@@ -345,11 +346,11 @@ class AlumniController extends BaseController
     $resultFile = File::find($fileId);
     $resultFile->status = 0;
     $resultFile->save();
-    
+
     Alumni::where([['personId', '=', $personId]])->update($status);
 
     UserLogin::where([['personId', '=', $personId]])->update($status);
-    
+
     Career::where([['personId', '=', $id]])->update($status);
 
     return response()->json($this->response);
