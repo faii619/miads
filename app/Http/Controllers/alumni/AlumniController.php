@@ -248,7 +248,7 @@ class AlumniController extends BaseController
     $homeId = $request->homeId;
     $officeId = $request->officeId;
     $image = $request->image;
-    
+
     if ($request->birthday != 0) {
       $bd = explode("/", $request->birthday);
       $birthday = $bd[2].'-'.$bd[1].'-'.$bd[0];
@@ -271,9 +271,6 @@ class AlumniController extends BaseController
     $resultPerson->birthDate = $birthday;
     $resultPerson->email = $request->email;
     $resultPerson->otherEmails = $request->otherEmails;
-    // $resultPerson->photoFileId = $fileId;
-    // $resultPerson->homeAddressId = $homeId;
-    // $resultPerson->officeAddressId = $officeId;
     $resultPerson->isPreferOfficeContact = $request->ContactAddress;
     $resultPerson->gender = $request->gender;
     $resultPerson->nationalityAddressCountryId = $request->nationCountry;
