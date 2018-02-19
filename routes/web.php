@@ -32,7 +32,7 @@ $router->post('/ministry_departments/create', 'authority_control\MinistryDepartm
 $router->post('/ministry_departments/edit', 'authority_control\MinistryDepartmentsController@edit');
 
 $router->post('/university_department/create', 'authority_control\UniversityDepartmentsController@create');
-$router->post('/university_department/edit', 'authority_control\UniversityDepartmentsController @edit');
+$router->post('/university_department/edit', 'authority_control\UniversityDepartmentsController@edit');
 
 $router->get('/university', 'authority_control\UniversityController@university');
 $router->post('/university/create', 'authority_control\UniversityController@create');
