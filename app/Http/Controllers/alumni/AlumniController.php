@@ -242,7 +242,13 @@ class AlumniController extends BaseController
 
   public function edit(Request $request)
   {
+    $personId = $request->id;
+    $personCode = $request->code;
+    $fileId = $request->fileId;
+    $homeId = $request->homeId;
+    $officeId = $request->officeId;
     $image = $request->image;
+    
     if ($request->birthday != 0) {
       $bd = explode("/", $request->birthday);
       $birthday = $bd[2].'-'.$bd[1].'-'.$bd[0];
