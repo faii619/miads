@@ -361,10 +361,12 @@ class AlumniController extends BaseController
     $result = Person::where('personStatus', 1)
                 ->leftJoin('alumni', 'person.id', '=', 'alumni.personId')
                 ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.Id')
+                ->leftJoin('file', 'person.photoFileId', '=', 'file.id')
                 ->orderBy('person.id', 'desc')
                 ->limit(20)
                 ->get(['person.*', 'alumni.code', 'addresscountry.caption']);
-
+    $images = new ImageController();
+    $result = $images->getImagesUrl($result, $this->path, 'fileName');
     return response()->json($result);
   }
 
