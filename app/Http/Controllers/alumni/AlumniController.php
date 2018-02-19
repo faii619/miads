@@ -242,6 +242,7 @@ class AlumniController extends BaseController
 
   public function edit(Request $request)
   {
+    $image = $request->image;
     if ($request->birthday != 0) {
       $bd = explode("/", $request->birthday);
       $birthday = $bd[2].'-'.$bd[1].'-'.$bd[0];
@@ -271,11 +272,6 @@ class AlumniController extends BaseController
     $resultPerson->gender = $request->gender;
     $resultPerson->nationalityAddressCountryId = $request->nationCountry;
     $resultPerson->save();
-
-    $resultFile = File::find($fileId);
-    $resultFile->fileName = $image;
-    $resultFile->fileSize = $request->imageSize;
-    $resultFile->save();
     
     Alumni::where([['personId', '=', $personId]])
             ->update([
@@ -323,6 +319,11 @@ class AlumniController extends BaseController
               , 'careerOrganizationTypeId' => $request->careerOrganizationType
               , 'division' => $request->careerDivision
             ]);
+
+    $resultFile = File::find($fileId);
+    $resultFile->fileName = $image;
+    $resultFile->fileSize = $request->imageSize;
+    $resultFile->save();
 
     return response()->json($this->response);
   }
