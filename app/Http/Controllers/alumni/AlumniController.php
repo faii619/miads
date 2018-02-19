@@ -69,7 +69,8 @@ class AlumniController extends BaseController
   public function find($id)
   {
     $item = [
-      'person.*', 'alumni.code', 'file.fileName', 'file.fileSize'
+      'person.*', 'person.id as personID', 'alumni.code'
+      , 'file.fileName', 'file.fileSize'
       , 'persontitle.caption as personTitle'
       , 'addresscountry.caption as nationality'
       , 'career.*', 'gender.caption as personGender'
@@ -242,6 +243,13 @@ class AlumniController extends BaseController
 
   public function edit(Request $request)
   {
+    $personId = $request->id;
+    $personCode = $request->code;
+    $fileId = $request->fileId;
+    $homeId = $request->homeId;
+    $officeId = $request->officeId;
+    $image = $request->image;
+
     if ($request->birthday != 0) {
       $bd = explode("/", $request->birthday);
       $birthday = $bd[2].'-'.$bd[1].'-'.$bd[0];
@@ -264,18 +272,10 @@ class AlumniController extends BaseController
     $resultPerson->birthDate = $birthday;
     $resultPerson->email = $request->email;
     $resultPerson->otherEmails = $request->otherEmails;
-    // $resultPerson->photoFileId = $fileId;
-    // $resultPerson->homeAddressId = $homeId;
-    // $resultPerson->officeAddressId = $officeId;
     $resultPerson->isPreferOfficeContact = $request->ContactAddress;
     $resultPerson->gender = $request->gender;
     $resultPerson->nationalityAddressCountryId = $request->nationCountry;
     $resultPerson->save();
-
-    $resultFile = File::find($fileId);
-    $resultFile->fileName = $image;
-    $resultFile->fileSize = $request->imageSize;
-    $resultFile->save();
     
     Alumni::where([['personId', '=', $personId]])
             ->update([
@@ -324,6 +324,11 @@ class AlumniController extends BaseController
               , 'division' => $request->careerDivision
             ]);
 
+    $resultFile = File::find($fileId);
+    $resultFile->fileName = $image;
+    $resultFile->fileSize = $request->imageSize;
+    $resultFile->save();
+
     return response()->json($this->response);
   }
 
@@ -341,11 +346,11 @@ class AlumniController extends BaseController
     $resultFile = File::find($fileId);
     $resultFile->status = 0;
     $resultFile->save();
-    
+
     Alumni::where([['personId', '=', $personId]])->update($status);
 
     UserLogin::where([['personId', '=', $personId]])->update($status);
-    
+
     Career::where([['personId', '=', $id]])->update($status);
 
     return response()->json($this->response);
