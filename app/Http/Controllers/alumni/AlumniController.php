@@ -54,7 +54,7 @@ class AlumniController extends BaseController
     $result = Person::where($conditions)
     ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
     ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
-    ->leftJoin('File', 'person.photoFileId', '=', 'File.id')
+    ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
     ->orderBy('Alumni.code', 'asc')
     ->take(500)
     ->get(['Person.*', 'Alumni.code', 'AddressCountry.*', 'Person.id as personId', 'File.fileName']);
@@ -69,22 +69,22 @@ class AlumniController extends BaseController
   public function find($id)
   {
     $item = [
-      'person.*', 'person.id as personID', 'alumni.code'
+      'Person.*', 'Person.id as personID', 'Alumni.code'
       , 'File.fileName', 'File.fileSize'
-      , 'persontitle.caption as personTitle'
+      , 'PersonTitle.caption as personTitle'
       , 'addresscountry.caption as nationality'
-      , 'career.*', 'gender.caption as personGender'
-      , 'careerorganizationtype.caption as organizationType'
+      , 'Career.*', 'Gender.caption as personGender'
+      , 'CareerOrganizationType.caption as organizationType'
     ];
 
-    $result = Person::where([['person.id', '=', $id]])
-                ->leftJoin('alumni', 'person.id', '=', 'alumni.personId')
-                ->leftJoin('persontitle', 'person.personTitleId', '=', 'persontitle.id')
-                ->leftJoin('gender', 'person.gender', '=', 'gender.id')
-                ->leftJoin('File', 'person.photoFileId', '=', 'File.id')
-                ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.id')
-                ->leftJoin('career', 'person.id', '=', 'career.personId')
-                ->leftJoin('careerorganizationtype', 'career.careerOrganizationTypeId', '=', 'careerorganizationtype.id')
+    $result = Person::where([['Person.id', '=', $id]])
+                ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
+                ->leftJoin('PersonTitle', 'Person.personTitleId', '=', 'PersonTitle.id')
+                ->leftJoin('Gender', 'Person.gender', '=', 'Gender.id')
+                ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
+                ->leftJoin('addresscountry', 'Person.nationalityAddressCountryId', '=', 'addresscountry.id')
+                ->leftJoin('Career', 'Person.id', '=', 'Career.personId')
+                ->leftJoin('CareerOrganizationType', 'Career.careerOrganizationTypeId', '=', 'CareerOrganizationType.id')
                 ->get($item);
 
     if (count($result) > 0) {
@@ -126,9 +126,9 @@ class AlumniController extends BaseController
 
   public function get_person_address($address_id)
   {
-    $result = Address::where([['address.id', '=', $address_id]])
-                ->leftJoin('addresscountry', 'address.addressCountryId', '=', 'addresscountry.id')
-                ->get(['addresscountry.*', 'address.*']);
+    $result = Address::where([['Address.id', '=', $address_id]])
+                ->leftJoin('addresscountry', 'Address.addressCountryId', '=', 'addresscountry.id')
+                ->get(['addresscountry.*', 'Address.*']);
     
     return $result;
   }
@@ -136,8 +136,8 @@ class AlumniController extends BaseController
   public function get_person_program($person_id)
   {
     $result = ProgramParticipant::where([['alumniId', '=', $person_id]])
-                ->leftJoin('program', 'programparticipant.programId', '=', 'program.id')
-                ->get(['program.*']);
+                ->leftJoin('Program', 'ProgramParticipant.programId', '=', 'Program.id')
+                ->get(['Program.*']);
     return $result;
   }
 
@@ -246,6 +246,7 @@ class AlumniController extends BaseController
     $homeId = $request->homeId;
     $officeId = $request->officeId;
     $image = $request->image;
+    $birthday = '0000-00-00';
 
     if ($request->birthday != 0) {
       $bd = explode("/", $request->birthday);
@@ -356,12 +357,12 @@ class AlumniController extends BaseController
   public function latest()
   {
     $result = Person::where('personStatus', 1)
-                ->leftJoin('alumni', 'person.id', '=', 'alumni.personId')
-                ->leftJoin('addresscountry', 'person.nationalityAddressCountryId', '=', 'addresscountry.Id')
-                ->leftJoin('File', 'person.photoFileId', '=', 'File.id')
-                ->orderBy('person.id', 'desc')
+                ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
+                ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
+                ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
+                ->orderBy('Person.id', 'desc')
                 ->limit(5)
-                ->get(['person.*', 'alumni.code', 'addresscountry.caption', 'File.fileName']);
+                ->get(['Person.*', 'Alumni.code', 'AddressCountry.caption', 'File.fileName']);
     $images = new ImageController();
     $result = $images->getImagesUrl($result, $this->path, 'fileName');
     return response()->json($result);
