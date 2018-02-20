@@ -23,7 +23,11 @@ class MinistryController extends BaseController
   public function ministry() {
     // $results = Career::where('status', 1)->get();
     // $results = Career::where('status', 1)->take(200)->get();
-    $results = Career::where([['status', 1],['govMinistryName', '!=', ''],['govDepartmentName', '!=', '']])->take(200)->get();
+    $results = Career::where([
+      ['status', 1],
+      // ['govMinistryName', '!=', ''],
+      // ['govDepartmentName', '!=', '']
+    ])->get();
     
     return response()->json($results);
   }
