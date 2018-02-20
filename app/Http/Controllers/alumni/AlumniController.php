@@ -88,9 +88,6 @@ class AlumniController extends BaseController
                 ->get($item);
 
     if (count($result) > 0) {
-      // if ($result[0]['birthDate'] != NULL) {
-      //   # code...
-      // }
       $result[0]['birthDate'] = $this->getDateShow($result[0]['birthDate']);
       $result[0]['contactAddress'] = ($result[0]['isPreferOfficeContact'] == 0) ? 'Home' : 'Office' ;
       $result[0]['isContact'] = $result[0]['isPreferOfficeContact'];
