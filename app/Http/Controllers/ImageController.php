@@ -31,7 +31,7 @@ class ImageController extends BaseController
   private function verifyImage($image, $path)
   {
     $path_url = $_SERVER['DOCUMENT_ROOT'].'/'.$path.$image;
-    if (!file_exists($path_url)) $image = 'default.png';
+    if (!file_exists($path_url) || $image == NULL) $image = 'default.png';
     return $image;
   }
 }
