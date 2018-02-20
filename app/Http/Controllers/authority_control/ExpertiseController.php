@@ -23,7 +23,10 @@ class ExpertiseController extends BaseController
     public function expertise() {
       // $results = Career::where('status', 1)->get();
       // $results = Career::where('status', 1)->take(200)->get();
-    $results = Career::where([['status', 1],['areaOfExpertise', '!=', '']])->take(200)->get();
+      $results = Career::where([
+        ['status', 1],
+        ['areaOfExpertise', '!=', '']
+      ])->get();
       return response()->json($results);
     }
 
