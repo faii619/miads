@@ -24,7 +24,10 @@ class PositionController extends BaseController
     // $results = Career::where('status', 1)->get();
     // $results = Career::where('status', 1)->take(200)->get();
     // $results = Career::where('position', '!=', '')->take(200)->get();
-    $results = Career::where([['status', 1],['position', '!=', '']])->take(200)->get();
+    $results = Career::where([
+      ['status', 1],
+      ['position', '!=', '']
+    ])->get();
     return response()->json($results);
   }
 
