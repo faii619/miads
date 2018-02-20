@@ -23,7 +23,11 @@ class UniversityController extends BaseController
   public function university() {
     // $results = Career::where('status', 1)->get();
     // $results = Career::where('status', 1)->take(200)->get();
-    $results = Career::where([['status', 1],['universityName', '!=', ''],['universityDepartment', '!=', '']])->take(200)->get();
+    $results = Career::where([
+      ['status', 1],
+      // ['universityName', '!=', ''],
+      // ['universityDepartment', '!=', '']
+    ])->get();
     return response()->json($results);
   }
 
