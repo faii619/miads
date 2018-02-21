@@ -25,7 +25,7 @@ class OrganizationController extends BaseController
     // $results = Career::where('status', 1)->take(200)->get();
     $results = Career::where([
       ['status', 1],
-      // ['organizationName', '!=', ''],
+      ['organizationName', '!=', '']
       // ['organizationDepartment', '!=', '']
     ])->get();
     return response()->json($results);

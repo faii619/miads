@@ -28,9 +28,11 @@ $router->post('/ministry/create', 'authority_control\MinistryController@create')
 $router->post('/ministry/edit', 'authority_control\MinistryController@edit');
 $router->delete('/ministry/delete/{id:[0-9]+}', 'authority_control\MinistryController@delete');
 
+$router->get('/ministry_departments', 'authority_control\MinistryDepartmentsController@ministry_departments');
 $router->post('/ministry_departments/create', 'authority_control\MinistryDepartmentsController@create');
 $router->post('/ministry_departments/edit', 'authority_control\MinistryDepartmentsController@edit');
 
+$router->get('/university_department', 'authority_control\UniversityDepartmentsController@university_department');
 $router->post('/university_department/create', 'authority_control\UniversityDepartmentsController@create');
 $router->post('/university_department/edit', 'authority_control\UniversityDepartmentsController@edit');
 
@@ -44,6 +46,7 @@ $router->post('/organization/create', 'authority_control\OrganizationController@
 $router->post('/organization/edit', 'authority_control\OrganizationController@edit');
 $router->delete('/organization/delete/{id:[0-9]+}', 'authority_control\OrganizationController@delete');
 
+$router->get('/organization_department', 'authority_control\OrganizationDepartmentController@organization_department');
 $router->post('/organization_department/create', 'authority_control\OrganizationDepartmentController@create');
 $router->post('/organization_department/edit', 'authority_control\OrganizationDepartmentController@edit');
 

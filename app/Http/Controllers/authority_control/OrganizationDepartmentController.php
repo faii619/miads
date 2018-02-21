@@ -19,6 +19,18 @@ class OrganizationDepartmentController extends BaseController
   }
 
   private $response = array('status' => 1, 'message' => 'success');
+
+  public function organization_department() {
+    // $results = Career::where('status', 1)->get();
+    // $results = Career::where('status', 1)->take(200)->get();
+    $results = Career::where([
+      ['status', 1],
+      // ['organizationName', '!=', ''],
+      ['organizationDepartment', '!=', ''],
+    ])->get();
+    return response()->json($results);
+  }
+
   public function create(Request $request){
     $result = new Career;
     $result->organizationDepartment = $request->organizationDepartment;

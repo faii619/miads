@@ -20,6 +20,18 @@ class MinistryDepartmentsController extends BaseController
 
   private $response = array('status' => 1, 'message' => 'success');
 
+  public function ministry_departments() {
+    // $results = Career::where('status', 1)->get();
+    // $results = Career::where('status', 1)->take(200)->get();
+    $results = Career::where([
+      ['status', 1],
+      // ['govMinistryName', '!=', ''],
+      ['govDepartmentName', '!=', '']
+    ])->get();
+    
+    return response()->json($results);
+  }
+
   public function create(Request $request) {
     $result = new Career;
     $result->govDepartmentName = $request->govDepartmentName;

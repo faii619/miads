@@ -19,20 +19,34 @@ class UniversityDepartmentsController extends BaseController
     }
 
     private $response = array('status' => 1, 'message' => 'success');
-    
-    public function  create(Request $request) {
+
+    public function university_department()
+    {
+        // $results = Career::where('status', 1)->get();
+        // $results = Career::where('status', 1)->take(200)->get();
+        $results = Career::where([
+            ['status', 1],
+            // ['universityName', '!=', ''],
+            ['universityDepartment', '!=', '']
+        ])->get();
+        return response()->json($results);
+    }
+
+    public function create(Request $request)
+    {
         $result = new Career;
         $result->universityDepartment = $request->universityDepartment;
         $result->save();
-        return response()->json($this->response); 
-      }
+        return response()->json($this->response);
+    }
 
-      public function  edit(Request $request) {
+    public function edit(Request $request)
+    {
         $results = Career::find($request->id);
         $results->universityDepartment = $request->universityDepartment;
         $results->status = 1;
         $results->save();
         return response()->json($this->response);
-      }
+    }
 // ge universityName
 }

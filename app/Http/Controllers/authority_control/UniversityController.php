@@ -25,7 +25,7 @@ class UniversityController extends BaseController
     // $results = Career::where('status', 1)->take(200)->get();
     $results = Career::where([
       ['status', 1],
-      // ['universityName', '!=', ''],
+      ['universityName', '!=', '']
       // ['universityDepartment', '!=', '']
     ])->get();
     return response()->json($results);
