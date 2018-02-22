@@ -45,8 +45,30 @@ class ProgramSummaryController extends BaseController {
     ->get();
     foreach ($results as $key => $value) {
       $results[$key]['Person'] = $this->getPerson($value['alumniId']);
+      if ($results[$key]['Person'][0]['isPreferOfficeContact']==0) {
+        $results[$key]['Address'] = $this->getAddressHome($value['alumniId']);
+      }
+      elseif ($results[$key]['Person'][0]['isPreferOfficeContact']==1) {
+        $results[$key]['Address'] = $this->getAddressOffice($value['alumniId']);
+      }
       $results[$key]['Career'] = $this->getCareer($value['alumniId']);
     }
+    return $results;
+  }
+
+  public function getAddressHome($id) {
+    $results = Person::where('Person.personStatus', 1)
+    ->where('Person.id', $id)
+    ->leftJoin('Address', 'Person.homeAddressId', '=', 'Address.id')
+    ->get();
+    return $results;
+  }
+
+  public function getAddressOffice($id) {
+    $results = Person::where('Person.personStatus', 1)
+    ->where('Person.id', $id)
+    ->leftJoin('Address', 'Person.officeAddressId', '=', 'Address.id')
+    ->get();
     return $results;
   }
 
@@ -55,7 +77,6 @@ class ProgramSummaryController extends BaseController {
     ->where('Person.id', $id)
     ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
     ->leftJoin('PersonTitle', 'Person.personTitleId', '=', 'PersonTitle.id')
-    ->leftJoin('Address', 'Person.officeAddressId', '=', 'Address.id')
     ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
     ->get();
     $images = new ImageController();
