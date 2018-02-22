@@ -19,6 +19,8 @@ $router->get('/key', function () use ($router) {
 });
 
 $router->get('/country', 'country\CountryController@country');
+$router->get('/country/sumary', 'country\CountryController@top');
+$router->get('/country/sumary2', 'country\CountryController@top2');
 $router->post('/country/create', 'country\CountryController@create');
 $router->post('/country/edit', 'country\CountryController@edit');
 $router->delete('/country/delete/{id:[0-9]+}', 'country\CountryController@delete');
@@ -66,6 +68,7 @@ $router->post('/division/edit', 'authority_control\DivisionController@edit');
 $router->delete('/division/delete/{id:[0-9]+}', 'authority_control\DivisionController@delete');
 
 $router->post('/program/programs_by_conditions', 'program\ProgramController@programs_by_conditions');
+$router->get('/program/last_programs_dashboard', 'program\ProgramController@last_programs_dashboard');
 $router->get('/program/{id:[0-9]+}', 'program\ProgramController@find');
 $router->post('/program/create', 'program\ProgramController@create');
 $router->post('/program/edit', 'program\ProgramController@edit');

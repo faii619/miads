@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\country;
 
+use App\Models\person\Person;
 use App\Models\country\Country;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ImageController;
@@ -22,6 +23,7 @@ class CountryController extends BaseController
 
   private $response = array('status' => 1, 'message' => 'success');
   private $path = 'images/country/';
+  
 
   public function country() 
   {
@@ -64,6 +66,82 @@ class CountryController extends BaseController
     $results->status = 0;
     $results->save();
     return response()->json($this->response);
+  }
+  public function getCountry($results) 
+  {
+    $results = Country::where('status', 1)->get();
+    return $results;
+  }
+
+  public function top(Request $request)
+  {
+      // $results = Country::where('status', 1)
+      // ->get(['AddressCountry.id']);
+      // //  echo $results;
+      // foreach ($results as $result) {
+      //   echo $result;
+      // $result = Person::where('Person.nationalityAddressCountryId', '=', $result )
+      //  ->leftjoin('AddressCountry', 'AddressCountry.id','=','Person.nationalityAddressCountryId')
+      //   // ->get(['Person.nationalityAddressCountryId']);
+      //   ->count();
+      // }
+      
+      $results = Country::where('status', 1) 
+       ->where('AddressCountry.id','>',0)
+      ->count();
+      $sum=$results;
+
+      $results2 = Person::where('Person.nationalityAddressCountryId','>', 0) 
+     ->get(['Person.nationalityAddressCountryId']);
+
+      for($k=1;$k<=$sum;$k++){
+        $results2 = Person::where('Person.nationalityAddressCountryId','=', $k)
+        ->count();
+        $array[]=$results2;  
+          if('Person.nationalityAddressCountryId'== $k){
+            $resultsMale = Person::where('Person.gender','=', 1);
+            // $resultsMale = Person::where('Person.nationalityAddressCountryId','=', $k)
+            // ->count();
+            // $array[]=$resultsMale;
+            }    
+
+      }
+        // return response()->json($arrar,$arrayMale);
+        return response()->json($array);
+//  return response()->json($arrayMale);
+  }
+
+
+
+  public function top2(Request $request)
+  {
+      
+      $results = Country::where('status', 1) 
+       ->where('AddressCountry.id','>',0)
+      // ->get(['AddressCountry.id']);
+      ->count();
+      $sum=$results;
+      // echo 
+      // echo $results;
+      $results2 = Person::where('Person.nationalityAddressCountryId','>', 0) 
+     ->get(['Person.nationalityAddressCountryId']);
+    //  echo $results2;
+      for($k=0;$k<=$sum;$k++){
+        // echo $k;
+        $results2 = Person::where('Person.nationalityAddressCountryId','=', $k)
+        ->count();
+          if('Person.nationalityAddressCountryId'== $k){
+            $resultsMale = Person::where('Person.gender','=', 0)
+            ->count();
+            echo $resultsMale;
+            $arrayMale[]=$resultsMale;
+            }    
+$array[]=$results2;  
+      }
+     
+ 
+        return response()->json($arrayMale);
+
   }
    
 }
