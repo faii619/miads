@@ -97,6 +97,7 @@ $router->get('/persontitle', 'persontitle\PersonTitleController@person_title');
 
 $router->get('/gender', 'gender\GenderController@gender');
 
-$router->get('/country_summary', 'country_summary\CountrySummaryController@country_summary');
+// $router->get('/country_summary', 'report\CountrySummaryController@country_summary');
+$router->get('/program_summary', 'report\ProgramSummaryController@program_summary');
 
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
