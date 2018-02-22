@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\dashboard;
+namespace App\Http\Controllers\CountrySummaryController;
 
 use App\Models\person\Person;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
-class DashboardController extends BaseController {
+class CountrySummaryController extends BaseController {
   /**
    * Create a new controller instance.
    *
@@ -19,9 +19,13 @@ class DashboardController extends BaseController {
 
   private $response = array('status' => 1, 'message' => 'success');
 
-  public function dashboard() {
-    // $results = Person::where('status', 1)->get();
-    $results = Person::where('personStatus', 1)->orderBy('person.id', 'desc')->take(10)->get();
+  public function country_summary() {
+    $results = Person::where([
+      ['personStatus', 1],
+      ['gender', '=', '1'],
+      ['nationalityAddressCountryId', '=', '1']
+    ])->get();
+    // ['Person.gender']
     return response()->json($results);
   }
 }
