@@ -103,6 +103,8 @@ $router->get('/program_summary', 'report\ProgramSummaryController@program_summar
 $router->get('/program_summary/{id:[0-9]+}', 'report\ProgramSummaryController@find');
 
 $router->get('/news', 'news\NewsController@News');
+$router->get('/news/{id:[0-9]+}', 'news\NewsController@find');
+// $router->post('/news/create', 'news\NewsController@create');
 
 $router->get('/country/sumary_all', 'report\CountrySummaryController@country_summary_all');
 $router->get('/country/sumary', 'report\CountrySummaryController@country_summary');
