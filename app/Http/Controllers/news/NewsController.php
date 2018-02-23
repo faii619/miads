@@ -20,6 +20,7 @@ class NewsController extends BaseController {
   public function News()
   {
     $results = News::where('status', 1)->orderBy('id', 'desc')->get();
+    // $results = News::where('status', 1)->get();
     return response()->json($results);
   }
 }
