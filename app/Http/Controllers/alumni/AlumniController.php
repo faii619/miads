@@ -88,12 +88,18 @@ class AlumniController extends BaseController
                 ->get($item);
 
     if (count($result) > 0) {
+      $result[0]['contactAddress'] = $this->text_status;
+      $result[0]['officeContactAddress'] = $this->text_status;
+
+      if ($result[0]['isPreferOfficeContact'] != NULL) {
+        $result[0]['contactAddress'] = ($result[0]['isPreferOfficeContact'] == 0) ? 'Home' : 'Office' ;
+        $result[0]['officeContactAddress'] = ($result[0]['isPreferOfficeContact'] == 0) ? $result[0]['homeAddress'] : $result[0]['officeAddress'] ;
+      }
+
       $result[0]['birthDate'] = $this->getDateShow($result[0]['birthDate']);
-      $result[0]['contactAddress'] = ($result[0]['isPreferOfficeContact'] == 0) ? 'Home' : 'Office' ;
       $result[0]['isContact'] = $result[0]['isPreferOfficeContact'];
       $result[0]['homeAddress'] = ($result[0]['homeAddressId'] > 0 && $result[0]['homeAddressId'] != NULL) ? $this->get_person_address($result[0]['homeAddressId']) : $this->text_status ;
       $result[0]['officeAddress'] = ($result[0]['officeAddressId'] > 0 && $result[0]['officeAddressId'] != NULL) ? $this->get_person_address($result[0]['officeAddressId']) : $this->text_status ;
-      $result[0]['officeContactAddress'] = ($result[0]['isPreferOfficeContact'] = 0) ? $result[0]['homeAddress'] : $result[0]['officeAddress'] ;
       $result[0]['program'] = $this->get_person_program($id);
       $result[0]['program'] = $this->editFormatDate($result[0]['program']);
 
