@@ -55,7 +55,7 @@ class AlumniController extends BaseController
     ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
     ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
     ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
-    ->orderBy('Alumni.code', 'asc')
+    ->orderBy('Person.id', 'desc')
     ->take(500)
     ->get(['Person.*', 'Alumni.code', 'AddressCountry.*', 'Person.id as personId', 'File.fileName']);
 
