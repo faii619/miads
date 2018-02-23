@@ -104,6 +104,7 @@ $router->get('/program_summary/{id:[0-9]+}', 'report\ProgramSummaryController@fi
 
 $router->get('/news', 'news\NewsController@News');
 $router->get('/news/{id:[0-9]+}', 'news\NewsController@find');
+$router->delete('/news/delete/{id:[0-9]+}', 'news\NewsController@delete');
 // $router->post('/news/create', 'news\NewsController@create');
 
 $router->get('/country/sumary_all', 'report\CountrySummaryController@country_summary_all');

@@ -49,6 +49,13 @@ class NewsController extends BaseController {
     ->get();
     return response()->json($results);
   }
+  
+  public function delete($id) {
+    $results = News::find($id);
+    $results->status = 0;
+    $results->save();
+    return response()->json($this->response);
+  }
 
   // public function create(Request $request) {
   //   $results = new News;
