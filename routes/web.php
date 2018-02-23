@@ -19,8 +19,6 @@ $router->get('/key', function () use ($router) {
 });
 
 $router->get('/country', 'country\CountryController@country');
-$router->get('/country/sumary', 'country\CountryController@top');
-$router->get('/country/sumary2', 'country\CountryController@top2');
 $router->post('/country/create', 'country\CountryController@create');
 $router->post('/country/edit', 'country\CountryController@edit');
 $router->delete('/country/delete/{id:[0-9]+}', 'country\CountryController@delete');
@@ -103,5 +101,8 @@ $router->get('/gender', 'gender\GenderController@gender');
 // $router->get('/country_summary', 'report\CountrySummaryController@country_summary');
 $router->get('/program_summary', 'report\ProgramSummaryController@program_summary');
 $router->get('/program_summary/{id:[0-9]+}', 'report\ProgramSummaryController@find');
+
+$router->get('/country/sumary_all', 'report\CountrySummaryController@country_summary_all');
+$router->get('/country/sumary', 'report\CountrySummaryController@country_summary');
 
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');

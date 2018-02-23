@@ -31,7 +31,6 @@ class ProgramSummaryController extends BaseController {
     }
     return response()->json($results);
   }
-
   public function count($id) {
     $results = Programparticipant::where('ProgramParticipant.status', 1)
     ->where('ProgramParticipant.programId', $id)
