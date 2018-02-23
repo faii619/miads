@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\country;
 
+use App\Models\person\Person;
 use App\Models\country\Country;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ImageController;
@@ -22,6 +23,7 @@ class CountryController extends BaseController
 
   private $response = array('status' => 1, 'message' => 'success');
   private $path = 'images/country/';
+  
 
   public function country() 
   {
@@ -64,6 +66,11 @@ class CountryController extends BaseController
     $results->status = 0;
     $results->save();
     return response()->json($this->response);
+  }
+  public function getCountry($results) 
+  {
+    $results = Country::where('status', 1)->get();
+    return $results;
   }
    
 }
