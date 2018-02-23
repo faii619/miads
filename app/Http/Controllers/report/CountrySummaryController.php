@@ -37,15 +37,13 @@ class CountrySummaryController extends BaseController {
       $results[$key]['countcountryall'] = $this->countcountryall();
       $results[$key]['countundefineall'] = $this->countundefineall();
     }
-    // foreach ($results as $key => $value) {
-    //   $results[$key]['countcountryall'] = $this->countcountryall();
-    // }
     return response()->json($results);
   }
   public function country_summary() {
-    $results = Country::where('AddressCountry.status', 1)
+         $results = Country::where('AddressCountry.status', 1)
     ->orderBy('caption', 'asc')
-    ->get();  
+    // ->orderBy($data, 'asc')
+    ->get();
       $images = new ImageController();
     $results = $images->getImagesUrl($results, $this->path, 'flagImage');
     foreach ($results as $key => $value) {
@@ -54,17 +52,68 @@ class CountrySummaryController extends BaseController {
       $results[$key]['countfemale'] = $this->countfemale($value['id']);
       $results[$key]['countundefine'] = $this->countundefine($value['id']);
       $results[$key]['countfemaleal'] = $this->countfemaleall();
+      // $results[$key]['caption'] = $this->countcountrycaption();
     }
-  // $images = new ImageController();
-  // $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
-  // $result = $images->getImagesUrl($result, $this->path, 'fileName');
+     return response()->json($results);
+  }
+  public function country_summary_max() {
+    $results = Country::where('AddressCountry.status', 1)
+    // ->orderBy('caption', 'asc')
+    // ->limit(11) 
+    // ->groupby('countcountry')
+    ->get();  
+    foreach ($results as $key => $value) {
+    $results[$key]['countcountry'] = $this->countcountry($value['id']);
+    $results[$key]['cap'] = $this->countcountry($value['id']);
+   $start = $this->country_na(['caption']);  
+   $arraycap[]= $results[$key]['cap'];
+    $array[]= $results[$key]['countcountry'] ;
+    rsort($array);
+    // $array2[]= $results[$key]['countcountry'] ;
+     } 
+     for ($i=0;$i<10;$i++){
+    for ($j=0;$j<12;$j++){
+       if($array[$i]===$arraycap[$j]){
 
-    return response()->json($results);
+          // if($start[''])
+      // $results3[]['cap']= $this->countcountry($id);
+        $results3[]['caption'] = $start[$j]; 
+         $results3[]['count']= $array[$i];
+
+      }
+    }
   }
 
+
+  //   usort($results, function($a, $b) { //Sort the array using a user defined function
+  //     return $a->score > $b->score ? -1 : 1; //Compare the scores
+  // });  
+
+//  $posts = Country::with($results)->all()->sortBy(function ($item) {
+//   return $item->votes->count();
+// }, SORT_REGULAR, true)->take(10);
+
+// return $results;
+return response()->json($results3);
+}
+public function country_na() {
+  $results = Country::where('AddressCountry.status', 1)
+  // ->orderBy('caption', 'asc')
+  // ->limit(11) 
+  // ->groupby('countcountry')
+  ->get(['caption']);
+  return $results;
+}
   public function countcountry($id) {
     $results = Person::where('Person.personStatus', 1)
     ->where('Person.nationalityAddressCountryId', $id)
+    // ->orderBy('Person.nationalityAddressCountryId','desc')
+    ->count();
+    return $results;
+  }
+  public function countcountrycaption() {
+    $results = Person::where('Person.personStatus', 1)
+    // ->where('Person.nationalityAddressCountryId', )
     // ->orderBy('Person.nationalityAddressCountryId','desc')
     ->count();
     return $results;
@@ -73,10 +122,8 @@ class CountrySummaryController extends BaseController {
     $results = Person::where('Person.personStatus', 1)
     ->where('Person.nationalityAddressCountryId','>',0)
     ->count();
-    // foreach ($results as $key => $value) {
-      // $value['countcountryall']=$results ;
     return $results;
-    // return response()->json($value);
+ 
   }
   public function countmale($id) {
     $results = Person::where('Person.personStatus', 1)
@@ -118,14 +165,5 @@ class CountrySummaryController extends BaseController {
     return $results;
   }
   
-  
-  // $images = new ImageController();
-  //   $results = $images->getImagesUrl($results, $this->path, 'fileName');
-  //   return $results;
-  // $images = new ImageController();
-  // $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
-  // $result = $images->getImagesUrl($result, $this->path, 'fileName');
-
-  // return response()->json($result);
 
 }

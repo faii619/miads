@@ -54,16 +54,6 @@ class ProgramController extends BaseController {
 
     return response()->json($results);
   }
-  public function last_programs_dashboard()
-  {
-    $result = Program::where('status', 1)
-                ->orderBy('Program.id', 'desc')
-                ->limit(20)
-                ->get();
-
-    return response()->json($result);
-  }
-
   public function find($id) {
     $results = Program::find($id);
     $counts = count($results);

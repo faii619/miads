@@ -66,7 +66,6 @@ $router->post('/division/edit', 'authority_control\DivisionController@edit');
 $router->delete('/division/delete/{id:[0-9]+}', 'authority_control\DivisionController@delete');
 
 $router->post('/program/programs_by_conditions', 'program\ProgramController@programs_by_conditions');
-$router->get('/program/last_programs_dashboard', 'program\ProgramController@last_programs_dashboard');
 $router->get('/program/{id:[0-9]+}', 'program\ProgramController@find');
 $router->post('/program/create', 'program\ProgramController@create');
 $router->post('/program/edit', 'program\ProgramController@edit');
@@ -100,9 +99,11 @@ $router->get('/gender', 'gender\GenderController@gender');
 
 // $router->get('/country_summary', 'report\CountrySummaryController@country_summary');
 $router->get('/program_summary', 'report\ProgramSummaryController@program_summary');
+$router->get('/program_summary_last', 'report\ProgramSummaryController@program_summary_last');
 $router->get('/program_summary/{id:[0-9]+}', 'report\ProgramSummaryController@find');
 
 $router->get('/country/sumary_all', 'report\CountrySummaryController@country_summary_all');
 $router->get('/country/sumary', 'report\CountrySummaryController@country_summary');
+$router->get('/country/sumary_max', 'report\CountrySummaryController@country_summary_max');
 
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
