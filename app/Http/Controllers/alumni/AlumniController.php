@@ -55,7 +55,7 @@ class AlumniController extends BaseController
     ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
     ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
     ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
-    ->orderBy('Alumni.code', 'asc')
+    ->orderBy('Person.id', 'desc')
     ->take(500)
     ->get(['Person.*', 'Alumni.code', 'AddressCountry.*', 'Person.id as personId', 'File.fileName']);
 
@@ -88,12 +88,18 @@ class AlumniController extends BaseController
                 ->get($item);
 
     if (count($result) > 0) {
+      $result[0]['contactAddress'] = $this->text_status;
+      $result[0]['officeContactAddress'] = $this->text_status;
+
+      if ($result[0]['isPreferOfficeContact'] != NULL) {
+        $result[0]['contactAddress'] = ($result[0]['isPreferOfficeContact'] == 0) ? 'Home' : 'Office' ;
+        $result[0]['officeContactAddress'] = ($result[0]['isPreferOfficeContact'] == 0) ? $result[0]['homeAddress'] : $result[0]['officeAddress'] ;
+      }
+
       $result[0]['birthDate'] = $this->getDateShow($result[0]['birthDate']);
-      $result[0]['contactAddress'] = ($result[0]['isPreferOfficeContact'] == 0) ? 'Home' : 'Office' ;
       $result[0]['isContact'] = $result[0]['isPreferOfficeContact'];
       $result[0]['homeAddress'] = ($result[0]['homeAddressId'] > 0 && $result[0]['homeAddressId'] != NULL) ? $this->get_person_address($result[0]['homeAddressId']) : $this->text_status ;
       $result[0]['officeAddress'] = ($result[0]['officeAddressId'] > 0 && $result[0]['officeAddressId'] != NULL) ? $this->get_person_address($result[0]['officeAddressId']) : $this->text_status ;
-      $result[0]['officeContactAddress'] = ($result[0]['isPreferOfficeContact'] = 0) ? $result[0]['homeAddress'] : $result[0]['officeAddress'] ;
       $result[0]['program'] = $this->get_person_program($id);
       $result[0]['program'] = $this->editFormatDate($result[0]['program']);
 
@@ -193,6 +199,10 @@ class AlumniController extends BaseController
     $instancePerson->birthDate = $birthday;
     $instancePerson->email = $request->email;
     $instancePerson->otherEmails = $request->otherEmails;
+    $instancePerson->facebook = $request->facebook;
+    $instancePerson->twitter = $request->twitter;
+    $instancePerson->linkIn = $request->link_in;
+    $instancePerson->line = $request->line;
     $instancePerson->photoFileId = $fileId;
     $instancePerson->homeAddressId = $homeId;
     $instancePerson->officeAddressId = $officeId;
@@ -270,6 +280,10 @@ class AlumniController extends BaseController
     $resultPerson->birthDate = $birthday;
     $resultPerson->email = $request->email;
     $resultPerson->otherEmails = $request->otherEmails;
+    $resultPerson->facebook = $request->facebook;
+    $resultPerson->twitter = $request->twitter;
+    $resultPerson->linkIn = $request->link_in;
+    $resultPerson->line = $request->line;
     $resultPerson->isPreferOfficeContact = $request->ContactAddress;
     $resultPerson->gender = $request->gender;
     $resultPerson->nationalityAddressCountryId = $request->nationCountry;
@@ -367,9 +381,6 @@ class AlumniController extends BaseController
     $result = $images->getImagesUrl($result, $this->path, 'fileName');
     return response()->json($result);
   }
-
-
-
 
   public function change_passwod(Request $request)
   {

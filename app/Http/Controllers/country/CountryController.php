@@ -23,11 +23,10 @@ class CountryController extends BaseController
 
   private $response = array('status' => 1, 'message' => 'success');
   private $path = 'images/country/';
-  
 
   public function country() 
   {
-    $results = Country::where('status', 1)->orderBy('caption', 'asc')->take(200)->get();
+    $results = Country::where('status', 1)->orderBy('ordinal', 'asc')->take(200)->get();
     $images = new ImageController();
     $results = $images->getImagesUrl($results, $this->path, 'flagImage');
     return response()->json($results);
