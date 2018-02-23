@@ -201,7 +201,7 @@ class AlumniController extends BaseController
     $instancePerson->otherEmails = $request->otherEmails;
     $instancePerson->facebook = $request->facebook;
     $instancePerson->twitter = $request->twitter;
-    $instancePerson->linkIn = $request->link_in;
+    $instancePerson->linkedIn = $request->link_in;
     $instancePerson->line = $request->line;
     $instancePerson->photoFileId = $fileId;
     $instancePerson->homeAddressId = $homeId;
@@ -282,7 +282,7 @@ class AlumniController extends BaseController
     $resultPerson->otherEmails = $request->otherEmails;
     $resultPerson->facebook = $request->facebook;
     $resultPerson->twitter = $request->twitter;
-    $resultPerson->linkIn = $request->link_in;
+    $resultPerson->linkedIn = $request->link_in;
     $resultPerson->line = $request->line;
     $resultPerson->isPreferOfficeContact = $request->ContactAddress;
     $resultPerson->gender = $request->gender;
