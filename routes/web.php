@@ -102,6 +102,8 @@ $router->get('/gender', 'gender\GenderController@gender');
 $router->get('/program_summary', 'report\ProgramSummaryController@program_summary');
 $router->get('/program_summary/{id:[0-9]+}', 'report\ProgramSummaryController@find');
 
+$router->get('/news', 'news\NewsController@News');
+
 $router->get('/country/sumary_all', 'report\CountrySummaryController@country_summary_all');
 $router->get('/country/sumary', 'report\CountrySummaryController@country_summary');
 
