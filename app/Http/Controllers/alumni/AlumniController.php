@@ -199,6 +199,10 @@ class AlumniController extends BaseController
     $instancePerson->birthDate = $birthday;
     $instancePerson->email = $request->email;
     $instancePerson->otherEmails = $request->otherEmails;
+    $instancePerson->facebook = $request->facebook;
+    $instancePerson->twitter = $request->twitter;
+    $instancePerson->linkIn = $request->link_in;
+    $instancePerson->line = $request->line;
     $instancePerson->photoFileId = $fileId;
     $instancePerson->homeAddressId = $homeId;
     $instancePerson->officeAddressId = $officeId;
@@ -276,6 +280,10 @@ class AlumniController extends BaseController
     $resultPerson->birthDate = $birthday;
     $resultPerson->email = $request->email;
     $resultPerson->otherEmails = $request->otherEmails;
+    $resultPerson->facebook = $request->facebook;
+    $resultPerson->twitter = $request->twitter;
+    $resultPerson->linkIn = $request->link_in;
+    $resultPerson->line = $request->line;
     $resultPerson->isPreferOfficeContact = $request->ContactAddress;
     $resultPerson->gender = $request->gender;
     $resultPerson->nationalityAddressCountryId = $request->nationCountry;
@@ -373,9 +381,6 @@ class AlumniController extends BaseController
     $result = $images->getImagesUrl($result, $this->path, 'fileName');
     return response()->json($result);
   }
-
-
-
 
   public function change_passwod(Request $request)
   {
