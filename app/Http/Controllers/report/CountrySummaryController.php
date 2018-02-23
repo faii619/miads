@@ -4,16 +4,13 @@ namespace App\Http\Controllers\report;
 
 
 
-use Laravel\Lumen\Routing\Controller as BaseController;
+// use Laravel\Lumen\Routing\Controller as BaseController;
 use App\Models\country\Country;
 use App\Http\Controllers\UploadController;
-use App\Models\program\Program;
-use App\Models\program\Programparticipant;
 use App\Models\person\Person;
 use App\Http\Controllers\ImageController;
-use App\Models\career\Career;
 use Illuminate\Http\Request;
-// use Laravel\Lumen\Routing\Controller as BaseController;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 class CountrySummaryController extends BaseController {
   /**
@@ -27,7 +24,8 @@ class CountrySummaryController extends BaseController {
   }
 
   private $response = array('status'=>1,'message' => 'success');
-  private $path = 'images/alumni/';
+  // private $path = 'images/alumni/';
+  private $path = 'images/country/';
 
   public function country_summary_all() {
     $results = Country::where('AddressCountry.status', 1)
@@ -38,13 +36,18 @@ class CountrySummaryController extends BaseController {
       $results[$key]['countfemaleall'] = $this->countfemaleall();
       $results[$key]['countcountryall'] = $this->countcountryall();
       $results[$key]['countundefineall'] = $this->countundefineall();
-
     }
+    // foreach ($results as $key => $value) {
+    //   $results[$key]['countcountryall'] = $this->countcountryall();
+    // }
     return response()->json($results);
   }
   public function country_summary() {
     $results = Country::where('AddressCountry.status', 1)
-    ->get();
+    ->orderBy('caption', 'asc')
+    ->get();  
+      $images = new ImageController();
+    $results = $images->getImagesUrl($results, $this->path, 'flagImage');
     foreach ($results as $key => $value) {
       $results[$key]['countcountry'] = $this->countcountry($value['id']);
       $results[$key]['countmale'] = $this->countmale($value['id']);
@@ -52,12 +55,17 @@ class CountrySummaryController extends BaseController {
       $results[$key]['countundefine'] = $this->countundefine($value['id']);
       $results[$key]['countfemaleal'] = $this->countfemaleall();
     }
+  // $images = new ImageController();
+  // $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
+  // $result = $images->getImagesUrl($result, $this->path, 'fileName');
+
     return response()->json($results);
   }
 
   public function countcountry($id) {
     $results = Person::where('Person.personStatus', 1)
     ->where('Person.nationalityAddressCountryId', $id)
+    // ->orderBy('Person.nationalityAddressCountryId','desc')
     ->count();
     return $results;
   }
@@ -114,4 +122,10 @@ class CountrySummaryController extends BaseController {
   // $images = new ImageController();
   //   $results = $images->getImagesUrl($results, $this->path, 'fileName');
   //   return $results;
+  // $images = new ImageController();
+  // $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
+  // $result = $images->getImagesUrl($result, $this->path, 'fileName');
+
+  // return response()->json($result);
+
 }
