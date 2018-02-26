@@ -73,6 +73,7 @@ class AlumniController extends BaseController
       , 'File.fileName', 'File.fileSize'
       , 'PersonTitle.caption as personTitle'
       , 'addresscountry.caption as nationality'
+      , 'addresscountry.flagImage as flagImage'
       , 'Career.*', 'Gender.caption as personGender'
       , 'CareerOrganizationType.caption as organizationType'
     ];
@@ -104,6 +105,7 @@ class AlumniController extends BaseController
       $result[0]['program'] = $this->editFormatDate($result[0]['program']);
 
       $images = new ImageController();
+      $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
       $result = $images->getImagesUrl($result, $this->path, 'fileName');
     }
 
