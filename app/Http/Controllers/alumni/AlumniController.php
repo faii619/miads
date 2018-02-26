@@ -69,11 +69,13 @@ class AlumniController extends BaseController
   public function find($id)
   {
     $item = [
-      'Person.*', 'Person.id as personID', 'Alumni.code'
+      'Person.*', 'Person.id as personID'
+      , 'Alumni.code'
       , 'File.fileName', 'File.fileSize'
       , 'PersonTitle.caption as personTitle'
-      , 'addresscountry.caption as nationality'
-      , 'Career.*', 'Gender.caption as personGender'
+      , 'AddressCountry.caption as nationality'
+      , 'Career.*'
+      , 'Gender.caption as personGender'
       , 'CareerOrganizationType.caption as organizationType'
     ];
 
@@ -82,7 +84,7 @@ class AlumniController extends BaseController
                 ->leftJoin('PersonTitle', 'Person.personTitleId', '=', 'PersonTitle.id')
                 ->leftJoin('Gender', 'Person.gender', '=', 'Gender.id')
                 ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
-                ->leftJoin('addresscountry', 'Person.nationalityAddressCountryId', '=', 'addresscountry.id')
+                ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.id')
                 ->leftJoin('Career', 'Person.id', '=', 'Career.personId')
                 ->leftJoin('CareerOrganizationType', 'Career.careerOrganizationTypeId', '=', 'CareerOrganizationType.id')
                 ->get($item);
@@ -108,6 +110,7 @@ class AlumniController extends BaseController
     }
 
     return response()->json($result);
+    // return response()->json($item);
   }
 
   public function editFormatDate($results)
@@ -133,8 +136,8 @@ class AlumniController extends BaseController
   public function get_person_address($address_id)
   {
     $result = Address::where([['Address.id', '=', $address_id]])
-                ->leftJoin('addresscountry', 'Address.addressCountryId', '=', 'addresscountry.id')
-                ->get(['addresscountry.*', 'Address.*']);
+                ->leftJoin('AddressCountry', 'Address.addressCountryId', '=', 'AddressCountry.id')
+                ->get(['AddressCountry.*', 'Address.*']);
     
     return $result;
   }
