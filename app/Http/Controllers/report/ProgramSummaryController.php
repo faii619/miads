@@ -31,12 +31,22 @@ class ProgramSummaryController extends BaseController {
     }
     return response()->json($results);
   }
+  public function program_summary_last() {
+    $results = Program::where('Program.status', 1)->orderby('Program.id','desc')
+    ->limit(15)
+    ->get();
+    foreach ($results as $key => $value) {
+      $results[$key]['count'] = $this->count($value['id']);;
+    }
+    return response()->json($results);
+  }
   public function count($id) {
     $results = Programparticipant::where('ProgramParticipant.status', 1)
     ->where('ProgramParticipant.programId', $id)
     ->count();
     return $results;
   }
+
 
   public function find($id) {
     $results = Programparticipant::where('ProgramParticipant.status', 1)
