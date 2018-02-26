@@ -23,37 +23,34 @@ class CountrySummaryController extends BaseController
     private $response = array('status' => 1, 'message' => 'success');
     private $path = 'images/country/';
 
-    public function country_summary_all()
-    {
-        $results = Country::where('AddressCountry.status', 1)
-            ->limit(1)
-            ->get();
-        foreach ($results as $key => $value) {
-            $results[$key]['countmaleall'] = $this->countmaleall();
-            $results[$key]['countfemaleall'] = $this->countfemaleall();
-            $results[$key]['countcountryall'] = $this->countcountryall();
-            $results[$key]['countundefineall'] = $this->countundefineall();
-        }
-        return response()->json($results);
-    }
-
     public function genders_by_country_id()
     {
-        $results = Country::where('AddressCountry.status', 1)
+        $results['results'] = Country::where('AddressCountry.status', 1)
             ->orderBy('caption', 'asc')
             ->get();
 
         $images = new ImageController();
-        $results = $images->getImagesUrl($results, $this->path, 'flagImage');
+        $results['results'] = $images->getImagesUrl($results['results'], $this->path, 'flagImage');
 
-        foreach ($results as $key => $value) {
-            $results[$key]['count_male'] = $this->count_gender_by_gender_id_and_country_id(['status' => 1, 'gender_id' => 1, 'country_id' => $value['id']]);
-            $results[$key]['count_female'] = $this->count_gender_by_gender_id_and_country_id(['status' => 1, 'gender_id' => 0, 'country_id' => $value['id']]);
-            $results[$key]['count_undefine'] = $this->count_gender_by_gender_id_and_country_id(['status' => 1, 'gender_id' => null, 'country_id' => $value['id']]);
-            // $results[$key]['countfemaleal'] = 999;
-            $count_total = ($results[$key]['count_male'] + $results[$key]['count_female'] + $results[$key]['count_undefine']);
-            $results[$key]['count_total'] = $count_total;
+        $results['total_count_male'] = 0;
+        $results['total_count_female'] = 0;
+        $results['total_count_undefined'] = 0;
+        $results['total_count_all'] = 0;
+
+        foreach ($results['results'] as $key => $value) {
+            $results['results'][$key]['count_male'] = $this->count_gender_by_gender_id_and_country_id(['status' => 1, 'gender_id' => 1, 'country_id' => $value['id']]);
+            $results['results'][$key]['count_female'] = $this->count_gender_by_gender_id_and_country_id(['status' => 1, 'gender_id' => 0, 'country_id' => $value['id']]);
+            $results['results'][$key]['count_undefine'] = $this->count_gender_by_gender_id_and_country_id(['status' => 1, 'gender_id' => null, 'country_id' => $value['id']]);
+            $count_total = ($results['results'][$key]['count_male'] + $results['results'][$key]['count_female'] + $results['results'][$key]['count_undefine']);
+
+            $results['results'][$key]['count_total'] = $count_total;
+            $results['total_count_male'] += $results['results'][$key]['count_male'];
+            $results['total_count_female'] += $results['results'][$key]['count_female'];
+            $results['total_count_undefined'] += $results['results'][$key]['count_undefine'];
         }
+
+        $results['total_count_all'] = $results['total_count_male'] + $results['total_count_female'] + $results['total_count_undefined'];
+
         return response()->json($results);
     }
 
@@ -119,80 +116,4 @@ class CountrySummaryController extends BaseController
 
         return $results;
     }
-
-    // public function country_na()
-    // {
-    //     $results = Country::where('AddressCountry.status', 1)
-    //         ->get(['caption']);
-    //     return $results;
-    // }
-
-    // public function countcountrycaption()
-    // {
-    //     $results = Person::where('Person.personStatus', 1)
-    //     // ->where('Person.nationalityAddressCountryId', )
-    //     // ->orderBy('Person.nationalityAddressCountryId','desc')
-    //         ->count();
-    //     return $results;
-    // }
-
-    // public function countcountryall()
-    // {
-    //     $results = Person::where('Person.personStatus', 1)
-    //         ->where('Person.nationalityAddressCountryId', '>', 0)
-    //         ->count();
-    //     return $results;
-
-    // }
-
-    // public function countmale($id)
-    // {
-    //     $results = Person::where('Person.personStatus', 1)
-    //         ->where('Person.gender', 1)
-    //         ->where('Person.nationalityAddressCountryId', $id)
-    //         ->count();
-    //     return $results;
-    // }
-
-    // public function countfemale($id)
-    // {
-    //     $results = Person::where('Person.personStatus', 1)
-    //         ->where('Person.gender', 0)
-    //         ->where('Person.nationalityAddressCountryId', $id)
-    //         ->count();
-    //     return $results;
-    // }
-
-    // public function countundefine($id)
-    // {
-    //     $results = Person::where('Person.personStatus', 1)
-    //         ->where('Person.gender', null)
-    //         ->where('Person.nationalityAddressCountryId', $id)
-    //         ->count();
-    //     return $results;
-    // }
-
-    // public function countmaleall()
-    // {
-    //     $results = Person::where('Person.personStatus', 1)
-    //         ->where('Person.gender', 1)
-    //         ->count();
-    //     return $results;
-    // }
-
-    // public function countfemaleall()
-    // {
-    //     $results = Person::where('Person.personStatus', 1)
-    //         ->where('Person.gender', 0)
-    //         ->count();
-    //     return $results;
-    // }
-
-    // public function countundefineall()
-    // {
-    //     $results = Person::where('Person.personStatus', 1)
-    //         ->where('Person.gender', null)
-    //         ->count();
-    //     return $results;
-    // }
 }
