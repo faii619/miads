@@ -32,7 +32,7 @@ class CareerController extends BaseController
     $row = ($nowYear - $minYear)+1;
 
     for ($i=0; $i < $row; $i++) {
-      $result[$i] = $nowYear--;
+      $result[$i]['year'] = $nowYear--;
     }
 
     return response()->json($result);
