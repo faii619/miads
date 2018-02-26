@@ -112,3 +112,6 @@ $router->get('/country/count_genders', 'report\CountrySummaryController@count_ge
 $router->get('/country/country_summary_by_country_id', 'report\CountrySummaryController@country_summary_by_country_id');
 
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
+
+// Authentication
+$router->post('/authen', 'authen\AuthenController@authen');
