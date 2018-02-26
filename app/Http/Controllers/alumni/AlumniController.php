@@ -110,7 +110,6 @@ class AlumniController extends BaseController
     }
 
     return response()->json($result);
-    // return response()->json($item);
   }
 
   public function editFormatDate($results)
@@ -270,12 +269,6 @@ class AlumniController extends BaseController
       $upload = new UploadController();
       $image = $upload->setImage($request, $this->path);
     }
-
-    $personId = $request->id;
-    $personCode = $request->code;
-    $fileId = $request->fileId;
-    $homeId = $request->homeId;
-    $officeId = $request->officeId;
 
     $resultPerson = Person::find($personId);
     $resultPerson->personTitleId = $request->title;
