@@ -112,3 +112,5 @@ $router->get('/country/sumary', 'report\CountrySummaryController@country_summary
 $router->get('/country/country_summary_by_country_id', 'report\CountrySummaryController@country_summary_by_country_id');
 
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
+
+$router->get('/career/career_year', 'career\CareerController@career_year');
