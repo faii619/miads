@@ -110,7 +110,6 @@ class AlumniController extends BaseController
     }
 
     return response()->json($result);
-    // return response()->json($item);
   }
 
   public function editFormatDate($results)
