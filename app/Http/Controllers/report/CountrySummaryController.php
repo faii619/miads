@@ -58,7 +58,7 @@ class CountrySummaryController extends BaseController
 
     public function country_summary_by_country_id()
     {
-        $results = Country::where('AddressCountry.status', 1)->get();
+        $results = Country::where('AddressCountry.status', 1)->take(20)->get();
 
         foreach ($results as $key => $value) {
             $results[$key]['participants_count'] = $this->count_country_by_country_id($value['id']);
