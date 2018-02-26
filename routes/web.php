@@ -109,6 +109,6 @@ $router->delete('/news/delete/{id:[0-9]+}', 'news\NewsController@delete');
 
 $router->get('/country/sumary_all', 'report\CountrySummaryController@country_summary_all');
 $router->get('/country/sumary', 'report\CountrySummaryController@country_summary');
-$router->get('/country/sumary_max', 'report\CountrySummaryController@country_summary_max');
+$router->get('/country/country_summary_by_country_id', 'report\CountrySummaryController@country_summary_by_country_id');
 
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
