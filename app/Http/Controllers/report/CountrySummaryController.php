@@ -56,7 +56,7 @@ class CountrySummaryController extends BaseController
         return response()->json($results);
     }
 
-    public function country_summary_max()
+    public function country_summary_by_country_id()
     {
         $results = Country::where('AddressCountry.status', 1)->get();
 
