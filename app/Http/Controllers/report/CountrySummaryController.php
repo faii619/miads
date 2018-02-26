@@ -47,10 +47,10 @@ class CountrySummaryController extends BaseController
         $results = $images->getImagesUrl($results, $this->path, 'flagImage');
 
         foreach ($results as $key => $value) {
-            $results[$key]['count_male'] = $this->count_gender_by_gender_id_and_country_id(1, $value['id']);
-            $results[$key]['count_female'] = $this->count_gender_by_gender_id_and_country_id(0, $value['id']);
-            $results[$key]['count_undefine'] = $this->count_gender_by_gender_id_and_country_id(null, $value['id']);
-            $results[$key]['countfemaleal'] = 999;
+            $results[$key]['count_male'] = $this->count_gender_by_gender_id_and_country_id(['status' => 1, 'gender_id' => 1, 'country_id' => $value['id']]);
+            $results[$key]['count_female'] = $this->count_gender_by_gender_id_and_country_id(['status' => 1, 'gender_id' => 0, 'country_id' => $value['id']]);
+            $results[$key]['count_undefine'] = $this->count_gender_by_gender_id_and_country_id(['status' => 1, 'gender_id' => null, 'country_id' => $value['id']]);
+            // $results[$key]['countfemaleal'] = 999;
             $count_total = ($results[$key]['count_male'] + $results[$key]['count_female'] + $results[$key]['count_undefine']);
             $results[$key]['count_total'] = $count_total;
         }
@@ -108,12 +108,15 @@ class CountrySummaryController extends BaseController
         return $results;
     }
 
-    public function count_gender_by_gender_id_and_country_id($gender_id, $country_id)
+    public function count_gender_by_gender_id_and_country_id($query)
     {
-        $results = Person::where('Person.personStatus', 1)
-            ->where('Person.gender', $gender_id)
-            ->where('Person.nationalityAddressCountryId', $country_id)
+        $results = Person::where([
+            ['Person.personStatus', '=', $query['status']],
+            ['Person.gender', '=', $query['gender_id']],
+            ['Person.nationalityAddressCountryId', '=', $query['country_id']],
+        ])
             ->count();
+
         return $results;
     }
 
