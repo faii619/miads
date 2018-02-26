@@ -113,5 +113,7 @@ $router->get('/country/country_summary_by_country_id', 'report\CountrySummaryCon
 
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
 
+$router->get('/career/career_year', 'career\CareerController@career_year');
+
 // Authentication
 $router->post('/authen', 'authen\AuthenController@authen');

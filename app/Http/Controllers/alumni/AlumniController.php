@@ -51,6 +51,14 @@ class AlumniController extends BaseController
       $conditions[] = ['Person.nationalityAddressCountryId', '=', $request->countryId];
     }
 
+    // if ($request->txt_year !='0') {
+    //   $conditions[] = ['Person.nationalityAddressCountryId', '=', $request->txt_year];
+    // }
+
+    // if ($request->programId !='0') {
+    //   $conditions[] = ['Person.nationalityAddressCountryId', '=', $request->programId];
+    // }
+
     $result = Person::where($conditions)
     ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
     ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
