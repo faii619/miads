@@ -21,7 +21,7 @@ $router->get('/key', function () use ($router) {
 $router->get('/country', 'country\CountryController@country');
 $router->post('/country/create', 'country\CountryController@create');
 $router->post('/country/edit', 'country\CountryController@edit');
-$router->delete('/country/delete/{id:[0-9]+}', 'country\CountryController@delete');
+$router->delete('/country/delete/{id:[0-9]+}/{file_id:[0-9]+}', 'country\CountryController@delete');
 
 $router->get('/ministry', 'authority_control\MinistryController@ministry');
 $router->post('/ministry/create', 'authority_control\MinistryController@create');
