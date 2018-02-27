@@ -383,14 +383,14 @@ class AlumniController extends BaseController
     return response()->json($this->response);
   }
 
-  public function latest()
+  public function latest($rows)
   {
     $result = Person::where('personStatus', 1)
                 ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
                 ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
                 ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
                 ->orderBy('Person.id', 'desc')
-                ->limit(20)
+                ->limit($rows)
                 ->get(['Person.*', 'Alumni.code', 'AddressCountry.caption', 'File.fileName']);
     $images = new ImageController();
     $result = $images->getImagesUrl($result, $this->path, 'fileName');
