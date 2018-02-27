@@ -35,6 +35,7 @@ class ProgramparticipantController extends BaseController {
 
   public function enroll(Request $request) {
     $alumni = $request->alumni;
+    // $alumni = [7202];
 
     foreach ($alumni as $key => $value) {
       $results = new Programparticipant;
