@@ -4,6 +4,7 @@ namespace App\Http\Controllers\country;
 
 use App\Models\person\Person;
 use App\Models\country\Country;
+use App\Models\file\File;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class CountryController extends BaseController
     $results = Country::where('status', 1)->orderBy('ordinal', 'asc')->take(200)->get();
     $images = new ImageController();
     $results = $images->getImagesUrl($results, $this->path, 'flagImage');
+
     return response()->json($results);
   }
     
@@ -37,10 +39,15 @@ class CountryController extends BaseController
     $upload = new UploadController();
     $image = $upload->setImage($request, $this->path);
     
+    $file = new File();
+    $file->fileName = $image;
+    $file->save();
+    $lastIdFile = $file->id;
+
     $result = new Country;
     $result->caption = $request->caption;
     $result->ordinal = $request->ordinal;
-    $result->flagImage = $image;
+    $result->flagImage = $lastIdFile;
 
     $result->save();
     return response()->json($this->response);
