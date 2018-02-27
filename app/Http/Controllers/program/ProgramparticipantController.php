@@ -40,6 +40,7 @@ class ProgramparticipantController extends BaseController {
       $results = new Programparticipant;
       $results->programId = $request->programId;
       $results->alumniId = $value;
+      $results->status = 1;
       $results->save();
     }
     

@@ -33,6 +33,13 @@ class AlumniController extends BaseController
 
   public function sort(Request $request)
   {
+    $item = [
+      'Person.*'
+      , 'Alumni.code'
+      , 'AddressCountry.*'
+      , 'Person.id as personId'
+      , 'File.fileName'
+    ];
     $conditions[] = ['Person.personStatus', '=', 1];
     
     if ($request->txt_code !='0') {
@@ -51,21 +58,23 @@ class AlumniController extends BaseController
       $conditions[] = ['Person.nationalityAddressCountryId', '=', $request->countryId];
     }
 
-    // if ($request->txt_year !='0') {
-    //   $conditions[] = ['Person.nationalityAddressCountryId', '=', $request->txt_year];
-    // }
+    if ($request->txt_year !='0') {
+      $conditions[] = ['Career.startYear', '=', $request->txt_year];
+    }
 
-    // if ($request->programId !='0') {
-    //   $conditions[] = ['Person.nationalityAddressCountryId', '=', $request->programId];
-    // }
+    if ($request->programId !='0') {
+      $conditions[] = ['ProgramParticipant.programId', '=', $request->programId];
+    }
 
     $result = Person::where($conditions)
     ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
     ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
     ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
+    ->leftJoin('Career', 'Person.id', '=', 'Career.personId')
+    ->leftJoin('ProgramParticipant', 'Person.id', '=', 'ProgramParticipant.alumniId')
     ->orderBy('Person.id', 'desc')
     ->take(500)
-    ->get(['Person.*', 'Alumni.code', 'AddressCountry.*', 'Person.id as personId', 'File.fileName']);
+    ->get($item);
 
     $images = new ImageController();
     $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
@@ -81,8 +90,8 @@ class AlumniController extends BaseController
       , 'Alumni.code'
       , 'File.fileName', 'File.fileSize'
       , 'PersonTitle.caption as personTitle'
-      , 'addresscountry.caption as nationality'
-      , 'addresscountry.flagImage as flagImage'
+      , 'AddressCountry.caption as nationality'
+      , 'AddressCountry.flagImage as flagImage'
       , 'Career.*'
       , 'Gender.caption as personGender'
       , 'CareerOrganizationType.caption as organizationType'
