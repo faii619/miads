@@ -423,7 +423,7 @@ class AlumniController extends BaseController
       ])
           ->count();
 
-      return $results;
+      return response()->json($results);
   }
 
 }

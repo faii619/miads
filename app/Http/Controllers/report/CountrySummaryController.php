@@ -118,4 +118,11 @@ class CountrySummaryController extends BaseController
 
         return $results;
     }
+
+    public function count_courtry()
+    {
+        $results = Country::where('AddressCountry.status', 1)->count();
+  
+        return response()->json($results);
+    }
 }

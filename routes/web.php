@@ -111,6 +111,7 @@ $router->delete('/news/delete/{id:[0-9]+}', 'news\NewsController@delete');
 $router->get('/country/genders_by_country_id', 'report\CountrySummaryController@genders_by_country_id');
 $router->get('/country/count_genders', 'report\CountrySummaryController@count_genders');
 $router->get('/country/country_summary_by_country_id', 'report\CountrySummaryController@country_summary_by_country_id');
+$router->get('/country/count_courtry', 'report\CountrySummaryController@count_courtry');
 
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
 
