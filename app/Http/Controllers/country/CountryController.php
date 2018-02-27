@@ -27,9 +27,12 @@ class CountryController extends BaseController
 
   public function country() 
   {
-    $results = Country::where('status', 1)->orderBy('ordinal', 'asc')->take(200)->get();
+    $results = Country::where('AddressCountry.status', 1)
+    ->leftJoin('File', 'AddressCountry.flagImage', '=', 'File.id')
+    ->orderBy('ordinal', 'asc')->take(200)->get();
+
     $images = new ImageController();
-    $results = $images->getImagesUrl($results, $this->path, 'flagImage');
+    $results = $images->getImagesUrl($results, $this->path, 'fileName');
 
     return response()->json($results);
   }
