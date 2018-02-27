@@ -67,7 +67,7 @@ class CountryController extends BaseController
         $file = File::find($request->FileId);
         $file->fileName = $image;
         $file->save();
-        
+
         $result = Country::find($request->id);
         $result->caption = $request->caption;
 
@@ -75,11 +75,16 @@ class CountryController extends BaseController
         return response()->json($this->response);
     }
 
-    public function delete($id)
+    public function delete($id, $file_id)
     {
+        $file = File::find($file_id);
+        $file->status = 0;
+        $file->save();
+
         $results = Country::find($id);
         $results->status = 0;
         $results->save();
+
         return response()->json($this->response);
     }
     public function getCountry($results)
