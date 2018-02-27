@@ -410,10 +410,20 @@ class AlumniController extends BaseController
                 ->update([
                     'password' => md5($new),
                 ]);
-        } else {
-            $this->response = ['status' => 0, 'message' => 'not match'];
-        }
-        return response()->json($this->response);
+    } else {
+        $this->response = ['status' => 0, 'message' => 'not match'];
     }
+    return response()->json($this->response);
+  }
+
+  public function count_person()
+  {
+      $results = Person::where([
+          ['personStatus', '=', '1']
+      ])
+          ->count();
+
+      return $results;
+  }
 
 }

@@ -92,6 +92,7 @@ $router->post('/alumni/edit', 'alumni\AlumniController@edit');
 $router->delete('/alumni/delete/{id:[0-9]+}', 'alumni\AlumniController@delete');
 $router->get('/alumni/latest/{rows:[0-9]+}', 'alumni\AlumniController@latest');
 $router->post('/alumni/change_passwod', 'alumni\AlumniController@change_passwod');
+$router->get('/alumni/count', 'alumni\AlumniController@count_person');
 
 $router->get('/persontitle', 'persontitle\PersonTitleController@person_title');
 
