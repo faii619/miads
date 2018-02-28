@@ -119,3 +119,6 @@ $router->get('/career/career_year', 'career\CareerController@career_year');
 
 // Authentication
 $router->post('/authen', 'authen\AuthenController@authen');
+
+$router->get('/mi_alumni_directory', 'mi_alumni_directory\MiAlumniDirectoryController@mi_alumni_directory');
+$router->post('/mi_alumni_directory/edit', 'mi_alumni_directory\MiAlumniDirectoryController@edit');
