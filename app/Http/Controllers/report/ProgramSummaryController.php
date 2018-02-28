@@ -33,7 +33,7 @@ class ProgramSummaryController extends BaseController {
   }
   public function program_summary_last() {
     $results = Program::where('Program.status', 1)->orderby('Program.id','desc')
-    ->limit(15)
+    ->limit(10)
     ->get();
     foreach ($results as $key => $value) {
       $results[$key]['count'] = $this->count($value['id']);;
