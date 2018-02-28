@@ -76,8 +76,11 @@ class AlumniController extends BaseController
             ->leftJoin('Career', 'Person.id', '=', 'Career.personId')
             ->leftJoin('ProgramParticipant', 'Person.id', '=', 'ProgramParticipant.alumniId')
             ->orderBy('Person.id', 'desc')
-            ->take(500)
             ->get($items);
+
+        if ($request->txt_code == '0' && $request->txt_name == '0' && $request->txt_email == '0' && $request->countryId == '0' && $request->txt_year == '0' && $request->programId == '0') {
+            $result = $result->values()->slice(0, 500);
+        }
 
         $images = new ImageController();
         $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
@@ -182,10 +185,8 @@ class AlumniController extends BaseController
             $birthday = $bd[2] . '-' . $bd[1] . '-' . $bd[0];
         }
 
-        if (!empty($request->image) && $request->image != 0) {
-            $upload = new UploadController();
-            $image = $upload->setImage($request, $this->path);
-        }
+        $upload = new UploadController();
+        $image = $upload->setImage($request, $this->path);
 
         $instanceFile = new File;
         $instanceFile->fileName = $image;
@@ -287,10 +288,8 @@ class AlumniController extends BaseController
             $birthday = $bd[2] . '-' . $bd[1] . '-' . $bd[0];
         }
 
-        if (!empty($request->image) && $request->image != 0) {
-            $upload = new UploadController();
-            $image = $upload->setImage($request, $this->path);
-        }
+        $upload = new UploadController();
+        $image = $upload->setImage($request, $this->path);
 
         $resultPerson = Person::find($personId);
         $resultPerson->personTitleId = $request->title;
