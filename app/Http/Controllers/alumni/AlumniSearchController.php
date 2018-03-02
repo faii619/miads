@@ -25,7 +25,7 @@ class AlumniSearchController extends BaseController
 
     public function search_alumni_by_condition(Request $request)
     {
-      return response()->json($request);
+        // return response()->json($request);
         $items = [
             'Person.*'
             , 'Alumni.code'
@@ -38,29 +38,43 @@ class AlumniSearchController extends BaseController
         $conditions[] = ['Person.personStatus', '=', 1];
         $conditions[] = ['Alumni.personId', '!=', 0];
 
-        if ($request->txt_code != '0') {
-            $conditions[] = ['Alumni.code', 'like', $request->txt_code . '%'];
+        if ($request->code != '0') {
+            $conditions[] = ['Alumni.code', 'like', $request->code . '%'];
         }
 
-        if ($request->txt_name != '0') {
+        if ($request->start_date != '0' && $request->end_date) {
+            $conditions[] = ['Career.startYear', '>=', $request->start_date];
+            $conditions[] = ['Career.startYear', '<=', $request->end_date];
+        }
+
+        if ($request->program_id != '0') {
+            $conditions[] = ['ProgramParticipant.programId', '=', $request->program_id];
+        }
+
+        if ($request->mi_department != '0') {
+            $conditions[] = ['Career.govDepartmentName', 'like', $request->mi_department . '%'];
+        }
+
+        if ($request->organize_type_id != '0') {
+            $conditions[] = ['Career.careerOrganizationTypeId', '=', $request->organize_type_id];
+        }
+
+        if ($request->alumni_organization_name != '0') {
+            $conditions[] = ['Career.organizationName', 'like', $request->alumni_organization_name . '%'];
+        }
+
+        if ($request->country_id != '0') {
+            $conditions[] = ['Person.nationalityAddressCountryId', '=', $request->country_id];
+        }
+        
+        if ($request->alumni_area_of_expertise != '0') {
+            $conditions[] = ['Career.areaOfExpertise', 'like', $request->alumni_area_of_expertise . '%'];
+        }
+
+        if ($request->name != '0') {
             $conditions[] = ['Person.name', 'like', $request->txt_name . '%'];
         }
 
-        if ($request->txt_email != '0') {
-            $conditions[] = ['Person.email', 'like', $request->txt_email . '%'];
-        }
-
-        if ($request->countryId != '0') {
-            $conditions[] = ['Person.nationalityAddressCountryId', '=', $request->countryId];
-        }
-
-        if ($request->txt_year != '0') {
-            $conditions[] = ['Career.startYear', '=', $request->txt_year];
-        }
-
-        if ($request->programId != '0') {
-            $conditions[] = ['ProgramParticipant.programId', '=', $request->programId];
-        }
 
         $result = Person::where($conditions)
             ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
@@ -70,10 +84,6 @@ class AlumniSearchController extends BaseController
             ->leftJoin('ProgramParticipant', 'Person.id', '=', 'ProgramParticipant.alumniId')
             ->orderBy('Person.id', 'desc')
             ->get($items);
-
-        if ($request->txt_code == '0' && $request->txt_name == '0' && $request->txt_email == '0' && $request->countryId == '0' && $request->txt_year == '0' && $request->programId == '0') {
-            $result = $result->values()->slice(0, 500);
-        }
 
         $images = new ImageController();
         $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
