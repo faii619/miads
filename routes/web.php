@@ -65,6 +65,7 @@ $router->post('/division/create', 'authority_control\DivisionController@create')
 $router->post('/division/edit', 'authority_control\DivisionController@edit');
 $router->delete('/division/delete/{id:[0-9]+}', 'authority_control\DivisionController@delete');
 
+$router->get('/programs', 'program\ProgramController@programs');
 $router->post('/program/programs_by_conditions', 'program\ProgramController@programs_by_conditions');
 $router->get('/program/{id:[0-9]+}', 'program\ProgramController@find');
 $router->post('/program/create', 'program\ProgramController@create');
