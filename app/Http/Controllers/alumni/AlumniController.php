@@ -89,6 +89,37 @@ class AlumniController extends BaseController
         return response()->json($result);
     }
 
+    public function alumni(Request $request)
+    {
+        $items = [
+            'Person.*'
+            , 'Alumni.code'
+            , 'Alumni.id as alumniId'
+            , 'AddressCountry.*'
+            , 'Person.id as personId'
+            , 'File.fileName',
+        ];
+        
+        $result = Person::where([
+            ['Person.personStatus', '=', 1],
+            ['Alumni.personId', '!=', 0]
+        ])
+            ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
+            ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
+            ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
+            ->leftJoin('Career', 'Person.id', '=', 'Career.personId')
+            ->leftJoin('ProgramParticipant', 'Person.id', '=', 'ProgramParticipant.alumniId')
+            ->orderBy('Person.id', 'desc')
+            ->take(500)
+            ->get($items);
+
+        $images = new ImageController();
+        $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
+        $result = $images->getImagesUrl($result, $this->path, 'fileName');
+
+        return response()->json($result);
+    }
+
     public function find($id)
     {
         $item = [

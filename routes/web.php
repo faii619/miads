@@ -86,6 +86,7 @@ $router->post('/news_cate/create', 'news_category\NewsCategoryController@create'
 $router->post('/news_cate/edit', 'news_category\NewsCategoryController@edit');
 $router->delete('/news_cate/delete/{id:[0-9]+}', 'news_category\NewsCategoryController@delete');
 
+$router->get('/alumni', 'alumni\AlumniController@alumni');
 $router->post('/alumni/sort', 'alumni\AlumniController@sort');
 $router->get('/alumni/{id:[0-9]+}', 'alumni\AlumniController@find');
 $router->post('/alumni/create', 'alumni\AlumniController@create');
