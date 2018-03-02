@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\alumni;
 
 use App\Http\Controllers\ImageController;
-use App\Models\alumni\Alumni;
+use App\Models\person\Person;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -25,6 +25,7 @@ class AlumniSearchController extends BaseController
 
     public function search_alumni_by_condition(Request $request)
     {
+      return response()->json($request);
         $items = [
             'Person.*'
             , 'Alumni.code'
@@ -79,15 +80,5 @@ class AlumniSearchController extends BaseController
         $result = $images->getImagesUrl($result, $this->path, 'fileName');
 
         return response()->json($result);
-    }
-
-    public function getDateShow($date)
-    {
-        $formatDate = '00/00/0000';
-        if ($date !== null) {
-            $bd = explode("-", $date);
-            $formatDate = $bd[2] . '/' . $bd[1] . '/' . $bd[0];
-        }
-        return $formatDate;
     }
 }
