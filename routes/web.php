@@ -113,6 +113,7 @@ $router->get('/country/genders_by_country_id', 'report\CountrySummaryController@
 $router->get('/country/count_genders', 'report\CountrySummaryController@count_genders');
 $router->get('/country/country_summary_by_country_id', 'report\CountrySummaryController@country_summary_by_country_id');
 $router->get('/country/count_courtry', 'report\CountrySummaryController@count_courtry');
+$router->get('/dashboard/count_alumni_country', 'report\CountrySummaryController@count_alumni_country');
 
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
 

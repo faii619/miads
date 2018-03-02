@@ -125,4 +125,19 @@ class CountrySummaryController extends BaseController
   
         return response()->json($results);
     }
+
+    public function count_alumni_country()
+    {
+        $conditions = [15, 16, 17, 18, 20, 21];
+        $results = Country::whereIn('id', $conditions)->get();
+
+        foreach ($results as $key => $value) {
+            $results[$key]['participants_count'] = $this->count_country_by_country_id($value['id']);
+
+            $images = new ImageController();
+            $results[$key]['image_url'] = $images->getImageUrl($value['flagImage'], $this->path);
+        }
+  
+        return response()->json($results);
+    }
 }
