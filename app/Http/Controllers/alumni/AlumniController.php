@@ -112,10 +112,10 @@ class AlumniController extends BaseController
             , 'Person.id as personId'
             , 'File.fileName',
         ];
-        
+
         $result = Person::where([
             ['Person.personStatus', '=', 1],
-            ['Alumni.personId', '!=', 0]
+            ['Alumni.personId', '!=', 0],
         ])
             ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
             ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
@@ -408,23 +408,17 @@ class AlumniController extends BaseController
 
     public function delete($id)
     {
-        $result = $this->find($id)->original;
-        $personId = $result[0]['personId'];
-        $fileId = $result[0]['photoFileId'];
         $status = ['status' => 0];
-
-        $resultPerson = Person::find($personId);
+        $resultPerson = Person::find($id);
         $resultPerson->personStatus = 0;
         $resultPerson->save();
 
-        $resultFile = File::find($fileId);
-        $resultFile->status = 0;
-        $resultFile->save();
+        File::where('Person.id', $id)
+            ->leftJoin('Person', 'File.id', '=', 'Person.photoFileId')
+            ->update($status);
 
-        Alumni::where([['personId', '=', $personId]])->update($status);
-
-        UserLogin::where([['personId', '=', $personId]])->update($status);
-
+        Alumni::where([['personId', '=', $id]])->update($status);
+        UserLogin::where([['personId', '=', $id]])->update($status);
         Career::where([['personId', '=', $id]])->update($status);
 
         return response()->json($this->response);
@@ -438,8 +432,7 @@ class AlumniController extends BaseController
             ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
             ->orderBy('Person.id', 'desc')
             ->limit($rows)
-            ->get(['Person.*', 'Alumni.code', 'AddressCountry.caption', 'File.fileName','AddressCountry.flagImage']);
-        
+            ->get(['Person.*', 'Alumni.code', 'AddressCountry.caption', 'File.fileName', 'AddressCountry.flagImage']);
 
         $result = $this->getCountryImage($result);
         
@@ -455,7 +448,7 @@ class AlumniController extends BaseController
         $confirm = $request->confirmPassword;
         if ($new == $confirm) {
             UserLogin::where([['personId', '=', $personId]])
-            ->update([
+                ->update([
                     'password' => md5($new),
                 ]);
         } else {
