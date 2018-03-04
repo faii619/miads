@@ -82,11 +82,24 @@ class AlumniController extends BaseController
             $result = $result->values()->slice(0, 500);
         }
 
+        $result = $this->getCountryImage($result);
+
         $images = new ImageController();
-        $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
         $result = $images->getImagesUrl($result, $this->path, 'fileName');
 
         return response()->json($result);
+    }
+
+    public function getCountryImage($result)
+    {
+        foreach ($result as $key => $value) {
+            $flag = File::find($value['flagImage']);
+            $result[$key]['flag'] = $flag['fileName'];
+        }
+
+        $images = new ImageController();
+        $result = $images->getImagesUrl($result, 'images/country/', 'flag');
+        return $result;
     }
 
     public function alumni(Request $request)
@@ -161,8 +174,9 @@ class AlumniController extends BaseController
             $result[0]['program'] = $this->editFormatDate($result[0]['program']);
 
             $images = new ImageController();
-            $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
+            // $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
             $result = $images->getImagesUrl($result, $this->path, 'fileName');
+            $result = $this->getCountryImage($result);
         }
 
         return response()->json($result);
@@ -275,7 +289,7 @@ class AlumniController extends BaseController
 
         $instanceCareer = new Career;
         $instanceCareer->position = $request->careerPosition;
-        $instanceCareer->startYear = $request->careerStartYear;
+        $instanceCareer->startYear = ($request->careerStartYear != 0 ? $request->careerStartYear : date('Y'));
         $instanceCareer->areaOfExpertise = $request->careerExpertise;
         $instanceCareer->govMinistryName = $request->careerMinistry;
         $instanceCareer->govDepartmentName = $request->careerDepartment;
@@ -384,77 +398,78 @@ class AlumniController extends BaseController
                 , 'division' => $request->careerDivision,
             ]);
 
-    $resultFile = File::find($fileId);
-    $resultFile->fileName = $image;
-    $resultFile->fileSize = $request->imageSize;
-    $resultFile->save();
+        $resultFile = File::find($fileId);
+        $resultFile->fileName = $image;
+        $resultFile->fileSize = $request->imageSize;
+        $resultFile->save();
 
-    return response()->json($this->response);
-  }
+        return response()->json($this->response);
+    }
 
-  public function delete($id)
-  {
-    $result = $this->find($id)->original;
-    $personId = $result[0]['personId'];
-    $fileId = $result[0]['photoFileId'];
-    $status = ['status' => 0];
+    public function delete($id)
+    {
+        $result = $this->find($id)->original;
+        $personId = $result[0]['personId'];
+        $fileId = $result[0]['photoFileId'];
+        $status = ['status' => 0];
 
-    $resultPerson = Person::find($personId);
-    $resultPerson->personStatus = 0;
-    $resultPerson->save();
+        $resultPerson = Person::find($personId);
+        $resultPerson->personStatus = 0;
+        $resultPerson->save();
 
-    $resultFile = File::find($fileId);
-    $resultFile->status = 0;
-    $resultFile->save();
+        $resultFile = File::find($fileId);
+        $resultFile->status = 0;
+        $resultFile->save();
 
-    Alumni::where([['personId', '=', $personId]])->update($status);
+        Alumni::where([['personId', '=', $personId]])->update($status);
 
-    UserLogin::where([['personId', '=', $personId]])->update($status);
+        UserLogin::where([['personId', '=', $personId]])->update($status);
 
-    Career::where([['personId', '=', $id]])->update($status);
+        Career::where([['personId', '=', $id]])->update($status);
 
-    return response()->json($this->response);
-  }
+        return response()->json($this->response);
+    }
 
-  public function latest($rows)
-  {
-    $result = Person::where('personStatus', 1)
-                ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
-                ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
-                ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
-                ->orderBy('Person.id', 'desc')
-                ->limit($rows)
-                ->get(['Person.*', 'Alumni.code', 'AddressCountry.caption', 'File.fileName','AddressCountry.flagImage']);
-                $images = new ImageController();
-                $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
-                $result = $images->getImagesUrl($result, $this->path, 'fileName');
-    return response()->json($result);
-  }
+    public function latest($rows)
+    {
+        $result = Person::where('personStatus', 1)
+            ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
+            ->leftJoin('AddressCountry', 'Person.nationalityAddressCountryId', '=', 'AddressCountry.Id')
+            ->leftJoin('File', 'Person.photoFileId', '=', 'File.id')
+            ->orderBy('Person.id', 'desc')
+            ->limit($rows)
+            ->get(['Person.*', 'Alumni.code', 'AddressCountry.caption', 'File.fileName','AddressCountry.flagImage']);
+        
 
-  public function change_passwod(Request $request)
-  {
-    $personId = $request->id;
-    $new = $request->newPassword;
-    $confirm = $request->confirmPassword;
-    if ($new == $confirm) {
-      UserLogin::where([['personId', '=', $personId]])
-                ->update([
+        $result = $this->getCountryImage($result);
+        
+        $images = new ImageController();
+        $result = $images->getImagesUrl($result, $this->path, 'fileName');
+        return response()->json($result);
+    }
+
+    public function change_passwod(Request $request)
+    {
+        $personId = $request->id;
+        $new = $request->newPassword;
+        $confirm = $request->confirmPassword;
+        if ($new == $confirm) {
+            UserLogin::where([['personId', '=', $personId]])
+            ->update([
                     'password' => md5($new),
                 ]);
-    } else {
-        $this->response = ['status' => 0, 'message' => 'not match'];
+        } else {
+            $this->response = ['status' => 0, 'message' => 'not match'];
+        }
+        return response()->json($this->response);
     }
-    return response()->json($this->response);
-  }
 
-  public function count_person()
-  {
-      $results = Person::where([
-          ['personStatus', '=', '1']
-      ])
-          ->count();
+    public function count_person()
+    {
+        $results = Person::where([['personStatus', '=', '1']])
+                        ->count();
 
-      return response()->json($results);
-  }
+        return response()->json($results);
+    }
 
 }
