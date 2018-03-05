@@ -126,3 +126,8 @@ $router->post('/authen', 'authen\AuthenController@authen');
 
 $router->get('/mi_alumni_directory', 'mi_alumni_directory\MiAlumniDirectoryController@mi_alumni_directory');
 $router->post('/mi_alumni_directory/edit', 'mi_alumni_directory\MiAlumniDirectoryController@edit');
+
+$router->get('/link_video', 'link_video\LinkVideoController@link_video');
+$router->post('/link_video/create', 'link_video\LinkVideoController@create');
+$router->post('/link_video/edit', 'link_video\LinkVideoController@edit');
+$router->delete('/link_video/delete/{id:[0-9]+}', 'link_video\LinkVideoController@delete');

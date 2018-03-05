@@ -22,61 +22,37 @@ class LinkVideoController extends BaseController
 
     public function link_video()
     {
+        $results = LinkVideo::where('status', 1)->get();
         return response()->json($results);
     }
 
     public function create(Request $request)
     {
-        $upload = new UploadController();
-        $image = $upload->setImage($request, $this->path);
-
-        $file = new File();
-        $file->fileName = $image;
-        $file->save();
-        $lastIdFile = $file->id;
-
-        $result = new Country;
-        $result->caption = $request->caption;
-        $result->ordinal = $request->ordinal;
-        $result->flagImage = $lastIdFile;
-
+        $result = new LinkVideo;
+        $result->title = $request->title;
+        $result->url_video = $request->url_video;
         $result->save();
+
         return response()->json($this->response);
     }
 
     public function edit(Request $request)
     {
-        $upload = new UploadController();
-        $image = $upload->setImage($request, $this->path);
-
-        $file = File::find($request->FileId);
-        $file->fileName = $image;
-        $file->save();
-
-        $result = Country::find($request->id);
-        $result->caption = $request->caption;
-        $result->ordinal = $request->ordinal;
-
+        $result = LinkVideo::find($request->id);
+        $result->title = $request->title;
+        $result->url_video = $request->url_video;
         $result->save();
+
         return response()->json($this->response);
     }
 
-    public function delete($id, $file_id)
+    public function delete($id)
     {
-        $file = File::find($file_id);
-        $file->status = 0;
-        $file->save();
-
-        $results = Country::find($id);
+        $results = LinkVideo::find($id);
         $results->status = 0;
         $results->save();
 
         return response()->json($this->response);
-    }
-    public function getCountry($results)
-    {
-        $results = Country::where('status', 1)->get();
-        return $results;
     }
 
 }
