@@ -31,9 +31,6 @@ class CountrySummaryController extends BaseController
             ->orderBy('caption', 'asc')
             ->get();
 
-        $images = new ImageController();
-        $results['results'] = $images->getImagesUrl($results['results'], $this->path, 'flagImage');
-
         $results['total_count_male'] = 0;
         $results['total_count_female'] = 0;
         $results['total_count_undefined'] = 0;
@@ -49,7 +46,13 @@ class CountrySummaryController extends BaseController
             $results['total_count_male'] += $results['results'][$key]['count_male'];
             $results['total_count_female'] += $results['results'][$key]['count_female'];
             $results['total_count_undefined'] += $results['results'][$key]['count_undefine'];
+
+            $flag = File::find($value['flagImage']);
+            $results['results'][$key]['flagImage'] = $flag['fileName'];
         }
+
+        $images = new ImageController();
+        $results['results'] = $images->getImagesUrl($results['results'], $this->path, 'flagImage');
 
         $results['total_count_all'] = $results['total_count_male'] + $results['total_count_female'] + $results['total_count_undefined'];
 
@@ -69,7 +72,7 @@ class CountrySummaryController extends BaseController
         }
 
         $images = new ImageController();
-        $results = $images->getImagesUrl($results, 'images/country/', 'image');
+        $results = $images->getImagesUrl($results, $this->path, 'image');
 
         $results = $results->sortByDesc('participants_count')->values()->slice(0, 5);
         return response()->json($results);
