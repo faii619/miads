@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\country;
+namespace App\Http\Controllers\link_video;
 
-use App\Http\Controllers\ImageController;
-use App\Http\Controllers\UploadController;
-use App\Models\country\Country;
-use App\Models\file\File;
+use App\Models\link_video\LinkVideo;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
-class CountryController extends BaseController
+class LinkVideoController extends BaseController
 {
     /**
      * Create a new controller instance.
@@ -22,21 +19,9 @@ class CountryController extends BaseController
     }
 
     private $response = array('status' => 1, 'message' => 'success');
-    private $path = 'images/country/';
 
-    public function country()
+    public function link_video()
     {
-        $items = [
-            'AddressCountry.*', 'File.id as FileId', 'File.fileName',
-        ];
-
-        $results = Country::where('AddressCountry.status', 1)
-            ->leftJoin('File', 'AddressCountry.flagImage', '=', 'File.id')
-            ->orderBy('ordinal', 'asc')->take(200)->get($items);
-
-        $images = new ImageController();
-        $results = $images->getImagesUrl($results, $this->path, 'fileName');
-
         return response()->json($results);
     }
 
