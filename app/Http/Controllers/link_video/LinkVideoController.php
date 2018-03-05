@@ -62,10 +62,6 @@ class LinkVideoController extends BaseController
                         ->limit(2)
                         ->get();
 
-        foreach ($results as $key => $value) {
-            $url = explode('watch?v=', $value['url_video']);
-            $results[$key]['url'] = "https://www.youtube.com/embed/".$url[1];
-        }
         return response()->json($results);
     }
 
