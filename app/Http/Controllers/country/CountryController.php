@@ -70,6 +70,7 @@ class CountryController extends BaseController
 
         $result = Country::find($request->id);
         $result->caption = $request->caption;
+        $result->ordinal = $request->ordinal;
 
         $result->save();
         return response()->json($this->response);
