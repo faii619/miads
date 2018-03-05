@@ -120,6 +120,7 @@ $router->get('/dashboard/count_alumni_country', 'report\CountrySummaryController
 $router->get('/careerorganizationtype', 'careerorganizationtype\CareerOrganizationTypeController@careerorganizationtype');
 
 $router->get('/career/career_year', 'career\CareerController@career_year');
+$router->get('/career/count_person', 'career\CareerController@count_person');
 
 // Authentication
 $router->post('/authen', 'authen\AuthenController@authen');

@@ -38,4 +38,29 @@ class CareerController extends BaseController
     return response()->json($result);
   }
 
+  public function count_person()
+  {
+    $year = Career::where([
+      ['status', 1],
+      ['startYear', '!=', '']
+    ])->groupby('startYear')->get(['Career.startYear']);
+    
+    $results['lineLabels'] = array();
+    $results['lineData'] = array();
+
+    foreach ($year as $key => $value) {
+      array_push($results['lineLabels'], $value['startYear']);
+      $count = $this->count_person_by_startYear($value['startYear']);
+      array_push($results['lineData'], $count);
+    }
+
+    return response()->json($results);
+  }
+
+  private function count_person_by_startYear($year)
+  {
+    $results = Career::where('startYear', $year)->count();
+    return $results;
+  }
+
 }

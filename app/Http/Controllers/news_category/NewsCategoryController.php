@@ -20,7 +20,7 @@ class NewsCategoryController extends BaseController {
   
   public function news_cate()
   {
-    $results = NewsCategory::where('status', 1)->take(200)->get();
+    $results = NewsCategory::where('status', 1)->get();
     return response()->json($results);
   }
 
