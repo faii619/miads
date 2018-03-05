@@ -6,6 +6,7 @@ namespace App\Http\Controllers\report;
 use App\Http\Controllers\ImageController;
 use App\Models\country\Country;
 use App\Models\person\Person;
+use App\Models\file\File;
 use Illuminate\Support\Collection;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -57,14 +58,18 @@ class CountrySummaryController extends BaseController
 
     public function country_summary_by_country_id()
     {
-        $results = Country::where('AddressCountry.status', 1)->get();
+        $results = Country::where('AddressCountry.status', 1)
+                            ->get();
 
         foreach ($results as $key => $value) {
             $results[$key]['participants_count'] = $this->count_country_by_country_id($value['id']);
 
-            $images = new ImageController();
-            $results[$key]['image_url'] = $images->getImageUrl($value['flagImage'], $this->path);
+            $flag = File::find($value['flagImage']);
+            $results[$key]['image'] = $flag['fileName'];
         }
+
+        $images = new ImageController();
+        $results = $images->getImagesUrl($results, 'images/country/', 'image');
 
         $results = $results->sortByDesc('participants_count')->values()->slice(0, 5);
         return response()->json($results);
