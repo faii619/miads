@@ -23,14 +23,14 @@ class NewsController extends BaseController {
   {
     $results = News::where('News.status', 1)
     ->leftJoin('News_NewsCategory', 'News.id', '=', 'News_NewsCategory.newsId')
-    ->leftJoin('NewsCategory', 'News_NewsCategory.newsCategoryId', '=', 'NewsCategory.id')
-    ->leftJoin('NewsAttachment', 'News.id', '=', 'NewsAttachment.newsId')
-    ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
-    // ->leftJoin('MailBatch', 'News.mailBatchId', '=', 'MailBatch.id')
+    // ->leftJoin('NewsCategory', 'News_NewsCategory.newsCategoryId', '=', 'NewsCategory.id')
+    // ->leftJoin('NewsAttachment', 'News.id', '=', 'NewsAttachment.newsId')
+    // ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
+    ->leftJoin('MailBatch', 'News.mailBatchId', '=', 'MailBatch.id')
     // ->leftJoin('MailStatus', 'News.mailBatchId', '=', 'MailStatus.mailBatchId')
     // ->leftJoin('Person', 'MailStatus.personId', '=', 'Person.id')
     ->orderBy('News.id', 'desc')
-    ->get(['News.*', 'NewsCategory.caption']);
+    ->get();
     return response()->json($results);
   }
 
@@ -42,7 +42,7 @@ class NewsController extends BaseController {
     ->leftJoin('NewsCategory', 'News_NewsCategory.newsCategoryId', '=', 'NewsCategory.id')
     // ->leftJoin('NewsAttachment', 'News.id', '=', 'NewsAttachment.newsId')
     // ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
-    // ->leftJoin('MailBatch', 'News.mailBatchId', '=', 'MailBatch.id')
+    ->leftJoin('MailBatch', 'News.mailBatchId', '=', 'MailBatch.id')
     // ->leftJoin('MailStatus', 'News.mailBatchId', '=', 'MailStatus.mailBatchId')
     // ->leftJoin('Person', 'MailStatus.personId', '=', 'Person.id')
     ->orderBy('News.id', 'desc')
