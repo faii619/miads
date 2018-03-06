@@ -80,6 +80,9 @@ class AuthenController extends BaseController
                             , 'password' => $gen_password
                         );
             
+            $email = new MailController;
+            $email->send_email($data);
+            
             $response = array(
                             'status' => 1
                             , 'message' => 'success'
