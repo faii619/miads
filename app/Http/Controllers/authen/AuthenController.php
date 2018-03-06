@@ -4,6 +4,7 @@ namespace App\Http\Controllers\authen;
 
 use App\Models\user_login\UserLogin;
 use App\Models\person\Person;
+use App\Models\alumni\Alumni;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -52,6 +53,51 @@ class AuthenController extends BaseController
     {
       $result = Person::find($person_id);
       return $result;
+    }
+
+    public function forget_password(Request $request)
+    {
+        $result = Person::where('email', $request->email)
+                    ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
+                    ->get();
+
+        $response = array('status' => 0, 'message' => 'No email');
+
+        if (count($result) != 0) {
+            $gen_password = $this->randomString();
+
+        //     UserLogin::where([['personId', '=', $result[0]['personId']]])
+        //         ->update([
+        //             'password' => md5($gen_password)
+        //         ]);
+
+            $response = array(
+                            'username' => $result[0]['code']
+                            , 'password' => $gen_password
+                        );
+        }
+        return response()->json($response);
+    }
+
+    // function RandomString()
+    // {
+    //     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    //     $randstring = '';
+    //     for ($i = 0; $i < 5; $i++) {
+    //         $randstring = $characters[rand(0, strlen($characters))];
+    //     }
+    //     return $randstring;
+    // }range('A','Z'), 
+
+    function randomString() {
+        $str = "";
+        $characters = array_merge(range('a','z'), range('0','9'));
+        $max = count($characters) - 1;
+        for ($i = 0; $i < 5; $i++) {
+            $rand = mt_rand(0, $max);
+            $str .= $characters[$rand];
+        }
+        return $str;
     }
 
 }

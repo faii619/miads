@@ -124,6 +124,7 @@ $router->get('/career/count_person', 'career\CareerController@count_person');
 
 // Authentication
 $router->post('/authen', 'authen\AuthenController@authen');
+$router->post('/forget_password', 'authen\AuthenController@forget_password');
 
 $router->get('/mi_alumni_directory', 'mi_alumni_directory\MiAlumniDirectoryController@mi_alumni_directory');
 $router->post('/mi_alumni_directory/edit', 'mi_alumni_directory\MiAlumniDirectoryController@edit');
