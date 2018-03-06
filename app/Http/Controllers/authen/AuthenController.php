@@ -58,13 +58,12 @@ class AuthenController extends BaseController
 
     public function forget_password(Request $request)
     {
-        $response = array('status' => 0, 'message' => 'No email');
+        $response = array('status' => 0, 'message' => 'No email.');
 
         $result = Person::where('email', $request->email)
+                    ->leftJoin('PersonTitle', 'Person.personTitleId', '=', 'PersonTitle.id')
                     ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
                     ->get();
-
-        $response = array('status' => 0, 'message' => 'No email.');
 
         if (count($result) != 0) {
             $gen_password = $this->randomString();
@@ -76,6 +75,8 @@ class AuthenController extends BaseController
 
             $data = array(
                             'email' => $request->email
+                            , 'title_name' => $result[0]['caption']
+                            , 'name' => $result[0]['name']
                             , 'username' => $result[0]['code']
                             , 'password' => $gen_password
                         );
@@ -83,11 +84,7 @@ class AuthenController extends BaseController
             $email = new MailController;
             $email->send_email($data);
             
-            $response = array(
-                            'status' => 1
-                            , 'message' => 'success'
-                            , 'data' => $data
-                        );
+            $response = array('status' => 1, 'message' => 'success');
         }
         return response()->json($response);
     }
