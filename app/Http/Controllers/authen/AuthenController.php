@@ -64,26 +64,27 @@ class AuthenController extends BaseController
                     ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
                     ->get();
 
-        $response = array('status' => 0, 'message' => 'No email');
+        $response = array('status' => 0, 'message' => 'No email.');
 
         if (count($result) != 0) {
             $gen_password = $this->randomString();
 
-            // UserLogin::where([['personId', '=', $result[0]['personId']]])
-            //     ->update([
-            //         'password' => md5($gen_password)
-            //     ]);
+            UserLogin::where([['personId', '=', $result[0]['personId']]])
+                ->update([
+                    'password' => md5($gen_password)
+                ]);
 
             $data = array(
                             'email' => $request->email
                             , 'username' => $result[0]['code']
                             , 'password' => $gen_password
                         );
-                        
-            $email = new MailController;
-            $email->send_email($data);
             
-            $response = ['status' => 1, 'message' => 'success'];
+            $response = array(
+                            'status' => 1
+                            , 'message' => 'success'
+                            , 'data' => $data
+                        );
         }
         return response()->json($response);
     }
