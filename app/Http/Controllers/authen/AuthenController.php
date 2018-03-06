@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\authen;
 
+use App\Http\Controllers\mail\MailController;
 use App\Models\user_login\UserLogin;
 use App\Models\person\Person;
 use App\Models\alumni\Alumni;
@@ -57,6 +58,8 @@ class AuthenController extends BaseController
 
     public function forget_password(Request $request)
     {
+        $response = array('status' => 0, 'message' => 'No email');
+
         $result = Person::where('email', $request->email)
                     ->leftJoin('Alumni', 'Person.id', '=', 'Alumni.personId')
                     ->get();
@@ -66,15 +69,21 @@ class AuthenController extends BaseController
         if (count($result) != 0) {
             $gen_password = $this->randomString();
 
-        //     UserLogin::where([['personId', '=', $result[0]['personId']]])
-        //         ->update([
-        //             'password' => md5($gen_password)
-        //         ]);
+            // UserLogin::where([['personId', '=', $result[0]['personId']]])
+            //     ->update([
+            //         'password' => md5($gen_password)
+            //     ]);
 
-            $response = array(
-                            'username' => $result[0]['code']
+            $data = array(
+                            'email' => $request->email
+                            , 'username' => $result[0]['code']
                             , 'password' => $gen_password
                         );
+                        
+            $email = new MailController;
+            $email->send_email($data);
+            
+            $response = ['status' => 1, 'message' => 'success'];
         }
         return response()->json($response);
     }
