@@ -27,6 +27,8 @@ class ProgramSummaryController extends BaseController {
   public function program_summary() {
     $results = Program::where('Program.status', 1)->get();
     foreach ($results as $key => $value) {
+      $results[$key]['startDate'] = date("d/m/Y", strtotime($value['startDate']));
+      $results[$key]['endDate'] = date("d/m/Y", strtotime($value['endDate']));
       $results[$key]['count'] = $this->count($value['id']);;
     }
     return response()->json($results);
@@ -37,7 +39,9 @@ class ProgramSummaryController extends BaseController {
     ->limit(10)
     ->get();
     foreach ($results as $key => $value) {
-      $results[$key]['count'] = $this->count($value['id']);;
+      $results[$key]['startDate'] = date("d/m/Y", strtotime($value['startDate']));
+      $results[$key]['endDate'] = date("d/m/Y", strtotime($value['endDate']));
+      $results[$key]['count'] = $this->count($value['id']);
     }
     return response()->json($results);
   }
