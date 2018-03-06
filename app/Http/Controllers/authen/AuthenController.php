@@ -79,16 +79,6 @@ class AuthenController extends BaseController
         return response()->json($response);
     }
 
-    // function RandomString()
-    // {
-    //     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    //     $randstring = '';
-    //     for ($i = 0; $i < 5; $i++) {
-    //         $randstring = $characters[rand(0, strlen($characters))];
-    //     }
-    //     return $randstring;
-    // }range('A','Z'), 
-
     function randomString() {
         $str = "";
         $characters = array_merge(range('a','z'), range('0','9'));
