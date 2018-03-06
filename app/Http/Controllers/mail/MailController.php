@@ -30,7 +30,7 @@ class MailController extends BaseController
     $mail->Subject = 'Your username and new password.';
     // $mail->msgHTML(file_get_contents('contents.html'), __DIR__);
     $mail->msgHTML("username: ".$data['username']."Password: ".$data['password']);
-    $mail->AltBody = 'This is a plain-text message body';
+    // $mail->AltBody = 'This is a plain-text message body';
     //$mail->addAttachment('images/phpmailer_mini.png');
     if (!$mail->send()) {
       // echo "Mailer Error: " . $mail->ErrorInfo;
