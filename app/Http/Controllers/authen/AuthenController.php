@@ -92,7 +92,8 @@ class AuthenController extends BaseController
         return response()->json($response);
     }
 
-    function randomString() {
+    function randomString()
+    {
         $str = "";
         $characters = array_merge(range('a','z'), range('0','9'));
         $max = count($characters) - 1;
