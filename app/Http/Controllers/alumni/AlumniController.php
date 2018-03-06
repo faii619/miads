@@ -126,8 +126,10 @@ class AlumniController extends BaseController
             ->take(500)
             ->get($items);
 
+        $result = $this->getCountryImage($result);
+
         $images = new ImageController();
-        $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
+        // $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
         $result = $images->getImagesUrl($result, $this->path, 'fileName');
 
         return response()->json($result);
