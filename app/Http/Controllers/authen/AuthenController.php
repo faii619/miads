@@ -80,6 +80,9 @@ class AuthenController extends BaseController
                             , 'password' => $gen_password
                         );
             
+            $email = new MailController;
+            $email->send_email($data);
+            
             $response = array(
                             'status' => 1
                             , 'message' => 'success'
@@ -89,7 +92,8 @@ class AuthenController extends BaseController
         return response()->json($response);
     }
 
-    function randomString() {
+    function randomString()
+    {
         $str = "";
         $characters = array_merge(range('a','z'), range('0','9'));
         $max = count($characters) - 1;
