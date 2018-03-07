@@ -45,7 +45,8 @@ class NewsController extends BaseController {
     $item = [
       'News.id',
       'News.title',
-      'News.body'
+      'News.body',
+      'News_NewsCategory.newsCategoryId'
     ];
     $results = News::where('News.status', 1)
     ->where('News.id', $id)
@@ -56,7 +57,7 @@ class NewsController extends BaseController {
     // ->leftJoin('MailBatch', 'News.mailBatchId', '=', 'MailBatch.id')
     // ->leftJoin('MailStatus', 'News.mailBatchId', '=', 'MailStatus.mailBatchId')
     // ->leftJoin('Person', 'MailStatus.personId', '=', 'Person.id')
-    // ->orderBy('News.id', 'desc')
+    // News_NewsCategory
     ->get($item);
     return response()->json($results);
   }
