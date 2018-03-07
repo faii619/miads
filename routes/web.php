@@ -134,3 +134,7 @@ $router->post('/link_video/create', 'link_video\LinkVideoController@create');
 $router->post('/link_video/edit', 'link_video\LinkVideoController@edit');
 $router->delete('/link_video/delete/{id:[0-9]+}', 'link_video\LinkVideoController@delete');
 $router->get('/get_youtube', 'link_video\LinkVideoController@get_youtube');
+
+$router->get('/news_subscription/{id:[0-9]+}', 'news_subscription\NewsSubscriptionController@news_subscription');
+$router->post('/news_subscription/subscribe', 'news_subscription\NewsSubscriptionController@subscribe');
+$router->post('/news_subscription/delete', 'news_subscription\NewsSubscriptionController@delete');
