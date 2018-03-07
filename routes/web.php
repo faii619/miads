@@ -108,8 +108,9 @@ $router->get('/program_summary/{id:[0-9]+}', 'report\ProgramSummaryController@fi
 
 $router->get('/news', 'news\NewsController@News');
 $router->get('/news/{id:[0-9]+}', 'news\NewsController@find');
+$router->post('/news/create', 'news\NewsController@create');
+$router->post('/news/edit', 'news\NewsController@edit');
 $router->delete('/news/delete/{id:[0-9]+}', 'news\NewsController@delete');
-// $router->post('/news/create', 'news\NewsController@create');
 
 $router->get('/country/genders_by_country_id', 'report\CountrySummaryController@genders_by_country_id');
 $router->get('/country/count_genders', 'report\CountrySummaryController@count_genders');
