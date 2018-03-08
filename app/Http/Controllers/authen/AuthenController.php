@@ -75,10 +75,12 @@ class AuthenController extends BaseController
 
             $data = array(
                             'email' => $request->email
-                            , 'title_name' => $result[0]['caption']
-                            , 'name' => $result[0]['name']
-                            , 'username' => $result[0]['code']
-                            , 'password' => $gen_password
+                            // , 'title_name' => $result[0]['caption']
+                            // , 'name' => $result[0]['name']
+                            // , 'username' => $result[0]['code']
+                            // , 'password' => $gen_password
+                            , 'subject' => 'Your username and new password.'
+                            , 'body' => "To. ".$result[0]['caption']." ".$result[0]['name']."<br>This your username and password for login <br>Username: ".$result[0]['code']."<br>Password: ".$gen_password
                         );
             
             $email = new MailController;

@@ -39,8 +39,8 @@ class MailController extends BaseController
 
         //Content
         $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = 'Your username and new password.';
-        $mail->Body    = "To. ".$data['title_name']." ".$data['name']."<br>This your username and password for login <br>Username: ".$data['username']."<br>Password: ".$data['password'];
+        $mail->Subject = $data['subject'];
+        $mail->Body    = $data['body'];
         // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
         $mail->send();
