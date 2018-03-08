@@ -139,3 +139,8 @@ $router->get('/get_youtube', 'link_video\LinkVideoController@get_youtube');
 $router->get('/news_subscription/{id:[0-9]+}', 'news_subscription\NewsSubscriptionController@news_subscription');
 $router->post('/news_subscription/subscribe', 'news_subscription\NewsSubscriptionController@subscribe');
 $router->post('/news_subscription/delete', 'news_subscription\NewsSubscriptionController@delete');
+
+$router->get('/images_slide', 'images_slide\ImagesSlideController@images_slide');
+$router->post('/images_slide/create', 'images_slide\ImagesSlideController@create');
+$router->post('/images_slide/edit', 'images_slide\ImagesSlideController@edit');
+$router->delete('/images_slide/delete/{id:[0-9]+}/{file_id:[0-9]+}', 'images_slide\ImagesSlideController@delete');
