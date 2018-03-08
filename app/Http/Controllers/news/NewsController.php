@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\news;
 
+use App\Http\Controllers\mail\MailController;
 use App\Models\news\News;
+use App\Models\news_send_to\NewsSendTo;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -67,8 +69,37 @@ class NewsController extends BaseController {
     $results->title = $request->title;
     $results->body = $request->body;
     $results->status = 1;
+    $results->statusSending = $request->statusSending;
     $results->save();
+    $newsId = $results->id;
+
+    $results2 = new NewsSendTo;
+    $results2->newsId = $newsId;
+    $results2->sendTo = $request->to;
+    $results2->sendCC = $request->cc;
+    $results2->sendBCC = $request->bcc;
+    $results2->save();
+    $NewsSendId = $results2->id;
+    
+    $data = array(
+      'email' => $request->to
+      , 'email_cc' => $request->cc
+      , 'email_bcc' => $request->bcc
+      , 'subject' => $request->title
+      , 'body' => $request->body
+    );
+
+    $email = new MailController;
+    $statusSend = $email->send_email($data);
+
+    if ($statusSend == 1) {
+      $resultNewsSend = NewsSendTo::find($NewsSendId);
+      $resultNewsSend->status = 1;
+      $resultNewsSend->save();
+    }
+    
     return response()->json($this->response);
+    // return response()->json($xx);
   }
 
   public function edit(Request $request) {
