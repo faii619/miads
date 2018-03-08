@@ -22,15 +22,15 @@ class MailController extends BaseController
         $mail->isSMTP();                                      // Set mailer to use SMTP
         $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'niramon.sr619@gmail.com';                 // SMTP username
-        $mail->Password = 'niramon619';                           // SMTP password
+        $mail->Username = 'niramon.sr619@gmail.com';          // SMTP username
+        $mail->Password = 'niramon619';                       // SMTP password
         $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 587;                                    // TCP port to connect to
 
         //Recipients
         $mail->setFrom('niramon.sr619@gmail.com', 'MI Alumni system');
-        $mail->addAddress($data['email']);     // Add a recipient
-        // $mail->addAddress('ellen@example.com');               // Name is optional
+        $mail->addAddress($data['email']);                    // Add a recipient
+        // $mail->addAddress('ellen@example.com');            // Name is optional
         // $mail->addReplyTo('info@example.com', 'Information');
         if ($data['email_cc'] != 0) {
           $mail->addCC($data['email_cc']);
