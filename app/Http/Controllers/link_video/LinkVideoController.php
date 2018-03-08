@@ -31,6 +31,7 @@ class LinkVideoController extends BaseController
         $result = new LinkVideo;
         $result->title = $request->title;
         $result->url_video = $request->url_video;
+        $result->status = 1;
         $result->save();
 
         return response()->json($this->response);
@@ -41,6 +42,7 @@ class LinkVideoController extends BaseController
         $result = LinkVideo::find($request->id);
         $result->title = $request->title;
         $result->url_video = $request->url_video;
+        $result->status = 1;
         $result->save();
 
         return response()->json($this->response);
