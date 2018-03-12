@@ -11,10 +11,11 @@ require base_path("vendor/autoload.php");
 
 class MailController extends BaseController
 {
-  public function send_email($data)
-  {
+  public function send_email($data) {
+    // $x = 0;
+    // if ($data['email'] != '0') {$x = 1;}
+    // return $x;
     $status = 0;
-    // return $data;
     $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
     try {
         //Server settings
@@ -29,14 +30,18 @@ class MailController extends BaseController
 
         //Recipients
         $mail->setFrom('niramon.sr619@gmail.com', 'MI Alumni system');
-        $mail->addAddress($data['email']);                    // Add a recipient
+
+        if ($data['email'] != '0') {
+          $mail->addAddress($data['email']);
+        }
+                            // Add a recipient
         // $mail->addAddress('ellen@example.com');            // Name is optional
         // $mail->addReplyTo('info@example.com', 'Information');
-        if ($data['email_cc'] != 0) {
+        if ($data['email_cc'] != '0') {
           $mail->addCC($data['email_cc']);
         }
 
-        if ($data['email_bcc'] != 0) {
+        if ($data['email_bcc'] != '0') {
           $mail->addBCC($data['email_bcc']);
         }
 

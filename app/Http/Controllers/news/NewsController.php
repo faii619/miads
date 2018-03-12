@@ -99,7 +99,7 @@ class NewsController extends BaseController {
     }
     
     return response()->json($this->response);
-    // return response()->json($xx);
+    // return response()->json($statusSend);
   }
 
   public function edit(Request $request) {
