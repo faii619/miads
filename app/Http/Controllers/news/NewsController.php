@@ -4,6 +4,8 @@ namespace App\Http\Controllers\news;
 
 use App\Http\Controllers\mail\MailController;
 use App\Models\news\News;
+use App\Models\news_subscription\NewsSubscription;
+use App\Models\news_news_category\NewsNewsCategory;
 use App\Models\news_send_to\NewsSendTo;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -65,6 +67,9 @@ class NewsController extends BaseController {
   }
 
   public function create(Request $request) {
+    $newsId = 0;
+    $NewsSendId = 0;
+
     $results = new News;
     $results->title = $request->title;
     $results->body = $request->body;
@@ -73,33 +78,84 @@ class NewsController extends BaseController {
     $results->save();
     $newsId = $results->id;
 
-    $results2 = new NewsSendTo;
-    $results2->newsId = $newsId;
-    $results2->sendTo = $request->to;
-    $results2->sendCC = $request->cc;
-    $results2->sendBCC = $request->bcc;
-    $results2->save();
-    $NewsSendId = $results2->id;
-    
     $data = array(
-      'email' => $request->to
-      , 'email_cc' => $request->cc
-      , 'email_bcc' => $request->bcc
-      , 'subject' => $request->title
-      , 'body' => $request->body
-    );
+                  'title' => $request->title
+                  , 'body' => $request->body
+                );
 
-    $email = new MailController;
-    $statusSend = $email->send_email($data);
+    if ($request->newsCategoryId != 0) {
+      $results3 = new NewsNewsCategory;
+      $results3->newsId = $newsId;
+      $results3->newsCategoryId = $request->newsCategoryId;
+      $results3->save();
 
-    if ($statusSend == 1) {
-      $resultNewsSend = NewsSendTo::find($NewsSendId);
-      $resultNewsSend->status = 1;
-      $resultNewsSend->save();
+      $recipient_group = $this->getPersonSubscription($request->newsCategoryId);
     }
-    
+
+    if ($request->to != 0) {
+      $results2 = new NewsSendTo;
+      $results2->newsId = $newsId;
+      $results2->sendTo = $request->to;
+      $results2->sendCC = $request->cc;
+      $results2->sendBCC = $request->bcc;
+      $results2->save();
+      $NewsSendId = $results2->id;
+
+      $recipient = [[
+                    'to' => $request->to
+                    , 'cc' => $request->cc
+                    , 'bcc' => $request->bcc
+                  ]];
+    }
+
+    if ($request->statusSending == 1) {
+      $this->sendMail($recipient_group, $data, $NewsSendId);
+      $this->sendMail($recipient, $data, $NewsSendId);
+    }
+
     return response()->json($this->response);
-    // return response()->json($statusSend);
+    // return response()->json($recipient);
+  }
+
+  public function getPersonSubscription($newsCateId)
+  {
+    $result = [];
+    $rs = NewsSubscription::where([
+                                    ['newsCategoryId', $newsCateId]
+                                    , ['status', 1]
+                                  ])
+                  ->leftjoin('Person', 'NewsSubscription.personId', '=', 'Person.id')
+                  ->get(['Person.email', 'Person.otherEmails']);
+
+    foreach ($rs as $key => $value) {
+      $result[$key]['to'] = ($value['email'] != '' ? $value['email'] : 0);
+      $result[$key]['cc'] = ($value['otherEmails'] != '' ? $value['otherEmails'] : 0);
+      $result[$key]['bcc'] = 0;
+    }
+
+    return $result;
+  }
+
+  public function sendMail($recipient, $data, $NewsSendId)
+  {
+    foreach ($recipient as $key => $value) {
+      $set_data = array(
+                        'email' => $value->to
+                        , 'email_cc' => $value->cc
+                        , 'email_bcc' => $value->bcc
+                        , 'subject' => $data->title
+                        , 'body' => $data->body
+                      );
+
+      $email = new MailController;
+      $statusSend = $email->send_email($set_data);
+
+      if ($NewsSendId != 0) {
+        $resultNewsSend = NewsSendTo::find($NewsSendId);
+        $resultNewsSend->status = 1;
+        $resultNewsSend->save();
+      }
+    }
   }
 
   public function edit(Request $request) {
