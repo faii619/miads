@@ -66,9 +66,12 @@ class NewsController extends BaseController {
     return response()->json($results);
   }
 
-  public function create(Request $request) {
+  public function create(Request $request)
+  {
     $newsId = 0;
     $NewsSendId = 0;
+    $recipient['group'] = '';
+    $recipient['man'] = '';
 
     $results = new News;
     $results->title = $request->title;
@@ -89,10 +92,14 @@ class NewsController extends BaseController {
       $results3->newsCategoryId = $request->newsCategoryId;
       $results3->save();
 
-      $recipient_group = $this->getPersonSubscription($request->newsCategoryId);
+      $recipient['group'] = $this->getPersonSubscription($request->newsCategoryId);
+
+      if ($request->statusSending == 1) {
+        $this->sendMail($recipient['group'], $data, $NewsSendId);
+      }
     }
 
-    if ($request->to != 0) {
+    if ($request->to != "0") {
       $results2 = new NewsSendTo;
       $results2->newsId = $newsId;
       $results2->sendTo = $request->to;
@@ -101,20 +108,18 @@ class NewsController extends BaseController {
       $results2->save();
       $NewsSendId = $results2->id;
 
-      $recipient = [[
+      $recipient['man'] = [[
                     'to' => $request->to
                     , 'cc' => $request->cc
                     , 'bcc' => $request->bcc
                   ]];
-    }
 
-    if ($request->statusSending == 1) {
-      $this->sendMail($recipient_group, $data, $NewsSendId);
-      $this->sendMail($recipient, $data, $NewsSendId);
+      if ($request->statusSending == 1) {
+        $xxx['rec2'] = $this->sendMail($recipient['man'], $data, $NewsSendId);
+      }
     }
 
     return response()->json($this->response);
-    // return response()->json($recipient);
   }
 
   public function getPersonSubscription($newsCateId)
@@ -138,19 +143,20 @@ class NewsController extends BaseController {
 
   public function sendMail($recipient, $data, $NewsSendId)
   {
+    $set_data = [];
     foreach ($recipient as $key => $value) {
       $set_data = array(
-                        'email' => $value->to
-                        , 'email_cc' => $value->cc
-                        , 'email_bcc' => $value->bcc
-                        , 'subject' => $data->title
-                        , 'body' => $data->body
+                        'email' => $value['to']
+                        , 'email_cc' => $value['cc']
+                        , 'email_bcc' => $value['bcc']
+                        , 'subject' => $data['title']
+                        , 'body' => $data['body']
                       );
 
       $email = new MailController;
       $statusSend = $email->send_email($set_data);
 
-      if ($NewsSendId != 0) {
+      if ($NewsSendId != 0 && $statusSend == 1) {
         $resultNewsSend = NewsSendTo::find($NewsSendId);
         $resultNewsSend->status = 1;
         $resultNewsSend->save();
