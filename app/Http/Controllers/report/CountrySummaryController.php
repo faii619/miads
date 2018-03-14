@@ -137,23 +137,20 @@ class CountrySummaryController extends BaseController
     public function count_alumni_country()
     {
         $results['sum_person'] = 0;
-        $conditions = [15, 16, 17, 18, 20, 21];
-        $results['list'] = Country::whereIn('AddressCountry.id', $conditions)
-                        ->get();
-
-        foreach ($results['list'] as $key => $value) {
-            $results['list'][$key]['participants_count'] = $this->count_country_by_country_id($value['id']);
-            $file_name = File::find($value['flagImage']);
-            $image[$key] = 0;
-            if ($file_name !== null) {
-                $image[$key] = $file_name['fileName'];
-            }
-            $results['sum_person'] += $results['list'][$key]['participants_count'];
+        $conditions = [20, 18, 15, 21, 17, 16];
+        foreach ($conditions as $key => $value) {
+            $country = Country::where('AddressCountry.id', $value)
+                                        ->leftJoin('File', 'AddressCountry.flagImage', '=', 'File.id')
+                                        ->get(['AddressCountry.*','File.fileName']);
+            $results['list'][$key] = $country[0];
+            $results['list'][$key]['participants_count'] = $this->count_country_by_country_id($country[0]['id']);
 
             $images = new ImageController();
-            $results['list'][$key]['image_url'] = $images->getImageUrl($image[$key], $this->path);
+            $results['list'][$key]['image_url'] = $images->getImageUrl($country[0]['fileName'], $this->path);
+
+            $results['sum_person'] += $results['list'][$key]['participants_count'];
         }
-  
+
         return response()->json($results);
     }
 }
