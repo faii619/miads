@@ -26,9 +26,7 @@ class NewsController extends BaseController {
   public function News()
   {
     $item = [
-      'News.id',
-      'News.title',
-      'News.body',
+      'News.*',
       'MailBatch.progress'
     ];
     $results = News::where('News.status', 1)

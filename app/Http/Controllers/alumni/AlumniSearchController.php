@@ -4,6 +4,7 @@ namespace App\Http\Controllers\alumni;
 
 use App\Http\Controllers\ImageController;
 use App\Models\person\Person;
+use App\Models\file\File;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -42,7 +43,7 @@ class AlumniSearchController extends BaseController
             $conditions[] = ['Alumni.code', 'like', $request->code . '%'];
         }
 
-        if ($request->start_date != '0' && $request->end_date) {
+        if ($request->start_date != '0' && $request->end_date != '0') {
             $conditions[] = ['Career.startYear', '>=', $request->start_date];
             $conditions[] = ['Career.startYear', '<=', $request->end_date];
         }
@@ -72,7 +73,7 @@ class AlumniSearchController extends BaseController
         }
 
         if ($request->name != '0') {
-            $conditions[] = ['Person.name', 'like', $request->txt_name . '%'];
+            $conditions[] = ['Person.name', 'like', $request->name . '%'];
         }
 
 
@@ -85,10 +86,28 @@ class AlumniSearchController extends BaseController
             ->orderBy('Person.id', 'desc')
             ->get($items);
 
+        if ($request->code == '0' && $request->start_date == '0' && $request->end_date == '0' && $request->program_id == '0' && $request->mi_department == '0' && $request->organize_type_id == '0' && $request->alumni_organization_name == '0' && $request->country_id == '0' && $request->alumni_area_of_expertise == '0' && $request->name == '0') {
+            $result = $result->values()->slice(0, 500);
+        }
+
+        $result = $this->getCountryImage($result);
+
         $images = new ImageController();
-        $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
+        // $result = $images->getImagesUrl($result, 'images/country/', 'flagImage');
         $result = $images->getImagesUrl($result, $this->path, 'fileName');
 
         return response()->json($result);
+    }
+
+    public function getCountryImage($result)
+    {
+        foreach ($result as $key => $value) {
+            $flag = File::find($value['flagImage']);
+            $result[$key]['flag'] = $flag['fileName'];
+        }
+
+        $images = new ImageController();
+        $result = $images->getImagesUrl($result, 'images/country/', 'flag');
+        return $result;
     }
 }
