@@ -125,8 +125,8 @@ class NewsController extends BaseController {
   {
     $result = [];
     $rs = NewsSubscription::where([
-                                    ['newsCategoryId', $newsCateId]
-                                    , ['status', 1]
+                                    ['NewsSubscription.newsCategoryId', $newsCateId]
+                                    , ['NewsSubscription.status', 1]
                                   ])
                   ->leftjoin('Person', 'NewsSubscription.personId', '=', 'Person.id')
                   ->get(['Person.email', 'Person.otherEmails']);
@@ -220,6 +220,51 @@ class NewsController extends BaseController {
     $results = News::find($id);
     $results->status = 0;
     $results->save();
+    return response()->json($this->response);
+  }
+
+  public function sendEMail($id)
+  {
+    $recipient['group'] = '';
+    $recipient['man'] = '';
+    $item = [
+              'News.id',
+              'News.title',
+              'News.body',
+              'News_NewsCategory.newsCategoryId'
+            ];
+
+    $dataMail = News::where([
+                            ['News.id', $id]
+                            , ['News.status', 1]
+                          ])
+                ->leftJoin('News_NewsCategory', 'News.id', '=', 'News_NewsCategory.newsId')
+                ->get($item);
+
+    $sendByMan = NewsSendTo::where('newsId', $id)->get();
+
+    $attachment = NewsAttachment::where('newsId', $id)
+                  ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
+                  ->get();
+
+    $data = array(
+                  'title' => $dataMail[0]['title']
+                  , 'body' => $dataMail[0]['body']
+                );
+
+    if ($dataMail[0]['newsCategoryId'] != null) {
+      $recipient['group'] = $this->getPersonSubscription($dataMail[0]['newsCategoryId']);
+      $this->sendMail($recipient['group'], $data, 0);
+    }
+
+    if (!empty($sendByMan[0])) {
+      $recipient['man'] = [[
+                            'to' => $sendByMan[0]['sendTo']
+                            , 'cc' => $sendByMan[0]['sendCC']
+                            , 'bcc' => $sendByMan[0]['sendBCC']
+                          ]];
+      $this->sendMail($recipient['man'], $data, $sendByMan[0]['id']);
+    }
     return response()->json($this->response);
   }
 }
