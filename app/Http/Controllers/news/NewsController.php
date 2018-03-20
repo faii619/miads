@@ -7,6 +7,7 @@ use App\Models\news\News;
 use App\Models\news_subscription\NewsSubscription;
 use App\Models\news_news_category\NewsNewsCategory;
 use App\Models\news_send_to\NewsSendTo;
+use App\Models\news_attachment\NewsAttachment;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -26,42 +27,42 @@ class NewsController extends BaseController {
   public function News()
   {
     $item = [
-      'News.*',
-      'MailBatch.progress'
-    ];
+              'News.*',
+              'MailBatch.progress'
+            ];
+
     $results = News::where('News.status', 1)
-    ->leftJoin('News_NewsCategory', 'News.id', '=', 'News_NewsCategory.newsId')
-    // ->leftJoin('NewsCategory', 'News_NewsCategory.newsCategoryId', '=', 'NewsCategory.id')
-    // ->leftJoin('NewsAttachment', 'News.id', '=', 'NewsAttachment.newsId')
-    // ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
-    ->leftJoin('MailBatch', 'News.mailBatchId', '=', 'MailBatch.id')
-    // ->leftJoin('MailStatus', 'News.mailBatchId', '=', 'MailStatus.mailBatchId')
-    // ->leftJoin('Person', 'MailStatus.personId', '=', 'Person.id')
-    ->orderBy('News.id', 'desc')
-    ->get($item);
+                ->leftJoin('News_NewsCategory', 'News.id', '=', 'News_NewsCategory.newsId')
+                ->leftJoin('MailBatch', 'News.mailBatchId', '=', 'MailBatch.id')
+                ->orderBy('News.id', 'desc')
+                ->get($item);
+
     return response()->json($results);
   }
 
   public function find($id)
   {
     $item = [
-      'News.id',
-      'News.title',
-      'News.body',
-      'News_NewsCategory.newsCategoryId'
-    ];
-    $results = News::where('News.status', 1)
-    ->where('News.id', $id)
-    ->leftJoin('News_NewsCategory', 'News.id', '=', 'News_NewsCategory.newsId')
-    ->leftJoin('NewsCategory', 'News_NewsCategory.newsCategoryId', '=', 'NewsCategory.id')
-    // ->leftJoin('NewsAttachment', 'News.id', '=', 'NewsAttachment.newsId')
-    // ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
-    // ->leftJoin('MailBatch', 'News.mailBatchId', '=', 'MailBatch.id')
-    // ->leftJoin('MailStatus', 'News.mailBatchId', '=', 'MailStatus.mailBatchId')
-    // ->leftJoin('Person', 'MailStatus.personId', '=', 'Person.id')
-    // News_NewsCategory
-    ->get($item);
-    return response()->json($results);
+              'News.id',
+              'News.title',
+              'News.body',
+              'News_NewsCategory.newsCategoryId'
+            ];
+
+    $rs['data'] = News::where([
+                            ['News.id', $id]
+                            , ['News.status', 1]
+                          ])
+                ->leftJoin('News_NewsCategory', 'News.id', '=', 'News_NewsCategory.newsId')
+                ->get($item);
+
+    $rs['sendByMan'] = NewsSendTo::where('newsId', $id)->get();
+
+    $rs['att'] = NewsAttachment::where('newsId', $id)
+                  ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
+                  ->get();
+
+    return response()->json($rs);
   }
 
   public function create(Request $request)
