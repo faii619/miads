@@ -265,6 +265,12 @@ class NewsController extends BaseController {
                           ]];
       $this->sendMail($recipient['man'], $data, $sendByMan[0]['id']);
     }
+
+    News::where([['id', '=', $id]])
+          ->update([
+              'statusSending' => 1
+          ]);
+
     return response()->json($this->response);
   }
 }
