@@ -198,7 +198,6 @@ class NewsController extends BaseController {
               );
 
     if ($request->statusSending == 1) {
-      return response()->json($request);
       if ($request->newsCategoryId != 0) {
         $recipient['group'] = $this->getPersonSubscription($request->newsCategoryId);
         $this->sendMail($recipient['group'], $data, 0);
@@ -206,10 +205,10 @@ class NewsController extends BaseController {
 
       if ($request->to != "0") {
         $recipient['man'] = [[
-                      'to' => $request->to
-                      , 'cc' => $request->cc
-                      , 'bcc' => $request->bcc
-                    ]];
+                              'to' => $request->to
+                              , 'cc' => $request->cc
+                              , 'bcc' => $request->bcc
+                            ]];
         $this->sendMail($recipient['man'], $data, $request->sendByManId);
       }
     }
