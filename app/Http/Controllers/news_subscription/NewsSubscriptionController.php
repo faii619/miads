@@ -42,6 +42,15 @@ class NewsSubscriptionController extends BaseController
           $results->personId = $value;
           $results->status = 1;
           $results->save();
+        } else {
+          $condition = [
+                        ['newsCategoryId', '=', $request->newsCategoryId]
+                        , ['personId', '=', $value]
+                      ];
+          NewsSubscription::where($condition)
+                ->update([
+                    'status' => 1
+                ]);
         }
       }
       return response()->json($this->response);
