@@ -165,28 +165,40 @@ class NewsController extends BaseController {
 
   public function edit(Request $request)
   {
-    $newId = $request->id;
-    News::where([['id', '=', $newId]])
+    $newsId = $request->id;
+    $recipient['group'] = '';
+    $recipient['man'] = '';
+
+    News::where([['id', '=', $newsId]])
         ->update([
             'title' => $request->title,
             'body' => $request->body,
             'statusSending' => $request->statusSending
         ]);
 
-    NewsNewsCategory::where([['newsId', '=', $newId]])
-        ->update([
-            'newsCategoryId' => $request->newsCategoryId
-        ]);
+    if ($request->newsCategoryId != 0) {
+      NewsNewsCategory::where([['newsId', '=', $newsId]])
+          ->update([
+              'newsCategoryId' => $request->newsCategoryId
+          ]);
+    }
 
-    NewsSendTo::where([['id', '=', $request->sendByManId]])
-        ->update([
-            'sendTo' => $request->to,
-            'sendCC' => $request->cc,
-            'sendBCC' => $request->bcc
-        ]);
+    if ($request->sendByManId != 0) {
+      NewsSendTo::where([['id', '=', $request->sendByManId]])
+          ->update([
+              'sendTo' => $request->to,
+              'sendCC' => $request->cc,
+              'sendBCC' => $request->bcc
+          ]);
+    }
 
+    $data = array(
+                'title' => $request->title
+                , 'body' => $request->body
+              );
 
     if ($request->statusSending == 1) {
+      return response()->json($request);
       if ($request->newsCategoryId != 0) {
         $recipient['group'] = $this->getPersonSubscription($request->newsCategoryId);
         $this->sendMail($recipient['group'], $data, 0);
