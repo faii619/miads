@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\news;
 
 use App\Http\Controllers\mail\MailController;
+use App\Http\Controllers\UploadController;
 use App\Models\news\News;
 use App\Models\news_subscription\NewsSubscription;
 use App\Models\news_news_category\NewsNewsCategory;
 use App\Models\news_send_to\NewsSendTo;
 use App\Models\news_attachment\NewsAttachment;
+use App\Models\file\File;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -22,7 +24,8 @@ class NewsController extends BaseController {
       //
   }
 
-  private $response = array('status' => 1, 'message' => 'success');  
+  private $response = array('status' => 1, 'message' => 'success');
+  private $path = 'file_attachment/';
 
   public function News()
   {
@@ -80,6 +83,21 @@ class NewsController extends BaseController {
     $results->save();
     $newsId = $results->id;
 
+    if ($request->image != 0) {
+      $upload = new UploadController();
+      $image = $upload->setImage($request, $this->path);
+
+      $newsFile = new File;
+      $newsFile->fileName = $image;
+      $newsFile->save();
+      $fileId = $newsFile->id;
+
+      $newsAtt = new NewsAttachment;
+      $newsAtt->newsId = $newsId;
+      $newsAtt->fileId = $fileId;
+      $newsAtt->save();
+    }
+
     $data = array(
                   'title' => $request->title
                   , 'body' => $request->body
@@ -94,7 +112,7 @@ class NewsController extends BaseController {
       $recipient['group'] = $this->getPersonSubscription($request->newsCategoryId);
 
       if ($request->statusSending == 1) {
-        $this->sendMail($recipient['group'], $data, $NewsSendId);
+        // $this->sendMail($recipient['group'], $data, $NewsSendId);
       }
     }
 
@@ -114,11 +132,12 @@ class NewsController extends BaseController {
                   ]];
 
       if ($request->statusSending == 1) {
-        $this->sendMail($recipient['man'], $data, $NewsSendId);
+        // $this->sendMail($recipient['man'], $data, $NewsSendId);
       }
     }
 
     return response()->json($this->response);
+    // return response()->json($request->file('image'));
   }
 
   public function getPersonSubscription($newsCateId)
@@ -171,25 +190,25 @@ class NewsController extends BaseController {
 
     News::where([['id', '=', $newsId]])
         ->update([
-            'title' => $request->title,
-            'body' => $request->body,
-            'statusSending' => $request->statusSending
-        ]);
+                  'title' => $request->title,
+                  'body' => $request->body,
+                  'statusSending' => $request->statusSending
+                ]);
 
     if ($request->newsCategoryId != 0) {
       NewsNewsCategory::where([['newsId', '=', $newsId]])
           ->update([
-              'newsCategoryId' => $request->newsCategoryId
-          ]);
+                    'newsCategoryId' => $request->newsCategoryId
+                  ]);
     }
 
     if ($request->sendByManId != 0) {
       NewsSendTo::where([['id', '=', $request->sendByManId]])
           ->update([
-              'sendTo' => $request->to,
-              'sendCC' => $request->cc,
-              'sendBCC' => $request->bcc
-          ]);
+                    'sendTo' => $request->to,
+                    'sendCC' => $request->cc,
+                    'sendBCC' => $request->bcc
+                  ]);
     }
 
     $data = array(
