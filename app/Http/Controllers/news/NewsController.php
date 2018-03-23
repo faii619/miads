@@ -83,20 +83,21 @@ class NewsController extends BaseController {
     $results->save();
     $newsId = $results->id;
 
-    if ($request->image != 0) {
-      $upload = new UploadController();
-      $image = $upload->setImage($request, $this->path);
+    // if ($request->image != 0) {
+    //   $upload = new UploadController();
+    //   $image = $upload->setImage($request, $this->path);
+    //   $files = $request->file('image')->getClientOriginalName();
 
-      $newsFile = new File;
-      $newsFile->fileName = $image;
-      $newsFile->save();
-      $fileId = $newsFile->id;
+    //   $newsFile = new File;
+    //   $newsFile->fileName = $image;
+    //   $newsFile->save();
+    //   $fileId = $newsFile->id;
 
-      $newsAtt = new NewsAttachment;
-      $newsAtt->newsId = $newsId;
-      $newsAtt->fileId = $fileId;
-      $newsAtt->save();
-    }
+    //   $newsAtt = new NewsAttachment;
+    //   $newsAtt->newsId = $newsId;
+    //   $newsAtt->fileId = $fileId;
+    //   $newsAtt->save();
+    // }
 
     $data = array(
                   'title' => $request->title
@@ -137,7 +138,6 @@ class NewsController extends BaseController {
     }
 
     return response()->json($this->response);
-    // return response()->json($request->file('image'));
   }
 
   public function getPersonSubscription($newsCateId)
