@@ -72,6 +72,7 @@ class NewsController extends BaseController {
   {
     $newsId = 0;
     $NewsSendId = 0;
+    $image = 0;
     $recipient['group'] = '';
     $recipient['man'] = '';
 
@@ -83,21 +84,20 @@ class NewsController extends BaseController {
     $results->save();
     $newsId = $results->id;
 
-    // if ($request->image != 0) {
-    //   $upload = new UploadController();
-    //   $image = $upload->setImage($request, $this->path);
-    //   $files = $request->file('image')->getClientOriginalName();
+    if ($request->image != 0) {
+      $upload = new UploadController();
+      $image = $upload->setImage($request, $this->path);
 
-    //   $newsFile = new File;
-    //   $newsFile->fileName = $image;
-    //   $newsFile->save();
-    //   $fileId = $newsFile->id;
+      $newsFile = new File;
+      $newsFile->fileName = $image;
+      $newsFile->save();
+      $fileId = $newsFile->id;
 
-    //   $newsAtt = new NewsAttachment;
-    //   $newsAtt->newsId = $newsId;
-    //   $newsAtt->fileId = $fileId;
-    //   $newsAtt->save();
-    // }
+      $newsAtt = new NewsAttachment;
+      $newsAtt->newsId = $newsId;
+      $newsAtt->fileId = $fileId;
+      $newsAtt->save();
+    }
 
     $data = array(
                   'title' => $request->title
@@ -113,7 +113,7 @@ class NewsController extends BaseController {
       $recipient['group'] = $this->getPersonSubscription($request->newsCategoryId);
 
       if ($request->statusSending == 1) {
-        // $this->sendMail($recipient['group'], $data, $NewsSendId);
+        $this->sendMail($recipient['group'], $data, $NewsSendId);
       }
     }
 
@@ -133,7 +133,7 @@ class NewsController extends BaseController {
                   ]];
 
       if ($request->statusSending == 1) {
-        // $this->sendMail($recipient['man'], $data, $NewsSendId);
+        $this->sendMail($recipient['man'], $data, $NewsSendId);
       }
     }
 
