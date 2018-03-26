@@ -34,7 +34,8 @@ class MailController extends BaseController
         if ($data['email'] != '0') {
           $mail->addAddress($data['email']);
         }
-                            // Add a recipient
+
+        // Add a recipient
         // $mail->addAddress('ellen@example.com');            // Name is optional
         // $mail->addReplyTo('info@example.com', 'Information');
         if ($data['email_cc'] != '0') {
@@ -47,7 +48,9 @@ class MailController extends BaseController
 
         //Attachments
         // $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-        // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        if ($data['file'] != 0) {
+          $mail->addAttachment($data['file'], $data['file_name']);    // Optional name
+        }
 
         //Content
         $mail->isHTML(true);                                  // Set email format to HTML
