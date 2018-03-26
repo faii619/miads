@@ -20,10 +20,12 @@ class ImageController extends BaseController
   {
     $image = $this->verifyImage($image, $path);
     if ($image =='default.png') {
+      $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/web/miads-api/public/'.$image;
       $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/images/'.$image;
       // $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/alumni-api/public/images/'.$image;
     }else {
-      $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/'.$path.$image;
+      $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/web/miads-api/public/'.$path.$image;
+      // $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/'.$path.$image;
       // $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/alumni-api/public/'.$path.$image;
     }
     
@@ -34,6 +36,7 @@ class ImageController extends BaseController
   {
     $path_url = $_SERVER['DOCUMENT_ROOT'].'/'.$path.$image;
     // $path_url = $_SERVER['DOCUMENT_ROOT'].'/alumni-api/public/'.$path.$image;
+    // $path_url = $_SERVER['DOCUMENT_ROOT'].'/web/miads-api/public/'.$path.$image;
     if (!file_exists($path_url) || $image == NULL) $image = 'default.png';
     return $image;
   }
