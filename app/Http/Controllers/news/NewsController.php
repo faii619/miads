@@ -54,17 +54,13 @@ class NewsController extends BaseController {
             ];
 
     $rs['data'] = News::where([
-                            ['News.id', $id]
-                            , ['News.status', 1]
-                          ])
+                                ['News.id', $id]
+                                , ['News.status', 1]
+                              ])
                 ->leftJoin('News_NewsCategory', 'News.id', '=', 'News_NewsCategory.newsId')
                 ->get($item);
 
     $rs['sendByMan'] = NewsSendTo::where('newsId', $id)->get();
-
-    $rs['att'] = NewsAttachment::where('newsId', $id)
-                  ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
-                  ->get();
     
     $rs['att'] = $this->getFileAttachment($id);
 
@@ -74,8 +70,8 @@ class NewsController extends BaseController {
   public function getFileAttachment($id)
   {
     $rs = NewsAttachment::where('newsId', $id)
-                  ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
-                  ->get();
+                    ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
+                    ->get();
     
     $images = new ImageController();
     $rs = $images->getImagesUrl($rs, $this->path, 'fileName');
@@ -115,7 +111,7 @@ class NewsController extends BaseController {
 
     $attachment = $this->getFileAttachment($newsId);
     $file_name = $attachment[0]['fileName'];
-    if ($file_name != 'default.png') {
+    if (($file_name != 'default.png') && ($file_name != 0)) {
       $file = $attachment[0]['fileName_url'];
     }
 
@@ -205,6 +201,7 @@ class NewsController extends BaseController {
   public function edit(Request $request)
   {
     $newsId = $request->id;
+    $fileId = $request->fileId;
     $recipient['group'] = '';
     $recipient['man'] = '';
 
@@ -215,41 +212,64 @@ class NewsController extends BaseController {
                   'statusSending' => $request->statusSending
                 ]);
 
-    // if ($request->image != 0) {
-    //   $upload = new UploadController();
-    //   $image = $upload->setImage($request, $this->path);
+    if ($request->image != 0) {
+      $upload = new UploadController();
+      $image = $upload->setImage($request, $this->path);
 
-    //   $newsFile = new File;
-    //   $newsFile->fileName = $image;
-    //   $newsFile->save();
-    //   $fileId = $newsFile->id;
-
-    //   $newsAtt = new NewsAttachment;
-    //   $newsAtt->newsId = $newsId;
-    //   $newsAtt->fileId = $fileId;
-    //   $newsAtt->save();
-    // }
-
-    if ($request->newsCategoryId != 0) {
-      NewsNewsCategory::where([['newsId', '=', $newsId]])
+      File::where([['id', '=', $fileId]])
           ->update([
-                    'newsCategoryId' => $request->newsCategoryId
+                    'status' => 0
+                  ]);
+
+      $newsFile = new File;
+      $newsFile->fileName = $image;
+      $newsFile->save();
+      $fileId = $newsFile->id;
+
+      NewsAttachment::where([['newsId', '=', $newsId]])
+          ->update([
+                    'fileId' => $fileId
                   ]);
     }
 
-    if ($request->sendByManId != 0) {
-      NewsSendTo::where([['id', '=', $request->sendByManId]])
-          ->update([
-                    'sendTo' => $request->to,
-                    'sendCC' => $request->cc,
-                    'sendBCC' => $request->bcc
-                  ]);
+    NewsSendTo::where([['id', '=', $request->sendByManId]])
+        ->update([
+                  'sendTo' => $request->to,
+                  'sendCC' => $request->cc,
+                  'sendBCC' => $request->bcc
+                ]);
+
+    $attachment = $this->getFileAttachment($newsId);
+    $file_name = $attachment[0]['fileName'];
+    if (($file_name != 'default.png') && ($file_name != 0)) {
+      $file = $attachment[0]['fileName_url'];
     }
 
     $data = array(
-                'title' => $request->title
-                , 'body' => $request->body
-              );
+                  'title' => $request->title
+                  , 'body' => $request->body
+                  , 'file' => $file
+                  , 'file_name' => $file_name
+                );
+
+    if ($request->newsCategoryId != 0) {
+      $row = NewsNewsCategory::where([
+                ['newsId', '=', $newsId],
+                ['newsCategoryId', '=', $request->newsCategoryId]
+              ])->count();
+
+      if ($row <= 0) {
+        $results3 = new NewsNewsCategory;
+        $results3->newsId = $newsId;
+        $results3->newsCategoryId = $request->newsCategoryId;
+        $results3->save();
+      } else {
+        NewsNewsCategory::where([['newsId', '=', $newsId]])
+            ->update([
+                      'newsCategoryId' => $request->newsCategoryId
+                    ]);
+      }
+    }
 
     if ($request->statusSending == 1) {
       if ($request->newsCategoryId != 0) {
