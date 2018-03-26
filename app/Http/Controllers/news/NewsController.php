@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\news;
 
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\mail\MailController;
 use App\Http\Controllers\UploadController;
 use App\Models\news\News;
@@ -64,14 +65,27 @@ class NewsController extends BaseController {
     $rs['att'] = NewsAttachment::where('newsId', $id)
                   ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
                   ->get();
+    
+    $rs['att'] = $this->getFileAttachment($id);
 
     return response()->json($rs);
   }
 
+  public function getFileAttachment($id)
+  {
+    $rs = NewsAttachment::where('newsId', $id)
+                  ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
+                  ->get();
+    
+    $images = new ImageController();
+    $rs = $images->getImagesUrl($rs, $this->path, 'fileName');
+    return $rs;
+  }
+
   public function create(Request $request)
   {
-    $newsId = 0;
-    $NewsSendId = 0;
+    $file = 0;
+    $file_name = '';
     $image = 0;
     $recipient['group'] = '';
     $recipient['man'] = '';
@@ -87,21 +101,29 @@ class NewsController extends BaseController {
     if ($request->image != 0) {
       $upload = new UploadController();
       $image = $upload->setImage($request, $this->path);
+    }
 
-      $newsFile = new File;
-      $newsFile->fileName = $image;
-      $newsFile->save();
-      $fileId = $newsFile->id;
+    $newsFile = new File;
+    $newsFile->fileName = $image;
+    $newsFile->save();
+    $fileId = $newsFile->id;
 
-      $newsAtt = new NewsAttachment;
-      $newsAtt->newsId = $newsId;
-      $newsAtt->fileId = $fileId;
-      $newsAtt->save();
+    $newsAtt = new NewsAttachment;
+    $newsAtt->newsId = $newsId;
+    $newsAtt->fileId = $fileId;
+    $newsAtt->save();
+
+    $attachment = $this->getFileAttachment($newsId);
+    $file_name = $attachment[0]['fileName'];
+    if ($file_name != 'default.png') {
+      $file = $attachment[0]['fileName_url'];
     }
 
     $data = array(
                   'title' => $request->title
                   , 'body' => $request->body
+                  , 'file' => $file
+                  , 'file_name' => $file_name
                 );
 
     if ($request->newsCategoryId != 0) {
@@ -109,30 +131,28 @@ class NewsController extends BaseController {
       $results3->newsId = $newsId;
       $results3->newsCategoryId = $request->newsCategoryId;
       $results3->save();
-
-      $recipient['group'] = $this->getPersonSubscription($request->newsCategoryId);
-
-      if ($request->statusSending == 1) {
-        $this->sendMail($recipient['group'], $data, $NewsSendId);
-      }
     }
 
-    if ($request->to != "0") {
-      $results2 = new NewsSendTo;
-      $results2->newsId = $newsId;
-      $results2->sendTo = $request->to;
-      $results2->sendCC = $request->cc;
-      $results2->sendBCC = $request->bcc;
-      $results2->save();
-      $NewsSendId = $results2->id;
+    $results2 = new NewsSendTo;
+    $results2->newsId = $newsId;
+    $results2->sendTo = $request->to;
+    $results2->sendCC = $request->cc;
+    $results2->sendBCC = $request->bcc;
+    $results2->save();
+    $NewsSendId = $results2->id;
 
-      $recipient['man'] = [[
-                    'to' => $request->to
-                    , 'cc' => $request->cc
-                    , 'bcc' => $request->bcc
-                  ]];
-
-      if ($request->statusSending == 1) {
+    if ($request->statusSending == 1) {
+      if ($request->newsCategoryId != 0) {
+        $recipient['group'] = $this->getPersonSubscription($request->newsCategoryId);
+        $this->sendMail($recipient['group'], $data, $NewsSendId);
+      }
+    
+      if($request->to != 0) {
+        $recipient['man'] = [[
+                  'to' => $request->to
+                  , 'cc' => $request->cc
+                  , 'bcc' => $request->bcc
+                ]];
         $this->sendMail($recipient['man'], $data, $NewsSendId);
       }
     }
@@ -195,6 +215,21 @@ class NewsController extends BaseController {
                   'statusSending' => $request->statusSending
                 ]);
 
+    // if ($request->image != 0) {
+    //   $upload = new UploadController();
+    //   $image = $upload->setImage($request, $this->path);
+
+    //   $newsFile = new File;
+    //   $newsFile->fileName = $image;
+    //   $newsFile->save();
+    //   $fileId = $newsFile->id;
+
+    //   $newsAtt = new NewsAttachment;
+    //   $newsAtt->newsId = $newsId;
+    //   $newsAtt->fileId = $fileId;
+    //   $newsAtt->save();
+    // }
+
     if ($request->newsCategoryId != 0) {
       NewsNewsCategory::where([['newsId', '=', $newsId]])
           ->update([
@@ -244,6 +279,8 @@ class NewsController extends BaseController {
 
   public function sendEMail($id)
   {
+    $file = 0;
+    $file_name = '';
     $recipient['group'] = '';
     $recipient['man'] = '';
     $item = [
@@ -262,13 +299,20 @@ class NewsController extends BaseController {
 
     $sendByMan = NewsSendTo::where('newsId', $id)->get();
 
-    $attachment = NewsAttachment::where('newsId', $id)
-                  ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
-                  ->get();
+    $attachment = $this->getFileAttachment($id);
+
+    if (!empty($attachment[0])) {
+      $images = new ImageController();
+      $attachment = $images->getImagesUrl($attachment, $this->path, 'fileName');
+      $file = $attachment[0]['fileName_url'];
+      $file_name = $attachment[0]['fileName'];
+    }
 
     $data = array(
                   'title' => $dataMail[0]['title']
                   , 'body' => $dataMail[0]['body']
+                  , 'file' => $file
+                  , 'file_name' => $file_name
                 );
 
     if ($dataMail[0]['newsCategoryId'] != null) {
