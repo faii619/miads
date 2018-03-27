@@ -218,17 +218,7 @@ class NewsController extends BaseController {
 
       File::where([['id', '=', $fileId]])
           ->update([
-                    'status' => 0
-                  ]);
-
-      $newsFile = new File;
-      $newsFile->fileName = $image;
-      $newsFile->save();
-      $fileId = $newsFile->id;
-
-      NewsAttachment::where([['newsId', '=', $newsId]])
-          ->update([
-                    'fileId' => $fileId
+                    'fileName' => $image
                   ]);
     }
 
