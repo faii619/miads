@@ -80,11 +80,10 @@ class NewsController extends BaseController {
 
   public function create(Request $request)
   {
-    $file = 0;
     $file_name = '';
     $image = 0;
-    $recipient['group'] = '';
-    $recipient['man'] = '';
+    $recipient['group'] = [];
+    $recipient['man'] = [];
 
     $results = new News;
     $results->title = $request->title;
@@ -111,9 +110,7 @@ class NewsController extends BaseController {
 
     $attachment = $this->getFileAttachment($newsId);
     $file_name = $attachment[0]['fileName'];
-    if (($file_name != 'default.png') && ($file_name != 0)) {
-      $file = $attachment[0]['fileName_url'];
-    }
+    $file = (($file_name != 'default.png') && ($file_name != 0)) ? $attachment[0]['fileName_url'] : 0 ;
 
     $data = array(
                   'title' => $request->title
@@ -142,7 +139,7 @@ class NewsController extends BaseController {
         $recipient['group'] = $this->getPersonSubscription($request->newsCategoryId);
         $this->sendMail($recipient['group'], $data, $NewsSendId);
       }
-    
+
       if($request->to != 0) {
         $recipient['man'] = [[
                   'to' => $request->to
@@ -185,6 +182,8 @@ class NewsController extends BaseController {
                         , 'email_bcc' => $value['bcc']
                         , 'subject' => $data['title']
                         , 'body' => $data['body']
+                        , 'file' => $data['file']
+                        , 'file_name' => $data['file_name']
                       );
 
       $email = new MailController;
