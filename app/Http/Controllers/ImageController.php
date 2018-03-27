@@ -20,7 +20,7 @@ class ImageController extends BaseController
   {
     $image = $this->verifyImage($image, $path);
     if ($image =='default.png') {
-      // $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/web/miads-api/public/'.$image;
+      // $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/web/miads-api/public/images/'.$image;
       $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/images/'.$image;
       // $image_url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/alumni-api/public/images/'.$image;
     } else {
