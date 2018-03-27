@@ -70,8 +70,8 @@ class NewsController extends BaseController {
   public function getFileAttachment($id)
   {
     $rs = NewsAttachment::where('newsId', $id)
-                    ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
-                    ->get();
+            ->leftJoin('File', 'NewsAttachment.fileId', '=', 'File.id')
+            ->get();
     
     $images = new ImageController();
     $rs = $images->getImagesUrl($rs, $this->path, 'fileName');
@@ -163,8 +163,8 @@ class NewsController extends BaseController {
                                     ['NewsSubscription.newsCategoryId', $newsCateId]
                                     , ['NewsSubscription.status', 1]
                                   ])
-                  ->leftjoin('Person', 'NewsSubscription.personId', '=', 'Person.id')
-                  ->get(['Person.email', 'Person.otherEmails']);
+                ->leftjoin('Person', 'NewsSubscription.personId', '=', 'Person.id')
+                ->get(['Person.email', 'Person.otherEmails']);
 
     foreach ($rs as $key => $value) {
       $result[$key]['to'] = ($value['email'] != '' ? $value['email'] : 0);
@@ -310,12 +310,9 @@ class NewsController extends BaseController {
     $sendByMan = NewsSendTo::where('newsId', $id)->get();
 
     $attachment = $this->getFileAttachment($id);
-
-    if (!empty($attachment[0])) {
-      $images = new ImageController();
-      $attachment = $images->getImagesUrl($attachment, $this->path, 'fileName');
+    $file_name = $attachment[0]['fileName'];
+    if (($file_name != 'default.png') && ($file_name != 0)) {
       $file = $attachment[0]['fileName_url'];
-      $file_name = $attachment[0]['fileName'];
     }
 
     $data = array(
