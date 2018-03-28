@@ -13,7 +13,7 @@ class MailController extends BaseController
 {
   public function send_email($data) {
     // $x = 0;
-    // if ($data['email'] != '0') {$x = 1;}
+    // if ($data['file'] != '0') {$x = 1;}
     // return $x;
     $status = 0;
     $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
@@ -48,7 +48,7 @@ class MailController extends BaseController
 
         //Attachments
         // $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-        if ($data['file'] != 0) {
+        if ($data['file'] != '0') {
           $mail->addAttachment($data['file'], $data['file_name']);    // Optional name
         }
 
