@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\mail;
 
 use Illuminate\Http\Request;
-// use PHPMailer\PHPMailer\Exception;
-use Laravel\Lumen\Routing\Controller as BaseController;
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 require base_path("vendor/autoload.php");
 
@@ -14,7 +14,7 @@ class MailController extends BaseController
   public function send_email($data) {
     // $x = 0;
     // if ($data['file'] != '0') {$x = 1;}
-    // return $x;
+    // return $data['file'];
     $status = 0;
     $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
     try {
@@ -48,8 +48,9 @@ class MailController extends BaseController
 
         //Attachments
         // $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+        // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
         if ($data['file'] != '0') {
-          $mail->addAttachment($data['file'], $data['file_name']);    // Optional name
+          $mail->addAttachment($data['file'], $data['file_name']);
         }
 
         //Content

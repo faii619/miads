@@ -157,11 +157,11 @@ class NewsController extends BaseController {
   {
     $result = [];
     $rs = NewsSubscription::where([
-                                    ['NewsSubscription.newsCategoryId', $newsCateId]
-                                    , ['NewsSubscription.status', 1]
-                                  ])
-                ->leftjoin('Person', 'NewsSubscription.personId', '=', 'Person.id')
-                ->get(['Person.email', 'Person.otherEmails']);
+                ['NewsSubscription.newsCategoryId', $newsCateId]
+                , ['NewsSubscription.status', 1]
+              ])
+            ->leftjoin('Person', 'NewsSubscription.personId', '=', 'Person.id')
+            ->get(['Person.email', 'Person.otherEmails']);
 
     foreach ($rs as $key => $value) {
       $result[$key]['to'] = ($value['email'] != '' ? $value['email'] : 0);
